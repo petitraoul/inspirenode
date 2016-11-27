@@ -1,0 +1,1462 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Inspirathome</title>
+<meta name="viewport" content="width=device-width,user-scalable=no"/>
+<!--<meta name="viewport" content="width=device-width,initial-scale=1"/>
+ <link rel="stylesheet" href="http://code.jquery.com.mobile/latest/jquery.mobile.css" />
+<link rel="stylesheet" href="css/jquery.mobile-1.0rc1.min.css" />
+<script src="js/jquery.js"></script>
+<script src="js/jquery.mobile-1.0rc1.min.js"></script>
+ 
+
+<link rel="stylesheet" href="js/jquery/jquery.mobile-1.4.4.css" />
+<link rel="stylesheet" href="css/styles.css" />
+
+<script src="js/jquery/jquery-1.11.1.js"></script>
+<script src="js/jquery/jquery.mobile-1.4.4.js"></script>-->
+<link rel="shortcut icon" type="image/png" href="icon.png"/>
+
+
+
+<link rel="stylesheet" href="../lib_jquery/jquery/jquery.mobile-1.4.5.css" />
+<link rel="stylesheet" href="../lib_jquery/jqueryui/jquery-ui.css" />
+<link rel="stylesheet" href="../lib_jquery/leaflet-0.7.3/leaflet.css" /> 
+<link rel="stylesheet" href="css/styles.css" />
+<!-- <link rel="stylesheet" href="test/jquery.mobile-1.0rc1.min.css" /> -->
+<link rel="stylesheet" href="../themes/style_perso.css" />
+<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+<script src="../lib_jquery/jquery/jquery-1.11.3.js"></script>
+<script src="../lib_jquery/jqueryui/external/jquery/jquery.js"></script>
+<script src="../lib_jquery/jqueryui/jquery-ui.js"></script>
+<script src="../lib_jquery/jquery/jquery.mobile-1.4.5.js"></script>
+<script src="../lib_jquery/jquery.ui.touch.punch-0.2.3.js"></script>
+<script src="../lib_jquery/jquery.i18n/jquery.i18n.js"></script>
+<script src="../lib_jquery/jquery.i18n/jquery.i18n.messagestore.js"></script>
+<script src="../lib_jquery/jquery.i18n/jquery.i18n.fallbacks.js"></script>
+<script src="../lib_jquery/jquery.i18n/jquery.i18n.parser.js"></script>
+<script src="../lib_jquery/jquery.i18n/jquery.i18n.emitter.js"></script>
+<script src="../lib_jquery/jquery.i18n/jquery.i18n.language.js"></script>
+
+</head>
+    
+<body>
+
+<!-- Page d'acceuil -->
+
+	<div id="loginPage" data-role="page" data-add-back-btn="true" data-theme="c"  >
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed"  >
+			<h1>Inspirathome</h1>
+			<a href="#settingListPage" data-transition="slide" class="ui-btn-right ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext" >Button</a>
+		</div>
+		<div data-role="content" data-theme="c" style="height:100%">
+		<div  id="popupLogin" data-theme="a"  class="ui-corner-all">
+			<!-- data-role="popup" data-overlay-theme="b"-->	 
+			<form>
+				<div style="padding:10px 20px;">
+				  <h3>Identification</h3>
+			
+		          <label for="un" class="ui-hidden-accessible">Login:</label>
+		          <input type="text" name="user" id="un" value="" placeholder="login" data-theme="a" />
+
+		          <label for="pw" class="ui-hidden-accessible">Mot de passe:</label>
+		          <input type="password" name="pass" id="pw" value="" placeholder="Mot de passe" data-theme="a" />
+		    	  
+		    	  <label for="savepw" >Sauvegarder</label>
+		    	  <input type="checkbox" name="savepw" id="savepw" checked=true/>
+		    	  
+		    	  <button id="btnconnection" type="submit" data-theme="c" onclick="connexionappli();return false;";>Connexion</button>
+				<!-- <video id="pub" style="width:100%;max-height:100%">
+			        <source src="http://192.168.1.10:8888/movie.mp4" type="video/mp4"/>
+			        <source src="http://192.168.1.10:8888/movie.webm" type="video/webm"/>
+			        <source src="http://192.168.1.10:8888/movie.ogg" type="video/ogg"/>
+			        <!-- fallback --><!-- 
+			        Your browser does not support the <code>video</code> element.
+			    </video> 
+			    	    	  <button id="changetheme" type="submit" data-theme="b" onclick="switch_theme('c');return false;";>changetheme</button>
+	
+			    -->
+
+				</div>
+				
+				
+			</form>
+			<fieldset data-role="controlgroup" data-type="vertical" data-role="fieldcontain" id="langues">
+				
+				<!-- <input type="radio" name="radio-choice" id="radio-fr" value="fr">
+				<label for="radio-fr" >Francais</label>
+				
+				<input type="radio" name="radio-choice" id="radio-en" value="en">
+				<label for="radio-en" >English</label> -->
+         	</fieldset>
+		</div>
+	    </div>		
+
+
+
+	</div>  
+
+   <!--  <div id="acceuilPage" data-role="page"  data-add-back-btn="true"  >
+		
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed"  >
+			<h1 id="titreacceuil">Inspirathome</h1>
+			<a id="settingbuttona" href="#" onclick="chargeUserListPage();" data-transition="slide" class="ui-btn-right ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-user ui-btn-icon-notext">Button</a>
+					</div>
+		<div data-role="content" data-theme="c">
+	    	
+			<div class="ui-grid-a">
+				<div class="ui-block-a">
+					<div class="ui-bar ui-bar-b">
+						<div id="containerG1"></div>
+						<div id="containerG2"></div>	
+				    	<ul id="acceuilPeriphManuel" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    	<ul id="acceuilPeriphList1" data-role="listview" data-filter="false" data-theme="c"></ul>						
+					</div>
+				</div>
+				
+				<div class="ui-block-b">
+					<div class="ui-bar ui-bar-b">
+						<div id="containerD1"></div>
+						<div id="containerD2"></div>	
+						<ul id="acceuilPeriphList2" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    </div>
+				</div>
+			</div>
+			<div class="ui-bar ui-bar-b">
+				<ul id="acceuilPeriphList3" data-role="listview" data-filter="false" data-theme="c"></ul>
+			</div>
+		</div>
+		<div  id ="pied"  data-role="footer" data-theme="c" data-position="fixed" >
+			<div data-role="navbar">
+				<ul>
+					<li><a href="#acceuilPage" data-transition="slide" class="ui-btn-active ui-state-persist">Accueil</a></li>
+					<li><a href="#tagListPage" data-transition="slide" data-prefetch="true">Batiments</a></li>
+					<li><a href="#progmodepage" data-transition="slide" data-prefetch="true">Programmation</a></li>
+			</div>
+		</div>
+
+	</div>    -->
+
+	<div id="acceuilPage" data-role="page"  data-theme="c">
+	
+		<div id ="entete" data-role="header" data-theme="c" data-position="fixed">
+			
+			<h1 id="titre"></h1>
+			<a id="settingbuttona" href="#" onclick="chargeUserListPage();" data-transition="slide" class="ui-btn-right ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-user ui-btn-icon-notext">Button</a>
+			
+		</div>
+		<div data-role="content" data-theme="c" style="padding:0px 0px;margin:0px 0px">
+
+			<div class="ui-grid-a" >
+				<div class="ui-block-a">
+				    <div class="ui-bar">
+						<div id="containerG1"></div>
+						<div id="containerG2"></div>	
+				    	<ul id="acceuilPeriphList1" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    	<ul id="acceuilPeriphManuel" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    </div>
+				</div>
+				<div class="ui-block-b">
+					<div class="ui-bar">
+						<div id="containerD1"></div>
+						<div id="containerD2"></div>
+				    	<ul id="acceuilPeriphList2" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    </div>
+				</div>
+			</div>
+			<div class="ui-bar">
+				<ul id="acceuilPeriphList3" data-role="listview" data-filter="false" data-theme="c"></ul>
+			</div>
+	    </div>		
+		<div  id ="pied"  data-role="footer" data-theme="c" data-position="fixed" >
+			<div data-role="navbar">
+				<ul id="accueilmenulist1" style="display: none;">
+					<li><a href="#" id="button1" data-transition="slide" class="ui-btn-active ui-state-persist"></a></li>
+				</ul>
+				<ul id="accueilmenulist2" style="display: none;">
+					<li><a href="#" id="button1" data-transition="slide" class="ui-btn-active ui-state-persist"></a></li>
+					<li><a href="#" id="button2" data-transition="slide" data-prefetch="true"></a></li>
+				</ul>
+				<ul id="accueilmenulist3" style="display: none;" >
+					<li><a href="#" id="button1" data-transition="slide" class="ui-btn-active ui-state-persist"></a></li>
+					<li><a href="#" id="button2" data-transition="slide" data-prefetch="true"></a></li>
+					<li><a href="#" id="button3" data-transition="slide" data-prefetch="true"></a></li>
+				</ul>
+				<ul id="accueilmenulist4" style="display: none;">
+					<li><a href="#" id="button1" data-transition="slide" class="ui-btn-active ui-state-persist"></a></li>
+					<li><a href="#tagListPage" id="button2" data-transition="slide" data-prefetch="true"></a></li>
+					<li><a href="#progmodepage" id="button3" data-transition="slide" data-prefetch="true"></a></li>
+					<li><a href="#" id="button4" data-transition="slide" data-prefetch="true"></a></li>
+				</ul>
+			</div>
+		</div>
+
+	
+		<div data-role="popup" id="apopupMenu" data-theme="c" data-overlay-theme="b">
+			<ul id="apopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c" data-divider-theme="b" data-split-theme="b" data-split-icon="clock">
+			</ul>
+		</div>
+		
+		<div data-role="popup" id="popupInfo" class="ui-content" data-theme="e" style="max-width:350px;">
+          <p>Here is a <strong>tiny popup</strong> being used like a tooltip. The text will wrap to multiple lines as needed.</p>
+		</div>
+		
+		<div data-role="popup" id="differemodepopupMenua" data-theme="c" data-overlay-theme="c">
+			
+			<ul id="differemodepopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+			
+			<li>
+				<p id ="titre">
+					Titre
+				</p>
+			</li>
+			<li>
+				<p>
+					<input type="date" id="modedate" data-role="datebox" data-options='{"mode": "calbox", "useNewStyle":true}'>
+				</p>
+			</li>
+			
+			<li>
+			    <p>
+			    <select name="horaire" id="modetimer">
+			    	<option value='0h00'>0h00</option>
+					<option value='1h00'>1h00</option>
+					<option value='2h00'>2h00</option>
+					<option value='3h00'>3h00</option>
+					<option value='4h00'>4h00</option>
+					<option value='5h00'>5h00</option>
+					<option value='6h00'>6h00</option>
+					<option value='7h00'>7h00</option>
+					<option value='8h00'>8h00</option>
+					<option value='9h00'>9h00</option>
+					<option value='10h00'>10h00</option>
+					<option value='11h00'>11h00</option>
+					<option value='12h00'>12h00</option>
+					<option value='13h00'>13h00</option>
+					<option value='14h00'>14h00</option>
+					<option value='15h00'>15h00</option>
+					<option value='16h00'>16h00</option>
+					<option value='17h00'>17h00</option>
+					<option value='18h00'>18h00</option>
+					<option value='19h00'>19h00</option>
+					<option value='20h00'>20h00</option>
+					<option value='21h00'>21h00</option>
+					<option value='22h00'>22h00</option>
+					<option value='23h00'>23h00</option>
+			    </select>
+			    </p>			
+			</li>
+			<li>
+			<p>
+				<a href="#" onclick="differerEtatMode('differemodepopupMenua');return false;" class="ui-btn ui-corner-all">Valider</a>
+			</p>
+			</li>
+			</ul>
+		</div>
+		
+		<div data-role="popup" id="CodePinpopupMenua" data-theme="c" data-overlay-theme="c">
+			
+
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Code Pin actuel</Label>
+				    <input type="password" name="pincode" id="pincodeactuel">
+				</div>
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Nouveau Code Pin</Label>
+				    <input type="password" name="pincode" id="pincodenew1">
+				</div>
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Nouveau Code Pin</Label>
+				    <input type="password" name="pincode" id="pincodenew2">
+				</div>
+				
+				<div class="ui-grid-a"  style="padding-left:5px;padding-right:5px;" >
+					<div class="ui-block-a">
+					    <a href="#" data-role="button" onclick="$( '#CodePinpopupMenua' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="back">Annuler</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="#" data-role="button" onclick="updatecodepin('CodePinpopupMenua','errora');$( '#CodePinpopupMenua' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="action">Valider</a>
+					</div>
+				</div>
+			
+		</div>
+		
+		<div data-role="popup" id="alarmepopupMenua" data-theme="c" data-overlay-theme="c">
+			
+
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Code Pin</Label>
+				    <input type="password" name="pincode" id="setpincode">
+				</div>
+				<div  style="padding-top:10px;padding-left:20px;padding-right:20px;">
+					<Label>Alarmes</Label>
+					<ul id="alarmepopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+						<li>
+
+						</li>
+					</ul>
+				</div>
+				
+				<div class="ui-grid-a"  style="padding-left:5px;padding-right:5px;" >
+					<div class="ui-block-a">
+					    <a href="#" data-role="button" onclick="$( '#alarmepopupMenua' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="back">Annuler</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="#" data-role="button" onclick="validactionalarme('alarmepopupMenua','errora');$( '#alarmepopupMenua' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="action">Valider</a>
+					</div>
+				</div>
+			
+		</div>
+		
+		<div data-role="popup" id="errora" data-theme="c" data-overlay-theme="c">
+			
+
+				<div  style="padding-top:10px;padding-left:20px;padding-right:20px;">
+					<Label>Erreur</Label>
+					<ul id="errorlist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+						<li>
+
+						</li>
+					</ul>
+				</div>
+				
+				<div  style="padding-left:5px;padding-right:5px;" >
+					<div>
+					    <a href="#" data-role="button" onclick="$( '#errora' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="back">OK</a>
+					</div>
+				</div>
+			
+
+		</div>
+		
+		
+	</div>
+	
+    <div id="highchartpage" data-role="page"  data-add-back-btn="true" data-theme="c"  >
+		
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed"  >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+		</div>
+		<div data-role="content" data-theme="c">
+	    	<ul id="HightchartList" data-role="listview" data-filter="false" data-theme="c">
+		</div>
+	</div>      
+    <div id="highchartpagedetail" data-role="page"  data-add-back-btn="true"  data-theme="c" >
+		
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed"  >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+		</div>
+		<div data-role="content" data-theme="c">
+	    	<div id="containerHighChart" data-enhance="false" style="min-width: 70%; height:80%; margin: 0 auto"></div>
+		</div>
+	</div>      
+
+	<div id="tagListPage" data-role="page"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<a id="settingbutton" href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+			<div class="ui-grid-a">
+				<div class="ui-block-a">
+					<div class="ui-bar ui-bar-b">
+					    <ul id="TagList1" data-role="listview" data-filter="false" data-theme="c"></ul>
+					</div>
+				</div>
+				
+				<div class="ui-block-b">
+					<div class="ui-bar ui-bar-b">
+				    	<ul id="TagList2" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    </div>
+				</div>
+			</div>
+	    </div>		
+	</div>    
+		
+	<div id="periphpage" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div id="content" data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+			<div class="ui-grid-a" >
+				
+				<div class="ui-block-a">
+					<div class="ui-bar ui-bar-b">
+						<ul id="PeriphList1" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    	<ul id="PeriphManuel" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    </div>
+				</div>
+				<div class="ui-block-b">
+					<div class="ui-bar ui-bar-b">
+				    	<ul id="PeriphList2" data-role="listview" data-filter="false" data-theme="c"></ul>
+				    </div>
+				</div>
+			</div>
+			<div class="ui-bar ui-bar-b">
+				<ul id="PeriphList3" data-role="listview" data-filter="false" data-theme="c"></ul>
+			</div>
+	    </div>		
+	    <div data-role="popup" id="bpopupMenu" data-theme="c" data-overlay-theme="b">
+			<ul id="bpopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c" data-divider-theme="b" data-split-theme="b" data-split-icon="clock">
+			</ul>
+		</div>
+		
+		<div data-role="popup" id="errorb" data-theme="c" data-overlay-theme="b">
+		
+
+			<div  style="padding-top:10px;padding-left:20px;padding-right:20px;">
+				<Label>Erreur</Label>
+				<ul id="errorlist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+					<li>
+
+					</li>
+				</ul>
+			</div>
+			
+			<div  style="padding-left:5px;padding-right:5px;" >
+				<div>
+				    <a href="#" data-role="button" onclick="$( '#errorb' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="back">OK</a>
+				</div>
+			</div>
+			
+
+		</div>
+		
+		<div data-role="popup" id="CodePinpopupMenub" data-theme="c" data-overlay-theme="b">
+			
+
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Code Pin actuel</Label>
+				    <input type="password" name="pincode" id="pincodeactuel">
+				</div>
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Nouveau Code Pin</Label>
+				    <input type="password" name="pincode" id="pincodenew1">
+				</div>
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Nouveau Code Pin</Label>
+				    <input type="password" name="pincode" id="pincodenew2">
+				</div>
+				
+				<div class="ui-grid-a"  style="padding-left:5px;padding-right:5px;" >
+					<div class="ui-block-a">
+					    <a href="#" data-role="button" onclick="$( '#CodePinpopupMenub' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="back">Annuler</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="#" data-role="button" onclick="updatecodepin('CodePinpopupMenub','errorb');$( '#CodePinpopupMenub' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="action">Valider</a>
+					</div>
+				</div>
+			
+		</div>
+		
+		<div data-role="popup" id="alarmepopupMenub" data-theme="c" data-overlay-theme="b">
+			
+
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Code Pin</Label>
+				    <input type="password" name="pincode" id="setpincode">
+				</div>
+				<div  style="padding-top:10px;padding-left:20px;padding-right:20px;">
+					<Label>Alarmes</Label>
+					<ul id="alarmepopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+						<li>
+
+						</li>
+					</ul>
+				</div>
+				
+				<div class="ui-grid-a"  style="padding-left:5px;padding-right:5px;" >
+					<div class="ui-block-a">
+					    <a href="#" data-role="button" onclick="$( '#alarmepopupMenub' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="back">Annuler</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="#" data-role="button" onclick="validactionalarme('alarmepopupMenub','errorb');$( '#alarmepopupMenub' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="action">Valider</a>
+					</div>
+				</div>
+			
+		</div>
+		<div data-role="popup" id="differemodepopupMenub" data-theme="c" data-overlay-theme="b">
+			
+			<ul id="differemodepopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+			<li>
+				<p id ="titre">
+					Titre
+				</p>
+			</li>
+			<li>
+				<p>
+					<input type="date" id="modedate" data-role="datebox" data-options='{"mode": "calbox", "useNewStyle":true}'>
+				</p>
+			</li>
+			
+			<li>
+			    <p>
+			    <select name="horaire" id="modetimer">
+			    	<option value='0h00'>0h00</option>
+					<option value='1h00'>1h00</option>
+					<option value='2h00'>2h00</option>
+					<option value='3h00'>3h00</option>
+					<option value='4h00'>4h00</option>
+					<option value='5h00'>5h00</option>
+					<option value='6h00'>6h00</option>
+					<option value='7h00'>7h00</option>
+					<option value='8h00'>8h00</option>
+					<option value='9h00'>9h00</option>
+					<option value='10h00'>10h00</option>
+					<option value='11h00'>11h00</option>
+					<option value='12h00'>12h00</option>
+					<option value='13h00'>13h00</option>
+					<option value='14h00'>14h00</option>
+					<option value='15h00'>15h00</option>
+					<option value='16h00'>16h00</option>
+					<option value='17h00'>17h00</option>
+					<option value='18h00'>18h00</option>
+					<option value='19h00'>19h00</option>
+					<option value='20h00'>20h00</option>
+					<option value='21h00'>21h00</option>
+					<option value='22h00'>22h00</option>
+					<option value='23h00'>23h00</option>
+			    </select>
+			    </p>			
+			</li>
+			<li>
+			<p>
+				<a href="#" onclick="differerEtatMode('differemodepopupMenub');return false;" class="ui-btn ui-corner-all">Valider</a>
+			</p>
+			</li>
+			</ul>
+		</div>
+	</div> 
+	<div id="progmodepage" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<a id="settingmodes" href="#settingModes" data-transition="slide" class="ui-btn-right ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+			<div class="ui-bar ui-bar-b">
+			 	<ul id="progListmode" data-role="listview" data-theme="c" data-filter="false">
+				</ul>
+			</div> 
+			
+	    </div>		
+	    <div data-role="popup" id="modepopupMenu" data-theme="c" data-overlay-theme="b">
+			<ul id="modepopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+			</ul>
+		</div>
+		<div data-role="popup" id="differemodepopupMenu" data-theme="c" data-overlay-theme="b">
+			
+			<ul id="differemodepopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+			<li>
+				<p id ="titre">
+					Titre
+				</p>
+			</li>
+			<li>
+				<p>
+					<input type="date" id="modedate" data-role="datebox" data-options='{"mode": "calbox", "useNewStyle":true}'>
+				</p>
+			</li>
+			
+			<li>
+			    <p>
+			    <select name="horaire" id="modetimer">
+			    	<option value='0h00'>0h00</option>
+					<option value='1h00'>1h00</option>
+					<option value='2h00'>2h00</option>
+					<option value='3h00'>3h00</option>
+					<option value='4h00'>4h00</option>
+					<option value='5h00'>5h00</option>
+					<option value='6h00'>6h00</option>
+					<option value='7h00'>7h00</option>
+					<option value='8h00'>8h00</option>
+					<option value='9h00'>9h00</option>
+					<option value='10h00'>10h00</option>
+					<option value='11h00'>11h00</option>
+					<option value='12h00'>12h00</option>
+					<option value='13h00'>13h00</option>
+					<option value='14h00'>14h00</option>
+					<option value='15h00'>15h00</option>
+					<option value='16h00'>16h00</option>
+					<option value='17h00'>17h00</option>
+					<option value='18h00'>18h00</option>
+					<option value='19h00'>19h00</option>
+					<option value='20h00'>20h00</option>
+					<option value='21h00'>21h00</option>
+					<option value='22h00'>22h00</option>
+					<option value='23h00'>23h00</option>
+			    </select>
+			    </p>			
+			</li>
+			<li>
+			<p>
+				<a href="#" onclick="differerEtatMode('differemodepopupMenu');return false;" class="ui-btn ui-corner-all">Valider</a>
+			</p>
+			</li>
+			</ul>
+		</div>
+	</div> 
+	<div id="settingModes" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+
+			<div style="padding-left:20px;padding-right:20px;">
+			    <p>
+			    <Label>Icone</Label>
+			    <select name="icon" id="seticon">
+			    	<option value='images/confort.png'>Soleil</option>
+					<option value='images/eco.png'>Flocon</option>
+					<option value='images/vacance.png'>Valise</option>
+			    </select>
+			    </p>			
+			</div>
+			<div style="padding-left:20px;padding-right:20px;">
+			    <p>
+			    <Label>Nom</Label>
+			    <input name="nom" id="setnom">
+				</p>			
+			</div>
+				    
+
+			<script>
+			
+		   /* $( "#radius" ).selectmenu({
+		        change: function( event, data ) {
+		          circle.css({
+		            width: data.item.value,
+		            height: data.item.value
+		          });
+		        }
+		       });*/
+			</script>
+				   
+			<div class="ui-bar ui-bar-b">
+				<ul id="modeslist" data-role="listview" data-filter="false" data-theme="c" data-inset="true" data-divider-theme="b" data-split-theme="b" data-split-icon="delete">
+						<li data-role="list-divider">Modes</li>
+					    <li><a href="#" onclick="addmode();return false;">Ajouter</a></li>
+				</ul>
+			</div>
+
+
+	    </div>		
+	</div> 
+	
+	<div id="proglistcategpage" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+			<div class="ui-bar ui-bar-b">
+			 	<ul id="progListcateg" data-role="listview" data-theme="c" data-filter="false">
+				    <!-- <li data-role="list-divider">Jour de la semaine</li>
+					    <li><a href="#">Lundi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a>
+
+					    </li>
+					    <li><a href="#">Mardi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Mercredi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Jeudi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>		
+					    <li><a href="#">Vendredi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Samedi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Dimanche</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>	
+				    <li data-role="list-divider">Du Lundi au Dimanche</li>
+				     	<li><a href="#">Toute la semaine</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+				    <li data-role="list-divider">Semaine et Week-end</li>
+				    	<li><a href="#">Semaine</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+				    	<li><a href="#">Week-end</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					-->
+				</ul>
+			</div> 
+	    </div>		
+	</div> 	
+	<div id="proglistpage" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+			<div class="ui-bar ui-bar-b">
+			 	<ul id="progListTag" data-role="listview" data-theme="c" data-filter="false">
+				    <!-- <li data-role="list-divider">Jour de la semaine</li>
+					    <li><a href="#">Lundi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a>
+
+					    </li>
+					    <li><a href="#">Mardi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Mercredi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Jeudi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>		
+					    <li><a href="#">Vendredi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Samedi</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					    <li><a href="#">Dimanche</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>	
+				    <li data-role="list-divider">Du Lundi au Dimanche</li>
+				     	<li><a href="#">Toute la semaine</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+				    <li data-role="list-divider">Semaine et Week-end</li>
+				    	<li><a href="#">Semaine</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+				    	<li><a href="#">Week-end</a><a href="#" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+					-->
+				</ul>
+			</div> 
+	    </div>		
+	</div> 
+	<div id="progpage" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+
+			<div >
+			 	<p>
+			    <fieldset data-role="controlgroup" data-type="horizontal">
+				   <input type="checkbox" value="Lu" name="checkJour" id="checkLu" class="custom" />
+				   <label for="checkLu">L</label>
+				   <input type="checkbox" value="Ma" name="checkJour" id="checkMa" class="custom" />
+				   <label for="checkMa">M</label>
+				   <input type="checkbox" value="Me" name="checkJour" id="checkMe" class="custom" />
+				   <label for="checkMe">M</label>
+				   <input type="checkbox" value="Je" name="checkJour" id="checkJe" class="custom" />
+				   <label for="checkJe">J</label>
+				   <input type="checkbox" value="Ve" name="checkJour" id="checkVe" class="custom" />
+				   <label for="checkVe">V</label>
+				   <input type="checkbox" value="Sa" name="checkJour" id="checkSa" class="custom" />
+				   <label for="checkSa">S</label>
+				   <input type="checkbox" value="Di" name="checkJour" id="checkDi" class="custom" />
+				   <label for="checkDi">D</label>
+				</fieldset>
+				</p>	
+			</div>
+			<div>
+			    <p>
+			    <select name="horaire" id="progtimer">
+			    	<option value='0h00'>0h00</option>
+					<option value='0h15'>0h15</option>
+					<option value='0h30'>0h30</option>
+					<option value='0h45'>0h45</option>
+					<option value='1h00'>1h00</option>
+					<option value='1h15'>1h15</option>
+					<option value='1h30'>1h30</option>
+					<option value='1h45'>1h45</option>
+					<option value='2h00'>2h00</option>
+					<option value='2h15'>2h15</option>
+					<option value='2h30'>2h30</option>
+					<option value='2h45'>2h45</option>
+					<option value='3h00'>3h00</option>
+					<option value='3h15'>3h15</option>
+					<option value='3h30'>3h30</option>
+					<option value='3h45'>3h45</option>
+					<option value='4h00'>4h00</option>
+					<option value='4h15'>4h15</option>
+					<option value='4h30'>4h30</option>
+					<option value='4h45'>4h45</option>
+					<option value='5h00'>5h00</option>
+					<option value='5h15'>5h15</option>
+					<option value='5h30'>5h30</option>
+					<option value='5h45'>5h45</option>
+					<option value='6h00'>6h00</option>
+					<option value='6h15'>6h15</option>
+					<option value='6h30'>6h30</option>
+					<option value='6h45'>6h45</option>
+					<option value='7h00'>7h00</option>
+					<option value='7h15'>7h15</option>
+					<option value='7h30'>7h30</option>
+					<option value='7h45'>7h45</option>
+					<option value='8h00'>8h00</option>
+					<option value='8h15'>8h15</option>
+					<option value='8h30'>8h30</option>
+					<option value='8h45'>8h45</option>
+					<option value='9h00'>9h00</option>
+					<option value='9h15'>9h15</option>
+					<option value='9h30'>9h30</option>
+					<option value='9h45'>9h45</option>
+					<option value='10h00'>10h00</option>
+					<option value='10h15'>10h15</option>
+					<option value='10h30'>10h30</option>
+					<option value='10h45'>10h45</option>
+					<option value='11h00'>11h00</option>
+					<option value='11h15'>11h15</option>
+					<option value='11h30'>11h30</option>
+					<option value='11h45'>11h45</option>
+					<option value='12h00'>12h00</option>
+					<option value='12h15'>12h15</option>
+					<option value='12h30'>12h30</option>
+					<option value='12h45'>12h45</option>
+					<option value='13h00'>13h00</option>
+					<option value='13h15'>13h15</option>
+					<option value='13h30'>13h30</option>
+					<option value='13h45'>13h45</option>
+					<option value='14h00'>14h00</option>
+					<option value='14h15'>14h15</option>
+					<option value='14h30'>14h30</option>
+					<option value='14h45'>14h45</option>
+					<option value='15h00'>15h00</option>
+					<option value='15h15'>15h15</option>
+					<option value='15h30'>15h30</option>
+					<option value='15h45'>15h45</option>
+					<option value='16h00'>16h00</option>
+					<option value='16h15'>16h15</option>
+					<option value='16h30'>16h30</option>
+					<option value='16h45'>16h45</option>
+					<option value='17h00'>17h00</option>
+					<option value='17h15'>17h15</option>
+					<option value='17h30'>17h30</option>
+					<option value='17h45'>17h45</option>
+					<option value='18h00'>18h00</option>
+					<option value='18h15'>18h15</option>
+					<option value='18h30'>18h30</option>
+					<option value='18h45'>18h45</option>
+					<option value='19h00'>19h00</option>
+					<option value='19h15'>19h15</option>
+					<option value='19h30'>19h30</option>
+					<option value='19h45'>19h45</option>
+					<option value='20h00'>20h00</option>
+					<option value='20h15'>20h15</option>
+					<option value='20h30'>20h30</option>
+					<option value='20h45'>20h45</option>
+					<option value='21h00'>21h00</option>
+					<option value='21h15'>21h15</option>
+					<option value='21h30'>21h30</option>
+					<option value='21h45'>21h45</option>
+					<option value='22h00'>22h00</option>
+					<option value='22h15'>22h15</option>
+					<option value='22h30'>22h30</option>
+					<option value='22h45'>22h45</option>
+					<option value='23h00'>23h00</option>
+					<option value='23h15'>23h15</option>
+					<option value='23h30'>23h30</option>
+					<option value='23h45'>23h45</option>
+			    </select>
+			    </p>			
+			</div>
+			<div>
+			    <p>
+			    <select name="temperature" id="progvaleur">
+					<option value='5'>5°</option>
+					<option value='5.5'>5.5°</option>
+					<option value='6'>6°</option>
+					<option value='6.5'>6.5°</option>
+					<option value='7'>7°</option>
+					<option value='7.5'>7.5°</option>
+					<option value='8'>8°</option>
+					<option value='8.5'>8.5°</option>
+					<option value='9'>9°</option>
+					<option value='9.5'>9.5°</option>
+					<option value='10'>10°</option>
+					<option value='10.5'>10.5°</option>
+					<option value='11'>11°</option>
+					<option value='11.5'>11.5°</option>
+					<option value='12'>12°</option>
+					<option value='12.5'>12.5°</option>
+					<option value='13'>13°</option>
+					<option value='13.5'>13.5°</option>
+					<option value='14'>14°</option>
+					<option value='14.5'>14.5°</option>
+					<option value='15'>15°</option>
+					<option value='15.5'>15.5°</option>
+					<option value='16'>16°</option>
+					<option value='16.5'>16.5°</option>
+					<option value='17'>17°</option>
+					<option value='17.5'>17.5°</option>
+					<option value='18'>18°</option>
+					<option value='18.5'>18.5°</option>
+					<option value='19'>19°</option>
+					<option value='19.5'>19.5°</option>
+					<option value='20'>20°</option>
+					<option value='20.5'>20.5°</option>
+					<option value='21'>21°</option>
+					<option value='21.5'>21.5°</option>
+					<option value='22'>22°</option>
+					<option value='22.5'>22.5°</option>
+					<option value='23'>23°</option>
+					<option value='23.5'>23.5°</option>
+					<option value='24'>24°</option>
+					<option value='24.5'>24.5°</option>
+					<option value='25'>25°</option>
+					<option value='25.5'>25.5°</option>
+					<option value='26'>26°</option>
+					<option value='26.5'>26.5°</option>
+					<option value='27'>27°</option>
+
+
+			    </select>
+				</p>			
+			</div>
+				    
+
+			<script>
+			
+		   /* $( "#radius" ).selectmenu({
+		        change: function( event, data ) {
+		          circle.css({
+		            width: data.item.value,
+		            height: data.item.value
+		          });
+		        }
+		       });*/
+			</script>
+				   
+			<div class="ui-bar">
+				<ul id="programmationlist" data-role="listview" data-filter="false" data-inset="true" data-split-icon="delete">
+						<li data-role="list-divider">Programmation</li>
+					    <li><a href="#" onclick="addprog();return false;">Ajouter</a></li>
+				</ul>
+			</div>
+
+
+	    </div>		
+	</div> 
+	
+	<div id="progpage2" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+
+			<div>
+			    <p>
+			    <input type="date" id="progdate_start" data-role="datebox" data-options='{"mode": "calbox", "useNewStyle":true}'>
+			    <select name="horaire" id="progtimer_start">
+			    	<option value='0h00'>0h00</option>
+					<option value='0h15'>0h15</option>
+					<option value='0h30'>0h30</option>
+					<option value='0h45'>0h45</option>
+					<option value='1h00'>1h00</option>
+					<option value='1h15'>1h15</option>
+					<option value='1h30'>1h30</option>
+					<option value='1h45'>1h45</option>
+					<option value='2h00'>2h00</option>
+					<option value='2h15'>2h15</option>
+					<option value='2h30'>2h30</option>
+					<option value='2h45'>2h45</option>
+					<option value='3h00'>3h00</option>
+					<option value='3h15'>3h15</option>
+					<option value='3h30'>3h30</option>
+					<option value='3h45'>3h45</option>
+					<option value='4h00'>4h00</option>
+					<option value='4h15'>4h15</option>
+					<option value='4h30'>4h30</option>
+					<option value='4h45'>4h45</option>
+					<option value='5h00'>5h00</option>
+					<option value='5h15'>5h15</option>
+					<option value='5h30'>5h30</option>
+					<option value='5h45'>5h45</option>
+					<option value='6h00'>6h00</option>
+					<option value='6h15'>6h15</option>
+					<option value='6h30'>6h30</option>
+					<option value='6h45'>6h45</option>
+					<option value='7h00'>7h00</option>
+					<option value='7h15'>7h15</option>
+					<option value='7h30'>7h30</option>
+					<option value='7h45'>7h45</option>
+					<option value='8h00'>8h00</option>
+					<option value='8h15'>8h15</option>
+					<option value='8h30'>8h30</option>
+					<option value='8h45'>8h45</option>
+					<option value='9h00'>9h00</option>
+					<option value='9h15'>9h15</option>
+					<option value='9h30'>9h30</option>
+					<option value='9h45'>9h45</option>
+					<option value='10h00'>10h00</option>
+					<option value='10h15'>10h15</option>
+					<option value='10h30'>10h30</option>
+					<option value='10h45'>10h45</option>
+					<option value='11h00'>11h00</option>
+					<option value='11h15'>11h15</option>
+					<option value='11h30'>11h30</option>
+					<option value='11h45'>11h45</option>
+					<option value='12h00'>12h00</option>
+					<option value='12h15'>12h15</option>
+					<option value='12h30'>12h30</option>
+					<option value='12h45'>12h45</option>
+					<option value='13h00'>13h00</option>
+					<option value='13h15'>13h15</option>
+					<option value='13h30'>13h30</option>
+					<option value='13h45'>13h45</option>
+					<option value='14h00'>14h00</option>
+					<option value='14h15'>14h15</option>
+					<option value='14h30'>14h30</option>
+					<option value='14h45'>14h45</option>
+					<option value='15h00'>15h00</option>
+					<option value='15h15'>15h15</option>
+					<option value='15h30'>15h30</option>
+					<option value='15h45'>15h45</option>
+					<option value='16h00'>16h00</option>
+					<option value='16h15'>16h15</option>
+					<option value='16h30'>16h30</option>
+					<option value='16h45'>16h45</option>
+					<option value='17h00'>17h00</option>
+					<option value='17h15'>17h15</option>
+					<option value='17h30'>17h30</option>
+					<option value='17h45'>17h45</option>
+					<option value='18h00'>18h00</option>
+					<option value='18h15'>18h15</option>
+					<option value='18h30'>18h30</option>
+					<option value='18h45'>18h45</option>
+					<option value='19h00'>19h00</option>
+					<option value='19h15'>19h15</option>
+					<option value='19h30'>19h30</option>
+					<option value='19h45'>19h45</option>
+					<option value='20h00'>20h00</option>
+					<option value='20h15'>20h15</option>
+					<option value='20h30'>20h30</option>
+					<option value='20h45'>20h45</option>
+					<option value='21h00'>21h00</option>
+					<option value='21h15'>21h15</option>
+					<option value='21h30'>21h30</option>
+					<option value='21h45'>21h45</option>
+					<option value='22h00'>22h00</option>
+					<option value='22h15'>22h15</option>
+					<option value='22h30'>22h30</option>
+					<option value='22h45'>22h45</option>
+					<option value='23h00'>23h00</option>
+					<option value='23h15'>23h15</option>
+					<option value='23h30'>23h30</option>
+					<option value='23h45'>23h45</option>
+			    </select>
+			    </p>			
+			</div>
+			<div>
+			    <p>
+			    <input type="date" id="progdate_stop" data-role="datebox" data-options='{"mode": "calbox", "useNewStyle":true}'>
+			    <select name="horaire" id="progtimer_stop">
+			    	<option value='0h00'>0h00</option>
+					<option value='0h15'>0h15</option>
+					<option value='0h30'>0h30</option>
+					<option value='0h45'>0h45</option>
+					<option value='1h00'>1h00</option>
+					<option value='1h15'>1h15</option>
+					<option value='1h30'>1h30</option>
+					<option value='1h45'>1h45</option>
+					<option value='2h00'>2h00</option>
+					<option value='2h15'>2h15</option>
+					<option value='2h30'>2h30</option>
+					<option value='2h45'>2h45</option>
+					<option value='3h00'>3h00</option>
+					<option value='3h15'>3h15</option>
+					<option value='3h30'>3h30</option>
+					<option value='3h45'>3h45</option>
+					<option value='4h00'>4h00</option>
+					<option value='4h15'>4h15</option>
+					<option value='4h30'>4h30</option>
+					<option value='4h45'>4h45</option>
+					<option value='5h00'>5h00</option>
+					<option value='5h15'>5h15</option>
+					<option value='5h30'>5h30</option>
+					<option value='5h45'>5h45</option>
+					<option value='6h00'>6h00</option>
+					<option value='6h15'>6h15</option>
+					<option value='6h30'>6h30</option>
+					<option value='6h45'>6h45</option>
+					<option value='7h00'>7h00</option>
+					<option value='7h15'>7h15</option>
+					<option value='7h30'>7h30</option>
+					<option value='7h45'>7h45</option>
+					<option value='8h00'>8h00</option>
+					<option value='8h15'>8h15</option>
+					<option value='8h30'>8h30</option>
+					<option value='8h45'>8h45</option>
+					<option value='9h00'>9h00</option>
+					<option value='9h15'>9h15</option>
+					<option value='9h30'>9h30</option>
+					<option value='9h45'>9h45</option>
+					<option value='10h00'>10h00</option>
+					<option value='10h15'>10h15</option>
+					<option value='10h30'>10h30</option>
+					<option value='10h45'>10h45</option>
+					<option value='11h00'>11h00</option>
+					<option value='11h15'>11h15</option>
+					<option value='11h30'>11h30</option>
+					<option value='11h45'>11h45</option>
+					<option value='12h00'>12h00</option>
+					<option value='12h15'>12h15</option>
+					<option value='12h30'>12h30</option>
+					<option value='12h45'>12h45</option>
+					<option value='13h00'>13h00</option>
+					<option value='13h15'>13h15</option>
+					<option value='13h30'>13h30</option>
+					<option value='13h45'>13h45</option>
+					<option value='14h00'>14h00</option>
+					<option value='14h15'>14h15</option>
+					<option value='14h30'>14h30</option>
+					<option value='14h45'>14h45</option>
+					<option value='15h00'>15h00</option>
+					<option value='15h15'>15h15</option>
+					<option value='15h30'>15h30</option>
+					<option value='15h45'>15h45</option>
+					<option value='16h00'>16h00</option>
+					<option value='16h15'>16h15</option>
+					<option value='16h30'>16h30</option>
+					<option value='16h45'>16h45</option>
+					<option value='17h00'>17h00</option>
+					<option value='17h15'>17h15</option>
+					<option value='17h30'>17h30</option>
+					<option value='17h45'>17h45</option>
+					<option value='18h00'>18h00</option>
+					<option value='18h15'>18h15</option>
+					<option value='18h30'>18h30</option>
+					<option value='18h45'>18h45</option>
+					<option value='19h00'>19h00</option>
+					<option value='19h15'>19h15</option>
+					<option value='19h30'>19h30</option>
+					<option value='19h45'>19h45</option>
+					<option value='20h00'>20h00</option>
+					<option value='20h15'>20h15</option>
+					<option value='20h30'>20h30</option>
+					<option value='20h45'>20h45</option>
+					<option value='21h00'>21h00</option>
+					<option value='21h15'>21h15</option>
+					<option value='21h30'>21h30</option>
+					<option value='21h45'>21h45</option>
+					<option value='22h00'>22h00</option>
+					<option value='22h15'>22h15</option>
+					<option value='22h30'>22h30</option>
+					<option value='22h45'>22h45</option>
+					<option value='23h00'>23h00</option>
+					<option value='23h15'>23h15</option>
+					<option value='23h30'>23h30</option>
+					<option value='23h45'>23h45</option>
+			    </select>
+			    </p>			
+			</div>
+			<div>
+			    <p>
+			    <select name="temperature" id="progvaleur2">
+					<option value='5'>5°</option>
+					<option value='5.5'>5.5°</option>
+					<option value='6'>6°</option>
+					<option value='6.5'>6.5°</option>
+					<option value='7'>7°</option>
+					<option value='7.5'>7.5°</option>
+					<option value='8'>8°</option>
+					<option value='8.5'>8.5°</option>
+					<option value='9'>9°</option>
+					<option value='9.5'>9.5°</option>
+					<option value='10'>10°</option>
+					<option value='10.5'>10.5°</option>
+					<option value='11'>11°</option>
+					<option value='11.5'>11.5°</option>
+					<option value='12'>12°</option>
+					<option value='12.5'>12.5°</option>
+					<option value='13'>13°</option>
+					<option value='13.5'>13.5°</option>
+					<option value='14'>14°</option>
+					<option value='14.5'>14.5°</option>
+					<option value='15'>15°</option>
+					<option value='15.5'>15.5°</option>
+					<option value='16'>16°</option>
+					<option value='16.5'>16.5°</option>
+					<option value='17'>17°</option>
+					<option value='17.5'>17.5°</option>
+					<option value='18'>18°</option>
+					<option value='18.5'>18.5°</option>
+					<option value='19'>19°</option>
+					<option value='19.5'>19.5°</option>
+					<option value='20'>20°</option>
+					<option value='20.5'>20.5°</option>
+					<option value='21'>21°</option>
+					<option value='21.5'>21.5°</option>
+					<option value='22'>22°</option>
+					<option value='22.5'>22.5°</option>
+					<option value='23'>23°</option>
+					<option value='23.5'>23.5°</option>
+					<option value='24'>24°</option>
+					<option value='24.5'>24.5°</option>
+					<option value='25'>25°</option>
+					<option value='25.5'>25.5°</option>
+					<option value='26'>26°</option>
+					<option value='26.5'>26.5°</option>
+					<option value='27'>27°</option>
+
+
+			    </select>
+				</p>			
+			</div>
+				    
+
+			<script>
+			
+		   /* $( "#radius" ).selectmenu({
+		        change: function( event, data ) {
+		          circle.css({
+		            width: data.item.value,
+		            height: data.item.value
+		          });
+		        }
+		       });*/
+			</script>
+				   
+			<div class="ui-bar ui-bar-b">
+				<ul id="programmationlist2" data-role="listview" data-filter="false" data-theme="c" data-inset="true" data-divider-theme="b" data-split-theme="b" data-split-icon="delete">
+						<li data-role="list-divider">Programmation</li>
+					    <li><a href="#" onclick="addprog2();return false;">Ajouter</a></li>
+				</ul>
+			</div>
+
+
+	    </div>		
+	</div> 
+	<div id="progpagealarme" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+				<div style="padding-top:20px;padding-left:20px;padding-right:20px;">
+				    <Label>Code Pin</Label>
+				    <input type="password" name="pincode" id="setpincode">
+				</div>
+				<div  style="padding-top:10px;padding-left:20px;padding-right:20px;">
+					<Label>Alarmes</Label>
+					<ul id="alarmepopuplist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+						<li>
+
+						</li>
+					</ul>
+				</div>
+				
+				<div class="ui-grid-a"  style="padding-left:5px;padding-right:5px;" >
+					<div class="ui-block-a">
+					    <a href="#" data-rel="back" data-role="button" data-icon="back">Annuler</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="#" data-role="button" onclick="setprogalarme();return false;" data-icon="action">Valider</a>
+					</div>
+				</div>
+
+
+	    </div>		
+	    <div data-role="popup" id="errorc" data-theme="c" data-overlay-theme="b">
+			
+
+				<div  style="padding-top:10px;padding-left:20px;padding-right:20px;">
+					<Label>Erreur</Label>
+					<ul id="errorlist" data-role="listview" data-inset="true" style="min-width:210px;" data-theme="c">
+						<li>
+
+						</li>
+					</ul>
+				</div>
+				
+				<div  style="padding-left:5px;padding-right:5px;" >
+					<div>
+					    <a href="#" data-role="button" onclick="$( '#errorc' ).popup( 'close' ,{ shadow: false ,positionTo : 'window'} );return false;" data-icon="back">OK</a>
+					</div>
+				</div>
+			
+
+		</div>
+	</div> 
+	
+	<div id="camerapage" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre">Camera</h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+				<div>
+					<!--<h4 id="titre">video</h4>
+					 <h4 id="urlvideo">url</h4> -->
+					<img id="cameraview" src="#" style="width:100%;max-height:100%">
+					<!-- <label><p><h4 id="dateheure"></h4></p></label> -->
+					
+				</div>
+	    </div>
+	    <div  id ="pied"  data-role="footer" data-theme="c" data-position="fixed" >		
+	    	<div class="ui-grid-c" >
+				<div class="ui-block-a"><a href="#" class="ui-btn" id="cambutton1" onclick="cameramove('LEFT');return false" >LEFT</a></div>
+				<div class="ui-block-b"><a href="#" class="ui-btn" id="cambutton2" onclick="cameramove('UP');return false" >UP</a></div>
+				<div class="ui-block-c"><a href="#" class="ui-btn" id="cambutton3" onclick="cameramove('DOWN');return false" >DOWN</a></div>
+				<div class="ui-block-d"><a href="#" class="ui-btn" id="cambutton4" onclick="cameramove('RIGHT');return false" >RIGHT</a></div>
+			</div>
+		</div>
+	</div> 
+	
+	<div id="debugpage" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" >
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre">Debug</h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+				<label id="debuglabel">...</label>
+	    </div>		
+	</div> 
+	
+	<div id="settingListPage" data-role="page"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			
+		</div>
+		<div data-role="content" data-theme="c">
+			<ul id="settingList" data-role="listview" data-filter="false" data-theme="c"></ul>	
+	    </div>		
+	</div>  
+	
+	
+	<div id="settingUser" data-role="page" data-dom-cache="false" data-cache="false"  data-add-back-btn="true" data-theme="c">
+	
+		<div  id ="entete"  data-role="header" data-theme="c" data-position="fixed" >
+			
+			<h1 id="titre"></h1>
+			<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+			<!-- <a href="#settingListPage" data-transition="slide" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left ui-icon-gear ui-btn-icon-notext">Button</a>
+			-->
+		</div>
+		<div data-role="content" data-theme="c"  style="padding:0px 0px;margin:0px 0px">
+
+				    
+			<div style="padding-left:20px;padding-right:20px;">
+			    <p>
+			    <Label>Nom</Label>
+			    <input name="nom" id="setusername">
+				</p>			
+			</div>
+			<div style="padding-left:20px;padding-right:20px;">
+			    <p>
+			    <Label>Mot de passe</Label>
+			    <input type="password" name="password" id="setuserpassword">
+				</p>			
+			</div>
+			
+			<div style="padding-left:20px;padding-right:20px;">
+		    	<Label>Telephone</Label>
+	    		<input type="tel" name="phone" id="setuserphone">
+			</div>
+			<div style="padding-left:20px;padding-right:20px;">
+			    <Label>Email</Label>
+			    <input type="email" name="mail" id="setusermail">
+			</div>
+			<div  style="padding-left:20px;padding-right:20px;">
+				<Label>Notification alarme</Label>
+				<input type="checkbox" name="setuserphonealarme" id="setuserphonealarme"  />
+				<label for="setuserphonealarme" > par telephone</label>
+
+				<input type="checkbox" name="setusermailalarme" id="setusermailalarme"  />
+				<label for="setusermailalarme" > par email</label>
+				
+			</div>
+			
+			<div class="ui-grid-a"  style="padding-left:20px;padding-right:20px;" >
+				<div class="ui-block-a">
+				    <a href="#" data-role="button" onclick="videuser();return false;" data-icon="back">Annuler</a>
+				</div>
+				<div class="ui-block-b">
+					<a href="#" id="addbtn" onclick="adduser();return false;" data-role="button" data-icon="plus">Ajouter</a>
+					<a href="#" id="savebtn" onclick="updateuser();return false;" data-role="button" data-icon="check">Enregistrer</a>
+				</div>
+			</div>
+				   
+			<div class="ui-bar">
+				<ul id="userlist" data-role="listview" data-filter="false" data-theme="c" data-inset="true" data-divider-theme="b" data-split-theme="b" data-split-icon="delete">
+					<li data-role="list-divider">Utilisateurs</li>
+					<!-- <li><a href="#" onclick="adduser();return false;">Ajouter</a></li> -->
+				</ul>
+			</div>
+
+
+	    </div>		
+	</div>
+
+		
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script src="js/variables.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/md5.js"></script>
+
+<script src="js/Page_tagList.js"></script>
+<script src="js/Page_settingList.js"></script>
+<script src="js/userpage.js"></script>
+<script src="js/Page_acceuil.js"></script> 
+<script src="js/Page_login.js"></script> 
+<script src="js/Page_periph.js"></script>
+<script src="js/debugPage.js"></script>
+<script src="js/onclickperipheriques.js"></script> 
+<script src="js/onclicktag.js"></script>
+<script src="js/onclickprog.js"></script>
+<script src="js/onclickuser.js"></script>    
+<script src="js/onclickperipheriques.js"></script> 
+
+<script src="js/_request_manager.js"></script> 
+<script src="js/_core.js"></script>
+<script src="js/_connexion_request.js"></script>
+<script src="js/filemanager.js"></script>
+<script src="i18n/traductions.js"></script>    
+
+<script src="js/refreshetat.js"></script>
+<script src="js/progpage.js"></script>
+<script src="js/Highchartpage.js"></script>
+<script src="js/progListmodePage.js"></script>
+<script src="js/progListCategPage.js"></script>
+<script src="js/progListPage.js"></script>
+<script src="js/progalarmepage.js"></script>
+<script src="js/cameraPage.js"></script>
+
+<script src="js/settingmodespages.js"></script>
+<script src="js/onclickmode.js"></script>
+<script src="../lib_jquery/highchart/highcharts.js"></script>
+<script src="../lib_jquery/highchart/modules/exporting.js"></script>
+<!-- <script src="js/ges_highcharts.js"></script> -->
+<script type="text/javascript">
+         if(isitdevice()){
+         	 document.addEventListener('deviceready',function(){
+        		//alert('ready 5');
+            	app.initialize();
+            	//window.location='./main.html';
+        	}, false);
+         } else {
+         	app.initialize();
+    		//app.receivedEvent(0);
+         }
+         window.onerror = function (errorMsg, url, lineNumber) {
+     	    alert('Error: ' + errorMsg + '\n\nScript: ' + url + '\n\nLine: ' + lineNumber);
+     	}
+</script>
+        
+ 
+
+
+</body>
+
+</html>

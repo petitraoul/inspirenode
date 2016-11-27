@@ -1,0 +1,209 @@
+	<div id="Indus_ProgChauffage_Page" data-role="page" data-theme="c">
+	
+		<div id ="entete" data-role="header" data-theme="c" data-position="fixed">
+			<h1 id="titre"></h1>
+			<a href="#" style="margin-top:10px" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+		</div>
+		<div id="content" data-role="content" data-theme="c" >
+			<div >
+			 	<p>
+			    <fieldset data-role="controlgroup" data-type="horizontal">
+				   <input type="checkbox" value="Lu" name="checkJour" id="checkLu" class="custom" />
+				   <label for="checkLu">L</label>
+				   <input type="checkbox" value="Ma" name="checkJour" id="checkMa" class="custom" />
+				   <label for="checkMa">M</label>
+				   <input type="checkbox" value="Me" name="checkJour" id="checkMe" class="custom" />
+				   <label for="checkMe">M</label>
+				   <input type="checkbox" value="Je" name="checkJour" id="checkJe" class="custom" />
+				   <label for="checkJe">J</label>
+				   <input type="checkbox" value="Ve" name="checkJour" id="checkVe" class="custom" />
+				   <label for="checkVe">V</label>
+				   <input type="checkbox" value="Sa" name="checkJour" id="checkSa" class="custom" />
+				   <label for="checkSa">S</label>
+				   <input type="checkbox" value="Di" name="checkJour" id="checkDi" class="custom" />
+				   <label for="checkDi">D</label>
+				</fieldset>
+				</p>	
+			</div>
+			<div>
+			    <p>
+			    <select name="horaire" id="progtimer">
+			    	<option value='0h00'>0h00</option>
+					<option value='0h15'>0h15</option>
+					<option value='0h30'>0h30</option>
+					<option value='0h45'>0h45</option>
+					<option value='1h00'>1h00</option>
+					<option value='1h15'>1h15</option>
+					<option value='1h30'>1h30</option>
+					<option value='1h45'>1h45</option>
+					<option value='2h00'>2h00</option>
+					<option value='2h15'>2h15</option>
+					<option value='2h30'>2h30</option>
+					<option value='2h45'>2h45</option>
+					<option value='3h00'>3h00</option>
+					<option value='3h15'>3h15</option>
+					<option value='3h30'>3h30</option>
+					<option value='3h45'>3h45</option>
+					<option value='4h00'>4h00</option>
+					<option value='4h15'>4h15</option>
+					<option value='4h30'>4h30</option>
+					<option value='4h45'>4h45</option>
+					<option value='5h00'>5h00</option>
+					<option value='5h15'>5h15</option>
+					<option value='5h30'>5h30</option>
+					<option value='5h45'>5h45</option>
+					<option value='6h00'>6h00</option>
+					<option value='6h15'>6h15</option>
+					<option value='6h30'>6h30</option>
+					<option value='6h45'>6h45</option>
+					<option value='7h00'>7h00</option>
+					<option value='7h15'>7h15</option>
+					<option value='7h30'>7h30</option>
+					<option value='7h45'>7h45</option>
+					<option value='8h00'>8h00</option>
+					<option value='8h15'>8h15</option>
+					<option value='8h30'>8h30</option>
+					<option value='8h45'>8h45</option>
+					<option value='9h00'>9h00</option>
+					<option value='9h15'>9h15</option>
+					<option value='9h30'>9h30</option>
+					<option value='9h45'>9h45</option>
+					<option value='10h00'>10h00</option>
+					<option value='10h15'>10h15</option>
+					<option value='10h30'>10h30</option>
+					<option value='10h45'>10h45</option>
+					<option value='11h00'>11h00</option>
+					<option value='11h15'>11h15</option>
+					<option value='11h30'>11h30</option>
+					<option value='11h45'>11h45</option>
+					<option value='12h00'>12h00</option>
+					<option value='12h15'>12h15</option>
+					<option value='12h30'>12h30</option>
+					<option value='12h45'>12h45</option>
+					<option value='13h00'>13h00</option>
+					<option value='13h15'>13h15</option>
+					<option value='13h30'>13h30</option>
+					<option value='13h45'>13h45</option>
+					<option value='14h00'>14h00</option>
+					<option value='14h15'>14h15</option>
+					<option value='14h30'>14h30</option>
+					<option value='14h45'>14h45</option>
+					<option value='15h00'>15h00</option>
+					<option value='15h15'>15h15</option>
+					<option value='15h30'>15h30</option>
+					<option value='15h45'>15h45</option>
+					<option value='16h00'>16h00</option>
+					<option value='16h15'>16h15</option>
+					<option value='16h30'>16h30</option>
+					<option value='16h45'>16h45</option>
+					<option value='17h00'>17h00</option>
+					<option value='17h15'>17h15</option>
+					<option value='17h30'>17h30</option>
+					<option value='17h45'>17h45</option>
+					<option value='18h00'>18h00</option>
+					<option value='18h15'>18h15</option>
+					<option value='18h30'>18h30</option>
+					<option value='18h45'>18h45</option>
+					<option value='19h00'>19h00</option>
+					<option value='19h15'>19h15</option>
+					<option value='19h30'>19h30</option>
+					<option value='19h45'>19h45</option>
+					<option value='20h00'>20h00</option>
+					<option value='20h15'>20h15</option>
+					<option value='20h30'>20h30</option>
+					<option value='20h45'>20h45</option>
+					<option value='21h00'>21h00</option>
+					<option value='21h15'>21h15</option>
+					<option value='21h30'>21h30</option>
+					<option value='21h45'>21h45</option>
+					<option value='22h00'>22h00</option>
+					<option value='22h15'>22h15</option>
+					<option value='22h30'>22h30</option>
+					<option value='22h45'>22h45</option>
+					<option value='23h00'>23h00</option>
+					<option value='23h15'>23h15</option>
+					<option value='23h30'>23h30</option>
+					<option value='23h45'>23h45</option>
+			    </select>
+			    </p>			
+			</div>
+			<div>
+			    <p>
+			    <select name="temperature" id="progvaleur">
+					<option value='5'>5</option>
+					<option value='5.5'>5.5</option>
+					<option value='6'>6</option>
+					<option value='6.5'>6.5</option>
+					<option value='7'>7</option>
+					<option value='7.5'>7.5</option>
+					<option value='8'>8</option>
+					<option value='8.5'>8.5</option>
+					<option value='9'>9</option>
+					<option value='9.5'>9.5</option>
+					<option value='10'>10</option>
+					<option value='10.5'>10.5</option>
+					<option value='11'>11</option>
+					<option value='11.5'>11.5</option>
+					<option value='12'>12</option>
+					<option value='12.5'>12.5</option>
+					<option value='13'>13</option>
+					<option value='13.5'>13.5</option>
+					<option value='14'>14</option>
+					<option value='14.5'>14.5</option>
+					<option value='15'>15</option>
+					<option value='15.5'>15.5</option>
+					<option value='16'>16</option>
+					<option value='16.5'>16.5</option>
+					<option value='17'>17</option>
+					<option value='17.5'>17.5</option>
+					<option value='18'>18</option>
+					<option value='18.5'>18.5</option>
+					<option value='19'>19</option>
+					<option value='19.5'>19.5</option>
+					<option value='20'>20</option>
+					<option value='20.5'>20.5</option>
+					<option value='21'>21</option>
+					<option value='21.5'>21.5</option>
+					<option value='22'>22</option>
+					<option value='22.5'>22.5</option>
+					<option value='23'>23</option>
+					<option value='23.5'>23.5</option>
+					<option value='24'>24</option>
+					<option value='24.5'>24.5</option>
+					<option value='25'>25</option>
+					<option value='25.5'>25.5</option>
+					<option value='26'>26</option>
+					<option value='26.5'>26.5</option>
+					<option value='27'>27</option>
+
+
+			    </select>
+				</p>			
+			</div>
+				    
+
+			<script>
+			
+		   /* $( "#radius" ).selectmenu({
+		        change: function( event, data ) {
+		          circle.css({
+		            width: data.item.value,
+		            height: data.item.value
+		          });
+		        }
+		       });*/
+			</script>
+				   
+			<div class="ui-bar ui-bar-b">
+				<ul id="programmationlist" data-role="listview" data-filter="false" data-theme="c" data-inset="true" data-divider-theme="b" data-split-theme="b" data-split-icon="delete">
+						<li data-role="list-divider">Programmation</li>
+					    <li><a href="#" onclick="addprog();return false;">Ajouter</a></li>
+				</ul>
+			</div>
+
+			
+	    </div>		
+		<div  id ="pied"  data-role="footer" data-theme="b" data-position="fixed" >
+
+		</div>
+	</div>

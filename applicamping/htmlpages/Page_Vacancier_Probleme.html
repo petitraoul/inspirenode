@@ -1,0 +1,19 @@
+	<div id="Vacancier_Probleme_Page" data-role="page" data-theme="c">
+		
+		<div id ="entete" data-role="header" data-theme="c" data-position="fixed">
+			<h1 id="titre"  data-i18n="vacancier_titre"></h1>
+			<a href="#" style="margin-top:10px" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-icon-back ui-btn-icon-left ui-btn-icon-notext">Back</a>
+		</div>
+		<div id ="content" data-role="content" data-theme="c" >
+			<div data-role="fieldcontain">
+			<label for="commentaire">Descriptif du probleme :</label>
+			<textarea  style="color:red" cols="40" rows="10" name="commentaire" id="commentaire"></textarea>
+			</div>
+			<button onclick="saveProblemeVacancier();return false;" type="submit" data-theme="b" data-i18n="enregistrer">Enregistrer</button>
+			
+		</div>
+
+		<div  id ="pied"  data-role="footer" data-theme="c" data-position="fixed" >
+
+		</div>
+	</div>

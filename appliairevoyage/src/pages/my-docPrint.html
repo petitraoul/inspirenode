@@ -1,0 +1,79 @@
+﻿<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/iron-location/iron-query-params.html">
+<link rel="import" href="../../bower_components/iron-location/iron-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route-converter.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
+
+
+<link rel="import" href="../element/my-doc_recu.html">
+<link rel="import" href="../element/my-doc_listefamilles_selection.html">
+<link rel="import" href="../element/my-doc_listefamilles.html">
+
+<dom-module id="my-docPrint">
+
+  <template>
+
+    <style>
+
+    </style>
+
+	<div hidden$="{{printmode}}">
+	  <iron-location path="{{path}}" ></iron-location>
+
+      <iron-pages role="main" selected="[[params.doc]]" attr-for-selected="name">
+      	<my-doc_recu name="doc_recu" selection_query='{{params}}'></my-doc_recu>
+      	<my-doc_listefamilles name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles>  
+	  </iron-pages>
+	  
+	</div>
+	
+	<div hidden$="{{!printmode}}">
+		<my-doc_listefamilles_selection name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles_selection>  
+	</div>
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'my-docPrint',
+    	  properties: {  
+    		  params:{type:Object
+    			  ,notify:true
+    			  ,value:{doc:'test'}},
+    		  printmode:{type:Object,
+    			  notify:true,
+    			  value:true}
+    	  },
+    	  observers: [
+	                  '_objetchange(path)'	                  
+	                ],
+	      _objetchange:function(path){
+	    	  var querystring=window.decodeURIComponent(path).split('?');
+	    	  if (querystring.length>1){
+	    		  this.set('printmode',false);
+		    	  var querypair=querystring[1].split('&');
+		    	  var queryobjet={};
+		    	  for (var i in querypair){
+		    		  var queryparts=querypair[i].split('=');
+		    		  queryobjet[queryparts[0]]=queryparts[1];
+		    	  }
+		    	  this.set('params',queryobjet);
+	    	  } else {
+	    		  this.set('printmode',true);
+	    	  }
+	    	  
+	      }
+    });
+  </script>
+
+</dom-module>
