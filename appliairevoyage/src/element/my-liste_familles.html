@@ -8,38 +8,42 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
-<link rel="import" href="../element/my-profilfamille.html">
+<link rel="import" href="../majcore/my-liste_behavior.html">
+<link rel="import" href="../element/my-liste_sexes.html">
 
 <dom-module id="my-liste_familles">
 
   <template>
 		<style >
-		 .add-button{
-		 	position:fixed;
-		 	bottom:50px;
-		 	left:50px;
-		 	--paper-fab-background: var(--paper-red-400);
-		    --paper-fab-keyboard-focus-background: var(--paper-red-900);
-		 }
+			my-liste_behavior{
+				--max_widthliste:var(--max_width_liste);
+			}
   		</style>
+  		
 
-  	<iron-ajax
-		id="charge_allfamilles"
-	    method="GET"
-	    url="{{charge_allfamilles_url}}"
-	    headers="{{app.header_auth}}"
-	    params="{{params_allfamilles}}"
-	    handle-as="json"
-	    on-error="_disconnect"
-	    last-response="{{famille_Response}}"
-	    debounce-duration="300">
-	</iron-ajax>
-	<paper-fab class="add-button" hidden$="[[editbuttonhide]]" mini icon="add" title="Cr�er" on-tap="add"></paper-fab>
-		
-    <template is="dom-repeat" items="[[famille_Response]]">
-			<my-profilfamille objet="{{item}}" selitem="{{selitem}}" editbuttonhide="{{editbuttonhide}}" contextePrint="{{contextePrint}}"></my-profilfamille>
-	</template>
-
+  		<my-liste_behavior 
+  			detail_code="my-profilfamille" 
+  			
+  			title="familles"
+  			title_background_color="rgba(50, 170, 25, 0.5)"
+  			
+  			params="{{params_allfamilles}}"
+  			
+  			hideother_onedit=false
+  			hideothereditbutton_onedit=true
+  			grants="{{grants}}"
+  			
+  			scroll_actif=false
+  			max_heightliste="60vh"
+  			
+  			
+  			dropdowntype$="{{dropdowntype}}"
+  			value_sel="{{value_sel}}"
+  			dropdown_selobj="{{dropdown_selobj}}"
+  		>
+  		<!-- limite_creation=1 
+  			dropdowntype=false-->
+		</my-liste_behavior>
   </template>
   <script>
   Polymer({
@@ -47,49 +51,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  is: 'my-liste_familles',
 	  
 	  properties: {  
-	     app: {
-	          type: Object
-	        },    
   		 params_allfamilles:{type: Object,
 	   	 	  notify : true,
-	   	 	  value: {type:'get',action:'listpersonne',titulaire_id:"isnull"}},
-	   	 charge_allfamilles_url: {type:String, 
-	   		    notify : true,
-	   		  	value:null },
-	     editbuttonhide:{type:Boolean,
-	    	 	notify : true,
-	    	 	value:false },	     
-	     selitem:{type:Number,
-		    	 	notify : true,
-		    	 	value :-1},
-	  },
-	  listeners: {
-          'reply_famille': 'handleReply',
-        },
-	  add : function(){
-		 this.push('famille_Response', {newobjet:true});
-		 this.set('selitem',0);
-		 this.set('editmode',true);
-		  this.set('editbuttonhide',true);
-	  },
-	  handleReply:function(e,detail){
-		  if (detail.id==-1 && this.famille_Response.indexOf(detail)>-1) {
-			  this.splice('famille_Response', this.famille_Response.indexOf(detail), 1);
-		  }
-	  },
-	  ready: function() {
-	        this.app = document.querySelector('#app');
-	    	  this.charge_allfamilles_url=this.app.url_api+':'+this.app.port_api+'/index'
-	    	  this.$.charge_allfamilles.generateRequest();
-	      },
-	      
-	  _disconnect: function(obj){
-	    	  this.app = document.querySelector('#app');
-	    	  return this.app.disconnect();
-	      },
-	  _toArray: function(obj){
-	    	  return this.app._toArray(obj);
-	      },
+	   	 	  value: function() { return {type:'get',action:'listpersonne',titulaire_id:"isnull"}; } 
+	        },
+	  	 grants:{type:Object,
+	  	 		 notify : true,
+	  	 		 value : {creation:true,
+		  	 			 modification:true,
+		  	 			 suppression:true,
+		  	 			 impression:false}
+	  	 	 },
+	     liste_familles:{type:Array,
+	    	 notify:true},
+	    	 
+	     dropdown_selobj:{type:Object,notify:true},
+	     value_sel:{type:Number,notify:true,value:6}
+	  }
+
+	  
+
 
   })
   </script>

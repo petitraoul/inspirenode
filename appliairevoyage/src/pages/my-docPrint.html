@@ -13,11 +13,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 
 
-
+<link rel="import" href="../element/my-doc_facture.html">
 <link rel="import" href="../element/my-doc_recu.html">
 <link rel="import" href="../element/my-doc_listefamilles_selection.html">
 <link rel="import" href="../element/my-doc_listefamilles.html">
-
+<link rel="import" href="../element/my-doc_listeoperation_selection.html">
+<link rel="import" href="../element/my-doc_listeoperation.html">
 <dom-module id="my-docPrint">
 
   <template>
@@ -31,13 +32,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <iron-pages role="main" selected="[[params.doc]]" attr-for-selected="name">
       	<my-doc_recu name="doc_recu" selection_query='{{params}}'></my-doc_recu>
-      	<my-doc_listefamilles name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles>  
+      	<my-doc_facture name="doc_facture" selection_query='{{params}}'></my-doc_facture>
+      	<my-doc_listefamilles name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles>
+      	<my-doc_listeoperation name="doc_listeoperation" selection_query='{{params}}'></my-doc_listeoperation>    
 	  </iron-pages>
 	  
 	</div>
 	
 	<div hidden$="{{!printmode}}">
 		<my-doc_listefamilles_selection name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles_selection>  
+		<my-doc_listeoperation_selection name="doc_listeoperation" selection_query='{{params}}'></my-doc_listeoperation_selection>  
 	</div>
   </template>
 

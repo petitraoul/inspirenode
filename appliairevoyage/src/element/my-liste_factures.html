@@ -1,0 +1,74 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<dom-module id="my-liste_factures">
+
+  <template>
+		<style >
+			my-sous_liste_behavior{
+				--max_widthliste:var(--max_width_liste);
+			}
+  		</style>
+  		<my-sous_liste_behavior class="parametres_zone"
+  			
+  			detail_code="my-profilfacture" 
+  			
+  			title="factures"
+  			title_background_color="rgba(50, 170, 25, 0.5)"
+  			
+  			params="{{params_allfactures}}"
+  			
+  			hideother_onedit=false
+  			hideothereditbutton_onedit=true
+  			grants="{{grants}}"
+  			
+  			scroll_actif=false
+  			max_heightliste="20vh"
+  			
+  			
+  			dropdowntype$="{{dropdowntype}}"
+  			value_sel="{{value_sel}}"
+  			dropdown_selobj="{{dropdown_selobj}}"
+  			
+  			liste_objets="{{liste_objets}}"  		>
+	
+		</my-sous_liste_behavior>
+  </template>
+  <script>
+  Polymer({
+
+	  is: 'my-liste_factures',
+	  
+	  properties: {  
+  		 params_allfactures:{type: Object,
+	   	 	  notify : true,
+	   	 	  value:  {type:'get',action:'listfacture'} 
+	        },
+	  	 grants:{type:Object,
+	  	 		 notify : true,
+	  	 		 value : {creation:true,
+		  	 			 modification:true,
+		  	 			 suppression:true,
+		  	 			 impression:false}
+	  	 	 },
+	     liste_factures:{type:Array,
+	    	 notify:true},
+	    	 
+	     dropdown_selobj:{type:Object,notify:true},
+	     value_sel:{type:Number,notify:true,value:6}
+	  }
+
+	  
+
+
+  })
+  </script>
+
+</dom-module>

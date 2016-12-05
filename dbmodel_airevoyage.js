@@ -13,14 +13,9 @@ var database = {"name" : "mydb_airevoyage.db",
 			               {"id" : "peripheriquedeporte", "titre" : "Periphériques déportés", "action" : "peripheriquedeporte", "image" : "../images/onoff0.png"},
 			               {"id" : "periphschauff", "titre" : "Periphériques chauffage", "action" : "peripheriquechauff", "image" : "../images/termometr.png"},
 			               {"id" : "periphsbatterie", "titre" : "Periphériques batterie", "action" : "peripheriquebatterie", "image" : "../images/pile.png"},
-			               {"id" : "mode", "titre" : "Modes", "action" : "mode", "image" : "../images/confort.png"},
-			               {"id" : "mode", "titre" : "Modes activ. différé", "action" : "modeactivationdiff", "image" : "../images/confort.png"},
-			               {"id" : "type", "titre" : "Types", "action" : "type", "image" : "../images/type.png"},
-			               {"id" : "consigne_temp", "titre" : "Consignes chauffage", "action" : "consigne_temp", "image" : "../images/confort.png"},
-			               {"id" : "historise_cron", "titre" : "Historise Cron", "action" : "historise_cron", "image" : "../images/log.jpg"},
+			               {"id" : "type_operation", "titre" : "Type operation", "action" : "type_operation", "image" : "../images/log.png"},
 			               {"id" : "user", "titre" : "Utilisateurs", "action" : "utilisateurs", "image" : "../images/user.jpg"},
 			               {"id" : "image", "titre" : "Images", "action" : "images", "image" : "../images/images.jpg"},
-			               {"id" : "log", "titre" : "Logs", "action" : "log", "image" : "../images/log.jpg"},
 			               {"id" : "automation", "titre" : "Automation", "action" : "automation", "image" : "../images/log.jpg"},
 			               {"id" : "contantes", "titre" : "Contantes", "action" : "constantes", "image" : "../images/constantes.jpg"},
 			               {"id" : "box_virtuel_etat", "titre" : "Etat boxs virtuelles", "action" : "box_virtuel_etat", "image" : "../images/constantes.jpg"},
@@ -165,6 +160,8 @@ var database = {"name" : "mydb_airevoyage.db",
 						              {"name" : "position_x" , "type" : "TEXT","formulaire" : "input"},
 						              {"name" : "position_y" , "type" : "TEXT","formulaire" : "input"},
 						              {"name" : "icon_plan" , "type" : "TEXT","formulaire" : "input"},
+						              {"name" : "periph_elec_id" , "type" : "integer","formulaire" : "select" , "linkobject" : "peripherique"},
+						              {"name" : "periph_eau_id" , "type" : "integer","formulaire" : "select" , "linkobject" : "peripherique"},
 						              {"name" : "type" , "type" : "TEXT", "formulaire" : "select" , "object" : [{"id":"Batiment","nom":"Batiment"},
 							                                                                                       {"id":"Piece","nom":"Piece"}
 						              																			]},
@@ -365,6 +362,9 @@ var database = {"name" : "mydb_airevoyage.db",
 						             {"name" : "phone" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "mail" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "email" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "droit_tarif" , "type" : "TEXT","formulaire" : "select" , "object" : [{"id":"O","nom":"Oui modif"},
+																			                                         {"id":"N","nom":"Non aucune modif"}
+																													]},
 						             {"name" : "alarme_mail" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "alarme_phone" , "type" : "TEXT","formulaire" : "input"}
 						             ],					
@@ -771,12 +771,34 @@ var database = {"name" : "mydb_airevoyage.db",
 							         {"name" : "titulaire_id" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "type_operation" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "mode_paiement" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "date" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "libelle" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "qte" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "pu" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "montant" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "recu_num" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "facture_num" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "solde" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "editable" , "type" : "TEXT","formulaire" : "input"},
-						             {"name" : "printable" , "type" : "TEXT","formulaire" : "input"}
+						             {"name" : "printable" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "signe" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "calcul_solde" , "type" : "TEXT","formulaire" : "input"}
+						             
+						             ],					
+						"actionsreturnlist" : [{"name" : "Supprimer", "type" : "button", "action" : "index?type=maj&action=delete"},
+						                       {"name" : "Annuler", "type" : "button", "action" : "index?type=maj&action=keep"},
+						                       {"name" : "Enregistrer", "type" : "button", "action" : "index?type=maj&action=save"}
+		                   					]
+					},
+					{"name": "facture","in_database":true,
+						"colonnes": [
+						             {"name" : "id" , "type" : " integer primary key autoincrement","formulaire" : "label"},
+							         {"name" : "uuid" , "type" : "TEXT","formulaire" : "label"},
+							         {"name" : "titulaire_id" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "facture_num" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "date" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "libelle" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "solde" , "type" : "TEXT","formulaire" : "input"}
 						             
 						             ],					
 						"actionsreturnlist" : [{"name" : "Supprimer", "type" : "button", "action" : "index?type=maj&action=delete"},
@@ -820,7 +842,10 @@ var database = {"name" : "mydb_airevoyage.db",
 						             {"name" : "id" , "type" : " integer primary key autoincrement","formulaire" : "label"},
 							         {"name" : "uuid" , "type" : "TEXT","formulaire" : "label"},
 							         {"name" : "nom" , "type" : "TEXT","formulaire" : "input"},
-							         {"name" : "code" , "type" : "TEXT","formulaire" : "input"}
+							         {"name" : "code" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "signe" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "calcul_solde" , "type" : "TEXT","formulaire" : "input"}
+							         
 						             
 						             ],					
 						"actionsreturnlist" : [{"name" : "Supprimer", "type" : "button", "action" : "index?type=maj&action=delete"},
@@ -840,7 +865,17 @@ var database = {"name" : "mydb_airevoyage.db",
 						                       {"name" : "Annuler", "type" : "button", "action" : "index?type=maj&action=keep"},
 						                       {"name" : "Enregistrer", "type" : "button", "action" : "index?type=maj&action=save"}
 		                   					]
-					}
+					},
+					{"name": "numerotation","in_database":true,
+						"colonnes": [
+						             {"name" : "id" , "type" : "integer primary key autoincrement" ,"formulaire" : "label"},
+						             {"name" : "type" , "type" : "TEXT"},
+						             {"name" : "arg1" , "type" : "TEXT"},
+						             {"name" : "arg2" , "type" : "TEXT"},
+						             {"name" : "arg3" , "type" : "TEXT"},
+						             {"name" : "increment" , "type" : "TEXT"}
+						             ]
+						}
 					]
 				};
 

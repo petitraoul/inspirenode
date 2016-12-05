@@ -2,6 +2,12 @@
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../../bower_components/iron-scroll-target-behavior/iron-scroll-target-behavior.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 
@@ -447,7 +453,15 @@
          } else if (newpage) {
         	// load page import on demand.
         	document.getElementById('d').close();
-        	this.importHref(this.resolveUrl('../pages/my-' + newpage + '.html'), null, null, true);        	 
+      	  
+    	  if (!this.imports) {
+    		  this.imports={};
+    	  }
+    	  if (!this.imports['my-' + newpage ]){
+    		  this.importHref(this.resolveUrl('../pages/my-' + newpage + '.html'), null, null, true);  
+    		  this.imports['my-' + newpage]=true;
+    	  }
+        	        	 
          }
          
          
@@ -483,6 +497,7 @@
     	    //console.log('authentification valide',data.id);
     	    this.set('compte_id',data.id);
     	    this.set('user_auth',data.user);
+    	    this.set('droit_tarif',data.droit_tarif);
     	    this.$.loginbox.closelogin();
     	    this._charge_appli();
           },

@@ -926,6 +926,7 @@ module.exports =function(variables,res,user,req){
 				rep['id']='sans';
 			}
 			rep['user']=user.user;
+			rep['droit_tarif']=user.droit_tarif;
 			
 			res.writeHead(200, 
 					{'Content-Type': 'text/plain',
@@ -1709,7 +1710,36 @@ module.exports =function(variables,res,user,req){
 
 					});
 				break;
-			
+			case 'getrecu_num':
+
+					GLOBAL.req.numerotation.create_numero(function(num){
+							console.log('recu num',lpad(num,4));
+							var cde_no= 'R'+GLOBAL.req.moment().format('YYMM')+lpad(num,4);
+							var rep=JSON.stringify({num:cde_no});
+							res.writeHead(200, 
+									{'Content-Type': 'text/plain',
+									 'Access-Control-Allow-Origin': '*'});
+							res.end(rep);							
+
+					},'recu',GLOBAL.req.moment().format('YYYYMM'));
+						
+
+				break;
+			case 'getfacture_num':
+
+				GLOBAL.req.numerotation.create_numero(function(num){
+						console.log('facture num',lpad(num,4));
+						var cde_no= 'F'+GLOBAL.req.moment().format('YYMM')+lpad(num,4);
+						var rep=JSON.stringify({num:cde_no});
+						res.writeHead(200, 
+								{'Content-Type': 'text/plain',
+								 'Access-Control-Allow-Origin': '*'});
+						res.end(rep);							
+
+				},'facture',GLOBAL.req.moment().format('YYYYMM'));
+					
+
+			break;
 			
 			/*********************/
 			/*	case 'allconfig2':

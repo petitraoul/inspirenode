@@ -1,7 +1,7 @@
 /**
  * New node file
  */
-var programmation_consigne_test={id:311253,nom:"programmation_consigne_test",etat:"OFF",lastrun:null};
+var programmation_consigne_test={id:53,nom:"programmation_consigne_test",etat:"OFF",lastrun:null};
 var infirstappliqueprevious=false;
 var calculconsigneencours=false;
 var timer=null;

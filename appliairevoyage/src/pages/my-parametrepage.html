@@ -7,6 +7,12 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+
+<link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
+
+<link rel="import" href="../majcore/my-liste_behavior.html">
+<link rel="import" href="../majcore/my-sous_liste_behavior.html">
+<link rel="import" href="../majcore/my-profil_behavior.html">
 <link rel="import" href="../element/my-liste_tarifs.html">
 <link rel="import" href="../element/my-liste_typecafs.html">
 <link rel="import" href="../element/my-liste_sexes.html">
@@ -15,22 +21,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../element/my-liste_type_paiement.html">
 <link rel="import" href="../element/my-liste_societes.html">
 <link rel="import" href="../element/my-liste_aires.html">
+<link rel="import" href="../element/my-liste_emplacements.html">
 <dom-module id="my-parametrepage">
 
   <template>
 
     <style>
-
+			.parametres_zone{
+				--max_width_liste:550px;
+			}
     </style>
 
 	<div>
-		<my-liste_tarifs dropdowntype="false"></my-liste_tarifs>
-		<my-liste_typecafs dropdowntype="false"></my-liste_typecafs>
-		<my-liste_sexes dropdowntype="false"></my-liste_sexes>
-		<my-liste_type_operation dropdowntype="false"></my-liste_type_operation>
-		<my-liste_type_paiement dropdowntype="false"></my-liste_type_paiement>
-		<my-liste_aires dropdowntype="false"></my-liste_aires>
-		<my-liste_societes dropdowntype="false"></my-liste_societes>
+		<my-liste_tarifs class="parametres_zone"></my-liste_tarifs>
+		<my-liste_typecafs class="parametres_zone"></my-liste_typecafs>
+		<my-liste_sexes class="parametres_zone"></my-liste_sexes>
+		<my-liste_type_operation class="parametres_zone"></my-liste_type_operation>
+		<my-liste_type_paiement class="parametres_zone"></my-liste_type_paiement>
+		
+		<my-liste_societes class="parametres_zone"></my-liste_societes>
+		<my-liste_aires class="parametres_zone"></my-liste_aires>
+		<my-liste_emplacements class="parametres_zone"></my-liste_emplacements>
 
 	</div>
   </template>

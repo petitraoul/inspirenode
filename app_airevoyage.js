@@ -79,6 +79,7 @@ var reqarray=[	{name:'request',require:'request'},
 	            {name : "periph_chauffage",require:'./serveur_api/class_periph_chauffage'},
 	            {name : "periph_alarme",require:'./serveur_api/class_periph_alarme'},
 	            {name : "periph_batterie",require:'./serveur_api/class_periph_batterie'},
+	            {name : "numerotation",require:'./serveur_api/class_numerotation'},
 	            
 	            {name : "serverhttp",require:'./serveur_http/serverhttp.js'},
 	            {name:'httpdispatcher',require:'./serveur_http/httpdispatcher'},

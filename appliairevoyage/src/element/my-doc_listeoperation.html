@@ -1,0 +1,92 @@
+﻿<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="my-doc_listeoperation">
+		  <template>
+			  <style>
+				
+				table
+				{
+				    border-collapse: collapse;
+				}
+				td, th 
+				{
+				    border: 1px solid black;
+				}
+			  </style>
+			  
+			 <iron-ajax
+				id="charge_operation"			    method="GET"
+			    url="{{charge_operation_url}}"	    headers="{{app.header_auth}}"
+			    params="{{params_get_operation}}"    handle-as="json"   	on-error="_disconnect"
+			    last-response="{{operation}}"   		debounce-duration="300">
+			</iron-ajax>
+			
+			
+			<b>Liste des operations</b>
+			<table>
+			
+			   <tr>
+			       <th>Date</th>
+			       <th>Opération</th>
+			       <th>Montant</th>
+			       <th>Numéros</th>
+			   </tr>
+			
+				<template is="dom-repeat" items="[[operation]]" as="lig">
+				   <tr>
+				       
+				       <td>[[lig.date]]</td>
+				       <td>[[lig.type_operation]] en [[lig.mode_paiement]]</td>
+				       <td>[[lig.qte]] x [[lig.pu]] = [[lig.montant]]</td>
+				       <td>recu [[lig.recu_num]] facture [[lig.facture_num]]</td>
+				   </tr>
+			   	</template>
+			</table>
+				
+		  </template>
+		
+		  <script>
+		    Polymer({
+		
+		      is: 'my-doc_listeoperation',
+
+		      properties: {
+		 	     app: {
+			          type: Object
+		        	},    
+		    	 selection_query:{type : Object,
+	  				  notify:true,
+	  				  value:{}},
+		  		 params_get_operation:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'listcompte_ecriture'}},
+		      },
+	    	  observers: [
+		                  '_selection_query_change(selection_query)'	                  
+		                ],
+		      
+		      _selection_query_change: function(selection_query) {
+			        this.app = document.querySelector('#app');
+			        if (this.params_get_operation && selection_query && selection_query.date1 && selection_query.date2) {
+			        	this.params_get_operation.date=" between '"+selection_query.date1+"' and '"+selection_query.date2+"'";
+			        } else if (this.params_get_operation && selection_query && selection_query.date1) {
+			        	this.params_get_operation.date=">='"+selection_query.date1+"'";
+			        } else if (this.params_get_operation && selection_query && selection_query.date2) {
+			        	this.params_get_operation.date="<='"+selection_query.date2+"'";
+			        } else if (this.params_get_operation) {
+			        	this.params_get_operation.date='';
+			        }
+			        
+			        this.charge_operation_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_operation.generateRequest();
+			  },
+			  
+			  
+			  
+			  _disconnect: function(obj){
+		    	  this.app = document.querySelector('#app');
+		    	  return this.app.disconnect();
+		      }
+		    });
+		  </script>
+		</dom-module>

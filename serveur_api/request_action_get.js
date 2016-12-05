@@ -280,6 +280,21 @@ module.exports =function(variables,res,user){
 					res.end(rep);
 				});
 			break;
+		case 'listtag_voyage':
+			var sql=" Select t.* ,pc.uuid periph_elec_uuid,pe.uuid periph_eau_uuid" +
+					" from tag t left outer join peripherique pc on pc.id=t.periph_elec_id" +
+					"			  left outer join peripherique pe on pe.id=t.periph_eau_id" +
+					" order by id";
+			sql+=';'
+				GLOBAL.obj.app.db.sqlorder(sql,
+				function(rows){
+					var rep = JSON.stringify(rows);
+					res.writeHead(200, 
+								{'Content-Type': 'text/plain',
+								 'Access-Control-Allow-Origin': '*'});
+					res.end(rep);
+				});
+			break;
 		case 'detailtag':
 			var sql='Select * from tag where id=\''+variables.id+'\';';
 			GLOBAL.obj.app.db.sqlorder(sql,
@@ -744,6 +759,15 @@ module.exports =function(variables,res,user){
 
 		default:
 			var complsql="";
+			if(variables.id && variables.id.substr(0,1)!="=" && 
+					variables.id && variables.id.substr(0,1)!=" " && 
+					variables.id && variables.id.substr(0,1)!="!" && 
+					variables.id && variables.id.substr(0,1)!="l" && 
+					variables.id && variables.id.substr(0,1)!="L" && 
+					variables.id && variables.id.substr(0,1)!=">" &&
+					variables.id && variables.id.substr(0,1)!="<"   ){
+				variables.id='='+variables.id;
+			}
 			for (d in variables){
 				if (d!='action' && d!='type' && variables[d]){
 					complsql+= " and "+d+" "+variables[d];

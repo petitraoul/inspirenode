@@ -115,19 +115,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  this.change_slide(this,this.$.slider,e);
       },
 	  attached:function(){
-		  console.log('attached',this.periph.nom);
+		  //console.log('attached',this.periph.nom);
 	        this.listen(this.app, 'Etatchange', 'onEtatchange');
 	        var self=this;
 	        this.listen(this.$.slider,'value-change','_listen_changeslide');
 	  },
 	  detached:function(){
-		  console.log('detached',this.periph.nom);
+		  //console.log('detached',this.periph.nom);
 	        this.unlisten(this.app, 'Etatchange', 'onEtatchange');
 	        var self=this;
 	        this.unlisten(this.$.slider,'value-change', '_listen_changeslide');
 	  },
 	  ready: function() {
-		  console.log('Ready',this.periph.uuid,this.periph.ecriture_type,'VARIABLE');
+		  //console.log('Ready',this.periph.uuid,this.periph.ecriture_type,'VARIABLE');
 		  if (this.periph.ecriture_type=='VARIABLE') {
 		        this.app = document.querySelector('#app');
 		        

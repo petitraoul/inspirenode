@@ -9,17 +9,17 @@ class_numerotation.create_numero=function(callback,type,arg1,arg2,arg3){
   	  var sqlinsert='';
   	  var paramsql=[];
   	  if (arg3 && arg2 && arg1) {
-  		sql= "select max(increment)+1 increment from numerotation n" +
+  		sql= "select max(increment*1)+1 increment from numerotation n" +
   				" where type=? and arg1=? and arg2=? and arg3=?;";
   		sqlinsert= "insert into numerotation (type,arg1,arg2,arg3,increment) values(?,?,?,?,?);";
   		paramsql=[type,arg1,arg2,arg3];
   	  } else if (arg2 && arg1) {
-    	sql= "select max(increment)+1 increment from numerotation n" +
+    	sql= "select max(increment*1)+1 increment from numerotation n" +
 				" where type=? and arg1=? and arg2=? and arg3 is null;"
     	sqlinsert= "insert into numerotation (type,arg1,arg2,increment) values(?,?,?,?);";
 		paramsql=[type,arg1,arg2];
   	  } else if (arg1) {
-      	sql= "select max(increment)+1 increment from numerotation n" +
+      	sql= "select max(increment*1)+1 increment from numerotation n" +
       			" where type=? and arg1=? and arg2 is null and arg3 is null;"
       	sqlinsert= "insert into numerotation (type,arg1,increment) values(?,?,?);";
       	paramsql=[type,arg1];

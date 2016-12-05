@@ -1,7 +1,7 @@
 /**
  * New node file
  */
-var alerte_controle={id:1235,nom:"alerte_controle",etat:"OFF",lastrun:null};
+var alerte_controle={id:35,nom:"alerte_controle",etat:"OFF",lastrun:null};
 var timer=null;
 var timer2=null;
 
