@@ -44,14 +44,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				
 				<div class="ligne">
 					<!-- <my-liste_emplacements objet_sel="{{emplobj_sel}}" class="input3cols" tags_Response="{{tags_Response}}" id="emplacement_id" label="Emplacement" value_sel="{{objet.emplacement_id}}"></my-liste_emplacements> -->
-					<my-combo_select  dropdown_selobj="{{emplobj_sel}}" class="input3cols" table="tag_voyage" id="emplacement_id" label="Emplacement" value_sel="{{objet.emplacement_id}}"></my-combo_select>
+					<my-combo_select charge_table dropdown_selobj="{{emplobj_sel}}" class="input3cols" table="tag_voyage" id="emplacement_id" label="Emplacement" value_sel="{{objet.emplacement_id}}"></my-combo_select>
 					
 				</div>
 				<div class="ligne">
 					<!-- <my-liste_tarifs class="input05cols" id="type_tarif" label="Type Tarif" value_sel="{{objet.type_tarif}}"></my-liste_tarifs> -->
-					<my-combo_select  dropdown_selobj="{{tarifobj_sel}}" class="input05cols" table="typetarif" id="type_tarif" label="Type Tarif" value_sel="{{objet.type_tarif}}"></my-combo_select>
+					<my-combo_select charge_table dropdown_selobj="{{tarifobj_sel}}" class="input05cols" table="typetarif" id="type_tarif" label="Type Tarif" value_sel="{{objet.type_tarif}}"></my-combo_select>
 					<!-- <my-liste_typecafs class="input05cols" id="type_caf" label="Type Caf" value_sel="{{objet.type_caf}}"></my-liste_typecafs> -->
-					<my-combo_select  dropdown_selobj="{{Cafobj_sel}}" class="input05cols" table="typecaf" id="type_caf" label="Type Caf" value_sel="{{objet.type_caf}}"></my-combo_select>
+					<my-combo_select charge_table dropdown_selobj="{{Cafobj_sel}}" class="input05cols" table="typecaf" id="type_caf" label="Type Caf" value_sel="{{objet.type_caf}}"></my-combo_select>
 				</div>
 				<div class="ligne">
 				   	<paper-input class="input05cols" id="date_debut" label="Date debut" type="date" value="{{objet.date_debut}}"> 

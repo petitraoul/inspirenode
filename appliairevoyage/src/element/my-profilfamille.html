@@ -75,7 +75,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					</br>
 					Adresse {{objet.adresse}} {{objet.codepostal}} {{objet.ville}} {{objet.pays}}</br>
 					
-					{{objet.commentaire}}
+					{{objet.commentaire}} [[editmodehide]]
 					
 	  		</div>
 	  		<div class="edition" style="display:flex">
@@ -88,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							   	<paper-input class="input2cols" id="nom" label="Nom" type="text" value="{{objet.nom}}"> 
 					            </paper-input>
 					           <!--  <my-liste_sexes dropdowntype dropdown_selobj="{{dropdown_selobj}}" class="input1col" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-liste_sexes> -->
-					            <my-combo_select  dropdown_selobj="{{dropdown_selobj}}" class="input1col" table="sexe" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-combo_select>
+					            <my-combo_select charge_table$="{{is_edited}}" dropdown_selobj="{{dropdown_selobj}}" class="input1col" table="sexe" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-combo_select>
 							</div>
 							<div class="ligne">
 							    <paper-input class="input1col" id="prenom1" label="Prenom1" type="text" value="{{objet.prenom1}}"></paper-input>
@@ -123,10 +123,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					</my-groupprofil_behavior>
 				</li>
 				<li style="display:block;width:1000px;margin-left:auto;margin-right:auto;margin-top:-40px;margin-bottom:0">
-					<my-liste_compte_ecritures class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}" seltitulaire="{{objet.id}}"  ></my-liste_compte_ecritures>
-					<my-liste_factures class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]" ></my-liste_factures>
-					<my-liste_famillesejours class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]"  ></my-liste_famillesejours>
-					<my-liste_famillemembres class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]"></my-liste_famillemembres>
+					<my-liste_compte_ecritures charge_table$="{{is_edited}}" class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}" seltitulaire="{{objet.id}}"  ></my-liste_compte_ecritures>
+					<my-liste_factures charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]" ></my-liste_factures>
+					<my-liste_famillesejours charge_table$="{{is_edited}}" class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]"  ></my-liste_famillesejours>
+					<my-liste_famillemembres charge_table$="{{is_edited}}" class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]"></my-liste_famillemembres>
 				</li>
 				</div>				 	
 	  		
@@ -156,8 +156,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     
 	     doc_print_link:{type:String,
 	    	 notify:true,
-	    	 computed:'_getprintlink(objet)'}
-	     
+	    	 computed:'_getprintlink(objet)'},
+	     is_edited:{type:Boolean,
+	    	 notify:true,
+	    	 computed:'_is_edited(objet,edited_item_id)'
+	    	 }
 	  },
 
 	  _getprintlink:function(objet){
@@ -171,7 +174,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  _getparams_get:function(obj_id,objet){
 		  return {type:'get',action:'detailpersonne',id:obj_id}
 	  },
-
+	  _is_edited:function(objet,edited_item_id){
+		  if(objet && objet.id && objet.id==edited_item_id){
+			  return true;
+		  } else{
+			  return false;
+		  }
+	  }
   });
   
   </script>

@@ -32,6 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			
   			scroll_actif=false
   			max_heightliste="20vh"
+  			charge_table$="{{charge_table}}"
   			dropdowntype$="{{dropdowntype}}"
   			value_sel="{{value_sel}}"
   			dropdown_selobj="{{dropdown_selobj}}"
@@ -61,7 +62,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 notify:true},
 	    	 
 	     dropdown_selobj:{type:Object,notify:true},
-	     value_sel:{type:Number,notify:true,value:6}
+	     value_sel:{type:Number,notify:true,value:6},
+	     charge_table:{type:Boolean,notify:true}
 	  }
 
 	  

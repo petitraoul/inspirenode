@@ -76,12 +76,16 @@
 	    	 notify : true,
 	    	 value:false
 	     },
+	     
+	     charge_table:{type:Boolean,
+	    	notify:true,
+	    	value:false},
 	   	 value_sel: {type:String, 
 	   		    notify : true}
 	  },
 	  observers:[
 		  '_show_loading(show_loading)',
-		  'params_chang(params,detail_code)'  ,
+		  'params_chang(params,detail_code,charge_table)'  ,
 		  'detail_code_change(detail_code)',
 		  '_activescroll(scroll_actif,edited_item_id,max_heightliste)',
 		  'title_background_color_change(title_background_color)'  
@@ -89,9 +93,12 @@
 	  listeners: {
           'reply_delete': 'handleReplydelete',
         },
-      params_chang:function(params,detail_code){
-    	  console.log(detail_code,params);
-    	  this._refreshdata();  
+      params_chang:function(params,detail_code,charge_table){
+    	  
+    	  if (charge_table){
+    		  this._refreshdata();  
+    	  }
+    	    
       },
       detail_code_change:function(detail_code){
     	  this.app = document.querySelector('#app');

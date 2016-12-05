@@ -45,9 +45,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				</div>          
 				<div class="ligne">
 					<!-- <my-liste_type_operation objet_sel="{{type_operation_sel}}" class="input05cols" id="type_operation" required label="Type d'opération" value_sel="{{objet_temp.type_operation}}"></my-liste_type_operation> -->
-					<my-combo_select  dropdown_selobj="{{type_operation_sel}}" class="input05cols" table="type_operation" id="type_operation" label="Type d'opération" value_sel="{{objet.type_operation}}"></my-combo_select>
+					<my-combo_select charge_table dropdown_selobj="{{type_operation_sel}}" class="input05cols" table="type_operation" id="type_operation" label="Type d'opération" value_sel="{{objet.type_operation}}"></my-combo_select>
 					<!-- <my-liste_type_paiement class="input05cols" id="mode_paiement" required label="Mode de paiement" value_sel="{{objet_temp.mode_paiement}}"></my-liste_type_paiement> -->
-					<my-combo_select  dropdown_selobj="{{mode_paiement_sel}}" class="input05cols" table="mode_paiement" id="mode_paiement" label="Mode de paiement" value_sel="{{objet.mode_paiement}}"></my-combo_select>
+					<my-combo_select charge_table dropdown_selobj="{{mode_paiement_sel}}" class="input05cols" table="mode_paiement" id="mode_paiement" label="Mode de paiement" value_sel="{{objet.mode_paiement}}"></my-combo_select>
 				</div>
 				<div class="ligne">
 				 	 <paper-input class="input1col" id="qte" label="Quantité" required type="number" step=0.01 value="{{objet_temp.qte}}"></paper-input>
