@@ -88,8 +88,8 @@ function calcul_sejours(){
 						}
 					}
 				}
-				console.log(sqlmaj);
-				GLOBAL.obj.app.db.sqlorder(sqlmaj,
+				//console.log(sqlmaj);
+				GLOBAL.obj.app.db.sqltrans(sqlmaj,
 					function(rows){
 						console.log('maj des consommation faite');
 							

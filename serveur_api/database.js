@@ -222,6 +222,7 @@ module.exports = function() {
 				    	
 						selfdb.nbsqlencours++;
 						selfdb.nbsqltotal++;
+						//console.log('ici',sql);
 						//this.database.configure("busyTimeout", 29000);
 						selfdb.database.all(sql,function(err,rows) {
 							selfdb.nbsqlencours--;

@@ -20,7 +20,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			}
   		</style>
   		
-
+		<my-combo_select hidden charge_table liste="{{liste_soustable.sexe}}"   table="sexe" ></my-combo_select>
+		<my-combo_select hidden charge_table liste="{{liste_soustable.tag_voyage}}"   table="tag_voyage"  ></my-combo_select>
+		<my-combo_select hidden charge_table liste="{{liste_soustable.type_operation}}"   table="type_operation"  ></my-combo_select>
+		<my-combo_select hidden charge_table liste="{{liste_soustable.typecaf}}"   table="typecaf"  ></my-combo_select>
+		<my-combo_select hidden charge_table liste="{{liste_soustable.type_paiement}}"   table="type_paiement"  ></my-combo_select>
+		<my-combo_select hidden charge_table liste="{{liste_soustable.tarif}}"   table="tarif"  ></my-combo_select>
+		
   		<my-liste_behavior 
   			detail_code="my-profilfamille" 
   			
@@ -36,6 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			scroll_actif=false
   			max_heightliste="60vh"
   			
+  			liste_soustable="{{liste_soustable}}"
   			charge_table$="{{charge_table}}"
   			dropdowntype$="{{dropdowntype}}"
   			value_sel="{{value_sel}}"
@@ -64,7 +71,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  	 	 },
 	     liste_familles:{type:Array,
 	    	 notify:true},
-	    	 
+	     liste_soustable:{type:Object,
+	    	 notify:true,
+	    	 value:{}
+	     },
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true}

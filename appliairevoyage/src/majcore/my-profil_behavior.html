@@ -112,9 +112,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 	<div class="card" hidden$="[[editmodehide]]">		
 	
-	    <paper-fab  class="reply-button" mini icon="reply" title="Annuler" on-tap="reply"></paper-fab>
-		<paper-fab  class="reload-button"  mini icon="cached" title="Réactualiser" on-tap="refreshthis"></paper-fab>
-		<paper-fab  class="valid-button" hidden$="[[modificationbutton_hide]]" mini icon="check" title="Valider" on-tap="savethis"></paper-fab>
+	    <paper-fab hidden$="[[hidealwaysbottombutton]]" class="reply-button" mini icon="reply" title="Annuler" on-tap="reply"></paper-fab>
+		<paper-fab hidden$="[[hidealwaysbottombutton]]" class="reload-button"  mini icon="cached" title="Réactualiser" on-tap="refreshthis"></paper-fab>
+		<paper-fab hidden$="[[modificationbuttonint_hide]]" class="valid-button" mini icon="check" title="Valider" on-tap="savethis"></paper-fab>
 		<content select=".edition"></content>
    </div>
      
@@ -204,6 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     consulte_mode:{type:Boolean,notify : true,value:false},
 	     hideother_onedit:{notify : true },
 	     hideothereditbutton_onedit:{notify : true },
+	     hidealwaysbottombutton:{notify:true,value:false},
 	     return_onsave:{notify:true},
 	   	 editmodehide:{type:Boolean,
 	    	 	notify : true,
@@ -221,9 +222,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	  	 			 suppression:true,
   	  	 			 impression:true}
     	 	 },
+    	 
     	 modificationbutton_hide:{type:Boolean,
     		 notify:true,
     		 computed:'_modificationbutton_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode)'
+    	 },
+    	 modificationbuttonint_hide:{type:Boolean,
+    		 notify:true,
+    		 computed:'_modificationbuttonint_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton)'
     	 },
        	 suppressionbutton_hide:{type:Boolean,
        		 notify:true,
@@ -250,6 +256,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 	  _modificationbutton_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode){
 		  if (consulte_mode){
+			  return true;
+		  } else if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
+			  return true;
+		  } else if (!acces_modification){
+			  return true;
+		  } else {
+			  return false;
+		  }
+	    },
+	  _modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton){
+		  if (consulte_mode){
+			  return true;
+		  } else if (hidealwaysbottombutton){
 			  return true;
 		  } else if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
 			  return true;
@@ -327,6 +346,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  savethis:function (event) {
 		  this.set('show_loading',1);
+		  if ( this.parent && this.parent.id){
+			  this.set('objet.titulaire_id',this.parent.id);
+		  }
 		  this.set('params_save.body',{data:this.objet});
 		  this.$.save.url=this.app.url_api+':'+this.app.port_api+'/index';//?action=setprogrammation&v=piscine.1.1.1';
           this.$.save.generateRequest();

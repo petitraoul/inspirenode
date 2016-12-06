@@ -23,6 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  		edited_item_id="{{edited_item_id}}"
   	 	 	objet="{{objet}}" 
   	 	 	obj_id="{{objet.id}}"
+  	 	 	parent="{{parent}}"
+  	 	 	parentfield_id="titulaire_id"
   	 	 	grants_acces="{{grants_acces}}"
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
@@ -45,7 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		            </paper-input>
 		 		    <paper-input class="input1col" id="prenom1" label="Prenom1" type="text" value="{{objet.prenom1}}"></paper-input>
 					
-					<my-combo_select charge_table dropdown_selobj="{{dropdown_selobj}}" class="input1col" table="sexe" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-combo_select>
+					<my-combo_select liste="{{liste_soustable.sexe}}" dropdown_selobj="{{dropdown_selobj}}" class="input1col" table="sexe" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-combo_select>
 				</div>
 		        <div class="ligne">
 		            <paper-input class="input1col" id="datenaissance" label="Date de naissance" type="date" value="{{objet.datenaissance}}"><iron-icon icon="event-available" prefix></iron-icon></paper-input>
@@ -69,11 +71,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		     },
 	     params_save:{type: Object,
 	   	 	  notify : true,
-	   	 	  value: {body:{},params:{action:'save',type:'maj',element:'famillemembre'/*v:'voyage.1.1.1'*/}}
+	   	 	  value: {body:{},params:{action:'save',type:'maj',element:'personne'/*v:'voyage.1.1.1'*/}}
 	        },
 	     params_delete:{type: Object,
 	   	 	  notify : true,
-	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'famillemembre'/*v:'voyage.1.1.1'*/}}
+	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'personne'/*v:'voyage.1.1.1'*/}}
 	        },
 	     edited_item_id:{notify : true},
 	     

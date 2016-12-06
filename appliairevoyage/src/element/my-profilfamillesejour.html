@@ -16,13 +16,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   		</style>
   		
   	 	<my-profil_behavior 
-	  		table_code="famillesejour" 
+  	 		id="profilfamillesejour"
+	  		table_code="sejour" 
 	  		params_get="{{params_get}}"
 	  		params_save="{{params_save}}"
 	  		params_delete="{{params_delete}}"
 	  		edited_item_id="{{edited_item_id}}"
   	 	 	objet="{{objet}}" 
   	 	 	obj_id="{{objet.id}}"
+  	 	 	parent="{{parent}}"
+  	 	 	parentfield_id="titulaire_id"
   	 	 	grants_acces="{{grants_acces}}"
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
@@ -33,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  		
 	  		<div class="reduit">
 				du {{objet.date_debut}} au {{objet.date_fin}}</br>
-				<a href="#" on-tap="gettagclicked">{{objet.emplacement_id}}</a>
+				<a href="#" on-tap="gettagclicked">{{emplobj_sel.nom}}</a>
 	  		</div>
 	  		
 	  		
@@ -44,14 +47,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				
 				<div class="ligne">
 					<!-- <my-liste_emplacements objet_sel="{{emplobj_sel}}" class="input3cols" tags_Response="{{tags_Response}}" id="emplacement_id" label="Emplacement" value_sel="{{objet.emplacement_id}}"></my-liste_emplacements> -->
-					<my-combo_select charge_table dropdown_selobj="{{emplobj_sel}}" class="input3cols" table="tag_voyage" id="emplacement_id" label="Emplacement" value_sel="{{objet.emplacement_id}}"></my-combo_select>
+					<my-combo_select liste="{{liste_soustable.tag_voyage}}" dropdown_selobj="{{emplobj_sel}}" class="input3cols" table="tag_voyage" id="emplacement_id" label="Emplacement" value_sel="{{objet.emplacement_id}}"></my-combo_select>
 					
 				</div>
 				<div class="ligne">
 					<!-- <my-liste_tarifs class="input05cols" id="type_tarif" label="Type Tarif" value_sel="{{objet.type_tarif}}"></my-liste_tarifs> -->
-					<my-combo_select charge_table dropdown_selobj="{{tarifobj_sel}}" class="input05cols" table="typetarif" id="type_tarif" label="Type Tarif" value_sel="{{objet.type_tarif}}"></my-combo_select>
+					<my-combo_select liste="{{liste_soustable.tarif}}" dropdown_selobj="{{tarifobj_sel}}" class="input05cols" table="tarif" id="type_tarif" label="Type Tarif" value_sel="{{objet.type_tarif}}"></my-combo_select>
 					<!-- <my-liste_typecafs class="input05cols" id="type_caf" label="Type Caf" value_sel="{{objet.type_caf}}"></my-liste_typecafs> -->
-					<my-combo_select charge_table dropdown_selobj="{{Cafobj_sel}}" class="input05cols" table="typecaf" id="type_caf" label="Type Caf" value_sel="{{objet.type_caf}}"></my-combo_select>
+					<my-combo_select liste="{{liste_soustable.typecaf}}" dropdown_selobj="{{Cafobj_sel}}" class="input05cols" table="typecaf" id="type_caf" label="Type Caf" value_sel="{{objet.type_caf}}"></my-combo_select>
 				</div>
 				<div class="ligne">
 				   	<paper-input class="input05cols" id="date_debut" label="Date debut" type="date" value="{{objet.date_debut}}"> 
@@ -81,6 +84,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   		
   		</my-profil_behavior>
 	  		
+	  	<iron-ajax
+			id="charge_tagclicked"
+		    method="GET"
+		    url="{{charge_tagclicked_url}}"
+		    headers="{{app.header_auth}}"
+		    params="{{params_tagclicked}}"
+		    handle-as="json"
+		    on-error="_disconnect"
+		    last-response="{{tag_clicked}}"
+		    on-response= "tagclicked_retour"
+		    debounce-duration="300">
+		</iron-ajax>	
+	  		
   </template>
   <script>
   Polymer({
@@ -94,12 +110,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		     },
 	     params_save:{type: Object,
 	   	 	  notify : true,
-	   	 	  value: {body:{},params:{action:'save',type:'maj',element:'famillesejour'/*v:'voyage.1.1.1'*/}}
+	   	 	  value: {body:{},params:{action:'save',type:'maj',element:'sejour'/*v:'voyage.1.1.1'*/}}
 	        },
 	     params_delete:{type: Object,
 	   	 	  notify : true,
-	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'famillesejour'/*v:'voyage.1.1.1'*/}}
+	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'sejour'/*v:'voyage.1.1.1'*/}}
 	        },
+	     params_tagclicked:{type: Object,
+	   	 	  notify : true,
+	   	 	  value: {type:'get',action:'listtag',id:"=''"}},
 	     edited_item_id:{notify : true},
 	     
 	     doc_print_link:{type:String,
@@ -109,15 +128,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
-			  return "doc_famillesejour&id="+objet.id;
+			  return "doc_sejour&id="+objet.id;
 		  } else {
 			  return null;
 		  }
 		  
 	  },
 	  _getparams_get:function(obj_id,objet){
-		  return {type:'get',action:'detailfamillesejour',id:obj_id}
-	  }
+		  return {type:'get',action:'detailsejour',id:obj_id}
+	  },
+	  
+	  
+      gettagclicked:function(){
+			this.$.profilfamillesejour.app.$.location.path="/appliairevoyage/periphListPage/"+this.emplobj_sel.uuid;
+	  },
+
+	  getcompteurelec0:function(elem){
+		  this.app = document.querySelector('#app');
+		  var eleccounter=this.app.lastetat[this.emplobj_sel.periph_elec_uuid];
+		  if (eleccounter && eleccounter.expression){
+			  this.set('objet_temp.valeur0',eleccounter.expression.etat);
+		  }
+		  
+	  },
+	  getcompteurelec2:function(elem){
+		  this.app = document.querySelector('#app');
+		  var eleccounter=this.app.lastetat[this.emplobj_sel.periph_elec_uuid];
+		  if (eleccounter && eleccounter.expression){
+		  	this.set('objet_temp.valeur2',eleccounter.expression.etat);
+		  }
+	  },
+	  getcompteureau1:function(elem){
+		  this.app = document.querySelector('#app');
+		  var eaucounter=this.app.lastetat[this.emplobj_sel.periph_eau_uuid];
+		  if (eaucounter && eaucounter.expression){
+		  	this.set('objet_temp.valeur1',eaucounter.expression.etat);
+		  }
+	  },
+	  getcompteureau3:function(elem){
+		  this.app = document.querySelector('#app');
+		  var eaucounter=this.app.lastetat[this.emplobj_sel.periph_eau_uuid];
+		  if (eaucounter && eaucounter.expression){
+		  	this.set('objet_temp.valeur3',eaucounter.expression.etat);
+		  }
+	  },
   });
   
   </script>

@@ -23,6 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  		edited_item_id="{{edited_item_id}}"
   	 	 	objet="{{objet}}" 
   	 	 	obj_id="{{objet.id}}"
+  	 	 	parent="{{parent}}"
+  	 	 	parentfield_id="titulaire_id"
   	 	 	grants_acces="{{grants_acces}}"
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
@@ -38,26 +40,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  		
 	  		
 	  		<div class="edition">
-			    <paper-input id="id" label="id" hidden type="text" value="{{objet_temp.id}}"> </paper-input>
-			    <paper-input id="uuid" label="uuid" hidden type="text" value="{{objet_temp.uuid}}">     </paper-input>    
+			    <paper-input id="id" label="id" hidden type="text" value="{{objet.id}}"> </paper-input>
+			    <paper-input id="uuid" label="uuid" hidden type="text" value="{{objet.uuid}}">     </paper-input>    
 			    <div class="ligne">
-				 	 <paper-input class="input3cols" id="libelle" label="Libelle" required  type="text" value="{{objet_temp.libelle}}"></paper-input>
+				 	 <paper-input class="input3cols" id="libelle" label="Libelle" required  type="text" value="{{objet.libelle}}"></paper-input>
 				</div>          
 				<div class="ligne">
-					<!-- <my-liste_type_operation objet_sel="{{type_operation_sel}}" class="input05cols" id="type_operation" required label="Type d'opération" value_sel="{{objet_temp.type_operation}}"></my-liste_type_operation> -->
-					<my-combo_select charge_table dropdown_selobj="{{type_operation_sel}}" class="input05cols" table="type_operation" id="type_operation" label="Type d'opération" value_sel="{{objet.type_operation}}"></my-combo_select>
-					<!-- <my-liste_type_paiement class="input05cols" id="mode_paiement" required label="Mode de paiement" value_sel="{{objet_temp.mode_paiement}}"></my-liste_type_paiement> -->
-					<my-combo_select charge_table dropdown_selobj="{{mode_paiement_sel}}" class="input05cols" table="mode_paiement" id="mode_paiement" label="Mode de paiement" value_sel="{{objet.mode_paiement}}"></my-combo_select>
+					<!-- <my-liste_type_operation objet_sel="{{type_operation_sel}}" class="input05cols" id="type_operation" required label="Type d'opération" value_sel="{{objet.type_operation}}"></my-liste_type_operation> -->
+					<my-combo_select liste="{{liste_soustable.type_operation}}" dropdown_selobj="{{type_operation_sel}}" class="input05cols" table="type_operation" id="type_operation" label="Type d'opération" value_sel="{{objet.type_operation}}"></my-combo_select>
+					<!-- <my-liste_type_paiement class="input05cols" id="mode_paiement" required label="Mode de paiement" value_sel="{{objet.mode_paiement}}"></my-liste_type_paiement> -->
+					<my-combo_select liste="{{liste_soustable.type_paiement}}"  dropdown_selobj="{{mode_paiement_sel}}" class="input05cols" table="mode_paiement" id="mode_paiement" label="Mode de paiement" value_sel="{{objet.mode_paiement}}"></my-combo_select>
 				</div>
 				<div class="ligne">
-				 	 <paper-input class="input1col" id="qte" label="Quantité" required type="number" step=0.01 value="{{objet_temp.qte}}"></paper-input>
-				 	 <paper-input class="input1col" id="pu" label="Prix Unit." required type="number" step=0.01 value="{{objet_temp.pu}}"><div suffix>€</div> </paper-input>
-				 	 <paper-input class="input1col" id="montant" label="Montant" type="number" step=0.01 value="{{objet_temp.montant}}"><div suffix>€</div> </paper-input>
+				 	 <paper-input class="input1col" id="qte" label="Quantité" required type="number" step=0.01 value="{{objet.qte}}"></paper-input>
+				 	 <paper-input class="input1col" id="pu" label="Prix Unit." required type="number" step=0.01 value="{{objet.pu}}"><div suffix>€</div> </paper-input>
+				 	 <paper-input class="input1col" id="montant" label="Montant" type="number" step=0.01 value="{{objet.montant}}"><div suffix>€</div> </paper-input>
 				</div>
 				<div class="ligne">
-					<paper-input class="input05cols" id="date" label="Date" required type="date" value="{{objet_temp.date}}"></paper-input>
-		            <paper-input class="input05cols" id="recu_num" label="Numéro reçu" disabled type="text" value="{{objet_temp.recu_num}}"></paper-input>
-		            <paper-input class="input05cols" id="facture_num" label="Numéro facture" disabled type="text" value="{{objet_temp.facture_num}}"></paper-input>
+					<paper-input class="input05cols" id="date" label="Date" required type="date" value="{{objet.date}}"></paper-input>
+		            <paper-input class="input05cols" id="recu_num" label="Numéro reçu" disabled type="text" value="{{objet.recu_num}}"></paper-input>
+		            <paper-input class="input05cols" id="facture_num" label="Numéro facture" disabled type="text" value="{{objet.facture_num}}"></paper-input>
 				</div>
 	  		</div>
   		 		

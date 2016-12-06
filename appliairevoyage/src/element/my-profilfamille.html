@@ -49,12 +49,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		     	
 		     	min-width: 350px;
 		     }
+		 .valid-button{
+		 	position:absolute;
+		 	bottom:-20px;
+		 	right:50px;
+		 	--paper-fab-background: var(--paper-green-400);
+		    --paper-fab-keyboard-focus-background: var(--paper-green-900);
+		    z-index:10;
+		 }
+		 .reload-button{
+		 	position:absolute;
+		 	bottom:-20px;
+		 	right:5px;
+		 	--paper-fab-background: var(--paper-blue-400);
+		    --paper-fab-keyboard-focus-background: var(--paper-green-900);
+		    z-index:10;
+		 }
+		 .reply-button{
+		 	position:absolute;
+		 	top:-20px;
+		 	right:5px;
+		 	--paper-fab-background: var(--paper-red-400);
+		    --paper-fab-keyboard-focus-background: var(--paper-red-900);
+		    z-index:10;
+		 }
   		</style>
 
 
 
 
-  	 	<my-profil_behavior 
+  	 	<my-profil_behavior id="profilfamille"
 	  		table_code="personne" 
 	  		params_get="{{params_get}}"
 	  		params_save="{{params_save}}"
@@ -65,10 +89,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	 	 	grants_acces="{{grants_acces}}"
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
-  	 	 	return_onsave=true
+  	 	 	hidealwaysbottombutton=true
+  	 	 	return_onsave$=false
   		> 
   		
-
+		
 	  		
 	  		<div class="reduit">
 					Famille {{objet.nom}} {{objet.prenom1}}<div style="float:right;margin-right:110px">Solde : {{soldecompta}}</div>
@@ -88,7 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							   	<paper-input class="input2cols" id="nom" label="Nom" type="text" value="{{objet.nom}}"> 
 					            </paper-input>
 					           <!--  <my-liste_sexes dropdowntype dropdown_selobj="{{dropdown_selobj}}" class="input1col" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-liste_sexes> -->
-					            <my-combo_select charge_table$="{{is_edited}}" dropdown_selobj="{{dropdown_selobj}}" class="input1col" table="sexe" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-combo_select>
+					            <my-combo_select liste="{{liste_soustable.sexe}}" dropdown_selobj="{{dropdown_selobj}}" class="input1col" table="sexe" id="sexe" label="Genre" value_sel="{{objet.sexe}}"></my-combo_select>
 							</div>
 							<div class="ligne">
 							    <paper-input class="input1col" id="prenom1" label="Prenom1" type="text" value="{{objet.prenom1}}"></paper-input>
@@ -119,17 +144,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					        <div class="ligne">
 					            <paper-input class="input3cols" id="commentaire" label="Commentaires" type="textarea" value="{{objet.commentaire}}"></paper-input>
 					        </div> 
+							<paper-fab  class="reply-button" mini icon="reply" title="Annuler" on-tap="reply"></paper-fab>
+							<paper-fab  class="reload-button"  mini icon="cached" title="Réactualiser" on-tap="refreshthis"></paper-fab>
+							<paper-fab  class="valid-button" mini icon="check" title="Valider" on-tap="savethis"></paper-fab>
+							
 						</div>
+			
 					</my-groupprofil_behavior>
+					<my-liste_famillemembres  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillemembres>
 				</li>
 				<li style="display:block;width:1000px;margin-left:auto;margin-right:auto;margin-top:-40px;margin-bottom:0">
-					<my-liste_compte_ecritures charge_table$="{{is_edited}}" class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}" seltitulaire="{{objet.id}}"  ></my-liste_compte_ecritures>
-					<my-liste_factures charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]" ></my-liste_factures>
-					<my-liste_famillesejours charge_table$="{{is_edited}}" class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]"  ></my-liste_famillesejours>
-					<my-liste_famillemembres charge_table$="{{is_edited}}" class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]"></my-liste_famillemembres>
+					<my-liste_compte_ecritures liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}"></my-liste_compte_ecritures>
+					<my-liste_factures  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" ></my-liste_factures>
+					<my-liste_famillesejours  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillesejours>
 				</li>
-				</div>				 	
-	  		
+				</div>			
   		</my-profil_behavior>
 	  		
   </template>
@@ -162,7 +191,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 computed:'_is_edited(objet,edited_item_id)'
 	    	 }
 	  },
-
+	  savethis:function(){
+		  this.$.profilfamille.savethis();
+	  },
+	  refreshthis:function(){
+		  this.$.profilfamille.refreshthis();
+	  },
+	  reply:function(){
+		  this.$.profilfamille.reply();
+	  },
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
 			  return "doc_famille&id="+objet.id;

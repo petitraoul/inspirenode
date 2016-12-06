@@ -32,6 +32,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			scroll_actif=false
   			max_heightliste="20vh"
   			
+  			liste_soustable="{{liste_soustable}}"
+  			parent="{{titulaire}}"
   			charge_table$="{{charge_table}}"
   			dropdowntype$="{{dropdowntype}}"
   			value_sel="{{value_sel}}"
@@ -49,25 +51,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  properties: {  
   		 params_allfamillemembres:{type: Object,
 	   	 	  notify : true,
-	   	 	  value:  {type:'get',action:'listfamillemembre'} 
+	   	 	  computed:'_getparams_get(titulaire)'
 	        },
 	  	 grants:{type:Object,
 	  	 		 notify : true,
-	  	 		 value : {creation:true,
-		  	 			 modification:true,
-		  	 			 suppression:true,
-		  	 			 impression:false}
+	  	 		computed:'_get_grants(titulaire)'
 	  	 	 },
+	  	 titulaire:{type:Object,notify:true},
 	     liste_famillemembres:{type:Array,
 	    	 notify:true},
 	    	 
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true}
+	  },
+	 
+
+	  _getparams_get:function(titulaire){
+		  if (titulaire) {
+			  return  {type:'get',action:'listpersonne',titulaire_id:'='+titulaire.id} ;
+		  } else {
+			  return null;
+		  }
+		  
+	  },
+	  _get_grants:function(titulaire){
+		  if (titulaire && titulaire.id && titulaire.id>=0){
+			  return {creation:true,
+					 modification:true,
+					 suppression:true,
+					 impression:false};
+		  } else {
+			  return {creation:false,
+					 modification:false,
+					 suppression:false,
+					 impression:false};
+		  }
 	  }
-
-	  
-
 
   })
   </script>
