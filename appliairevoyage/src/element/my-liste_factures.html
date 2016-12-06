@@ -20,8 +20,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			
   			detail_code="my-profilfacture" 
   			
-  			title="factures"
-  			title_background_color="rgba(50, 170, 25, 0.5)"
+  			title="Factures"
+  			title_background_color="rgba(200, 26, 76, 0.5)"
   			
   			params="{{params_allfactures}}"
   			
@@ -79,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  if (titulaire && titulaire.id && titulaire.id>=0){
 			  return {creation:true,
 					 modification:true,
-					 suppression:true,
+					 suppression:false,
 					 impression:true};
 		  } else {
 			  return {creation:false,
