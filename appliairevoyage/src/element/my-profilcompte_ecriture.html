@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   		</style>
   		
   	 	<my-profil_behavior 
+  	 	    id="profil_compteecriture"
 	  		table_code="compte_ecriture" 
 	  		params_get="{{params_get}}"
 	  		params_save="{{params_save}}"
@@ -25,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	 	 	obj_id="{{objet.id}}"
   	 	 	parent="{{parent}}"
   	 	 	parentfield_id="titulaire_id"
+  	 	 	doc_print_link="{{doc_print_link}}"
   	 	 	grants_acces="{{grants_acces}}"
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
@@ -65,7 +67,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   		 		
   		
   		</my-profil_behavior>
-	  		
+	  <iron-ajax
+		id="get_new_recu_num"			    method="GET"
+	    url="{{new_recu_url}}"	    		headers="{{app.header_auth}}"
+	    params="{{params_new_recu.params}}"	handle-as="json"   	on-error="_disconnect"
+	    last-response="{{new_recu}}"   		debounce-duration="300"
+	    on-response="set_recu">
+	</iron-ajax>
   </template>
   <script>
   Polymer({
@@ -73,6 +81,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  is: 'my-profilcompte_ecriture',
 	  
 	  properties: {  
+	     app: {
+	          type: Object
+	        }, 
 	  	 params_get:{type: Object,
 		   	 	  notify : true,
 		   	 	  computed:'_getparams_get(objet.id,objet)'
@@ -85,16 +96,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	   	 	  notify : true,
 	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'compte_ecriture'/*v:'voyage.1.1.1'*/}}
 	        },
+	     params_new_recu:{type: Object,
+	   	 	  notify : true,
+	   	 	  value: {body:{},params:{action:'getrecu_num',v:'voyage.1.1.1'}}
+	        },
 	     edited_item_id:{notify : true},
-	     
+	     objet:{type: Object,
+	    	 notify : true
+	     },
 	     doc_print_link:{type:String,
 	    	 notify:true,
 	    	 computed:'_getprintlink(objet)'}
 	     
 	  },
+	  observers: [
+          '_calculmontant(objet.qte,objet.pu)',
+          '_calculmontant2(objet.montant)',
+          '_calculdate(objet)',
+          '_calculrecu_num(objet.id,objet)',
+          '_type_operation_sel_change(type_operation_sel)',
+          '_calculrecu_num(objet.id,objet)'
+        ],
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
-			  return "doc_compte_ecriture&id="+objet.id;
+			  return "doc_recu&id="+objet.id;
 		  } else {
 			  return null;
 		  }
@@ -102,7 +127,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  _getparams_get:function(obj_id,objet){
 		  return {type:'get',action:'detailcompte_ecriture',id:obj_id}
-	  }
+	  },
+      _type_operation_sel_change:function(type_operation_sel){
+    	  if (type_operation_sel && type_operation_sel.signe){
+    		  this.set('objet.signe',type_operation_sel.signe);
+    		  this.set('objet.calcul_solde',type_operation_sel.calcul_solde);
+    		  
+    	  } else {
+    		  this.set('objet.signe',"+");
+    		  this.set('objet.calcul_solde',"N");
+    	  }
+      },
+	  _calculdate:function(objet){
+		  if (!objet.date) {
+			  var today = new Date();
+			  var dd = today.getDate();
+			  var mm = today.getMonth()+1; //January is 0!
+			  var yyyy = today.getFullYear();
+			  this.set('objet.date',yyyy+'-'+mm+'-'+dd);
+		  }
+	  },
+	  _calculmontant:function(qte,pu){
+		    if (qte == null) {
+		    	this.set('objet.qte',1);
+		    }
+			if (qte && pu) {
+				this.set('objet.montant',qte*pu);
+			}  else {
+				this.set('objet.montant',0);
+			}
+	  },
+	  _calculmontant2:function(montant){
+		    if (this.objet.qte == null) {
+		    	this.set('objet.qte',1);
+		    }
+			if (this.objet.qte && this.objet.pu) {
+				this.set('objet.montant',this.objet.qte*this.objet.pu);
+			}  else {
+				this.set('objet.montant',0);
+			}
+	  },
+	  _calculrecu_num:function(id,objet){
+			if(id<0 && objet &&	(objet.recu_num=="" || !objet.recu_num)){
+				this.set('objet.recu_num','...');
+				this.set('app',this.$.profil_compteecriture.app);
+		        this.$.profil_compteecriture.app = document.querySelector('#app');
+				this.$.get_new_recu_num.url=this.$.profil_compteecriture.app.url_api+':'+this.$.profil_compteecriture.app.port_api+'/index';//?action=setprogrammation&v=piscine.1.1.1';
+		        this.$.get_new_recu_num.generateRequest();
+			}
+	  },
+	  set_recu:function(){
+			this.set('objet.recu_num',this.new_recu.num)  ;
+	  },
   });
   
   </script>

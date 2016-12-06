@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   		</style>
   		
   	 	<my-profil_behavior 
+  	 		id="profilfacture"
 	  		table_code="facture" 
 	  		params_get="{{params_get}}"
 	  		params_save="{{params_save}}"
@@ -25,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	 	 	obj_id="{{objet.id}}"
   	 	 	parent="{{parent}}"
   	 	 	parentfield_id="titulaire_id"
+  	 	 	doc_print_link="{{doc_print_link}}"
   	 	 	grants_acces="{{grants_acces}}"
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
@@ -55,14 +57,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   		 		
   		
   		</my-profil_behavior>
-	  		
+	  <iron-ajax
+		id="get_new_facture_num"			    method="GET"
+	    url="{{new_facture_url}}"	    		headers="{{app.header_auth}}"
+	    params="{{params_new_facture.params}}"	handle-as="json"   	on-error="_disconnect"
+	    last-response="{{new_facture}}"   		debounce-duration="300"
+	    on-response="set_facture">
+	</iron-ajax>
   </template>
   <script>
   Polymer({
 
 	  is: 'my-profilfacture',
 	  
-	  properties: {  
+	  properties: { 
+	     app: {
+	          type: Object
+	        }, 
 	  	 params_get:{type: Object,
 		   	 	  notify : true,
 		   	 	  computed:'_getparams_get(objet.id,objet)'
@@ -75,6 +86,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	   	 	  notify : true,
 	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'facture'/*v:'voyage.1.1.1'*/}}
 	        },
+	     params_new_facture:{type: Object,
+	   	 	  notify : true,
+	   	 	  value: {body:{},params:{action:'getfacture_num',v:'voyage.1.1.1'}}
+	        },
 	     edited_item_id:{notify : true},
 	     
 	     doc_print_link:{type:String,
@@ -82,6 +97,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 computed:'_getprintlink(objet)'}
 	     
 	  },
+	  observers: [
+          '_calculfacture_num(objet.id,objet)'
+        ],
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
 			  return "doc_facture&id="+objet.id;
@@ -92,7 +110,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  _getparams_get:function(obj_id,objet){
 		  return {type:'get',action:'detailfacture',id:obj_id}
-	  }
+	  },
+	  _calculfacture_num:function(id,objet){
+
+			if(id<0 && objet &&	(objet.facture_num=="" || !objet.facture_num)){
+				this.set('objet.facture_num','...');
+				this.set('app',this.$.profilfacture.app);
+		        this.$.profilfacture.app = document.querySelector('#app');
+				this.$.get_new_facture_num.url=this.$.profilfacture.app.url_api+':'+this.$.profilfacture.app.port_api+'/index';//?action=setprogrammation&v=piscine.1.1.1';
+		        this.$.get_new_facture_num.generateRequest();
+			}
+	  },
+	  set_facture:function(){
+	        this.set('objet.facture_num',this.new_facture.num)  ;
+		  
+	  },
   });
   
   </script>

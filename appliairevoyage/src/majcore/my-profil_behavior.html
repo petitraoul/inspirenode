@@ -259,19 +259,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			  return true;
 		  } else if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
 			  return true;
-		  } else if (!acces_modification){
+		  }  else if (!acces_modification){
 			  return true;
 		  } else {
 			  return false;
 		  }
 	    },
 	  _modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton){
+		  var table=this.table_code;
+		  var id=this.objet.id;
 		  if (consulte_mode){
 			  return true;
 		  } else if (hidealwaysbottombutton){
 			  return true;
 		  } else if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
 			  return true;
+		  } else if (edited_item_id==-1){
+			  return false;
 		  } else if (!acces_modification){
 			  return true;
 		  } else {
