@@ -85,13 +85,17 @@ var ipx800 = function(adresseip) {
 		logger('INFO',{nom:self.nom,id:this.id,msg:"Ordre envoyé a la box ",lien:this.ip+'/status.xml'},'box_ipx800')
 		GLOBAL.req.comm.perso_get(this.ip,'/status.xml',self.port,function(err,httpResponse,body){
 			//var result=body;
+			
 			if (err) {
 				logger('ERROR',{nom:self.nom,id:self.id,msg:err},'box_ipx800');
+				body=self.body;
 			}
 			if (!body){
 				logger('ERROR',{nom:self.nom,id:self.id,msg:'reponse vide'},'box_ipx800');
+				body=self.body;
 			}
 			if (body) {
+				self.body=body;
 				try {
 					parserxml2json.parseString(body, function (err, result) {
 						var res={};

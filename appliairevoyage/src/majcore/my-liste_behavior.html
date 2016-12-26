@@ -8,24 +8,25 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../majcore/my-majliste_behavior.html">
+<link rel="import" href="../element/my-searchbox.html">
 <link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
 
 <dom-module id="my-liste_behavior">
 
-  <template include="app-grid-style">
-		<style >
+  <template >
+		<style include="app-grid-style">
 		
 		 :host{
-		 	--liste_maxheight:60vh;
+		 	--liste_maxheight:10vh;
 		 	--liste_overflow:none;
 		 	--title_background_color:rgba(50, 170, 25, 0.5);
 		 	--max_widthliste:500px
 		 	
 		 /*display:flex;*/
 			display: block;
-          --app-grid-columns: 2;
+          --app-grid-columns: 1;
           --app-grid-gutter: 10px;
-          --app-grid-expandible-item-columns: 6;
+          --app-grid-expandible-item-columns: 2;
           --paper-icon-button-ink-color: white;
           margin-top :2px;
           margin-bottom:2px;
@@ -35,6 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		 padding:0;
 		 margin-bottom:-15px;
 		 line-height:1.2;
+		 list-style: none;
 		}
 		 .add-button{
 		 	/*position:fixed;
@@ -71,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     }
 	     .cardprinc{
 		 	padding-top:60px;
-		 	margin-top: 40px;
+		 	margin-top: 5px;
 		 	position: relative;
 		 }
 		 .refresh-button{
@@ -105,25 +107,60 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			    last-response="{{liste_objets}}"
 			    debounce-duration="300">
 			</iron-ajax>
-				<div class="item-title" >{{title}}</div>
-				<paper-icon-button  class="refresh-button" mini icon="cached" title="Rafraichir" on-tap="refreshthis"></paper-icon-button>
+				<div class="item-title" ><div style="float:left">{{title}}</div></div>
+				<paper-icon-button  hidden$="[[refreshbutton_hide]]" class="refresh-button" mini icon="cached" title="Rafraichir" on-tap="refreshthis"></paper-icon-button>
+			 	<div>
+			 		<content style="float:left" select=".selection"></content>
+			 		<my-searchbox placeholder="Filtre" query="{{searchquery}}"></my-searchbox>	
+			 	</div>
+
 			<div id="regionscroll" class="regionscroll">
-			
-			    <template id="temp_liste" is="dom-repeat" items="{{liste_objets}}">
-					<iron-pages selected="[[detail_code]]" attr-for-selected="name">
-				          <my-profiltarif name="my-profiltarif" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profiltarif>
-				          <my-profilsexe name="my-profilsexe" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profilsexe>
-				          <my-profiltypecaf name="my-profiltypecaf" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profiltypecaf>
-				          <my-profiltype_paiement name="my-profiltype_paiement" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profiltype_paiement>
-				          <my-profiltype_operation name="my-profiltype_operation" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profiltype_operation>
-						  <my-profilsociete name="my-profilsociete" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profilsociete>
-						  <my-profilaire name="my-profilaire" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profilaire>
-						  <my-profilemplacement name="my-profilemplacement" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profilemplacement>
-						  <my-profilfamille name="my-profilfamille" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"></my-profilfamille>
-
-
-			        </iron-pages>
-				</template>
+				<ul class="app-grid" >
+				    <template id="temp_liste" is="dom-repeat" items="{{liste_objets}}">
+					    <li class="item" style="margin-bottom:0;margin-top:-2px">
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profiltarif')}}">
+						          	<my-profiltarif name="my-profiltarif" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}"  parent="{{parent}}"></my-profiltarif>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilsexe')}}">
+						          	<my-profilsexe name="my-profilsexe" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilsexe>
+						          </template>								  
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profiltypecaf')}}">
+						          	<my-profiltypecaf name="my-profiltypecaf" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profiltypecaf>
+						          </template>								  
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profiltype_paiement')}}">
+						          	<my-profiltype_paiement name="my-profiltype_paiement" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profiltype_paiement>
+						          </template>
+						          <template is="dom-if" if="{{show_element(detail_code,'my-profiltype_operation')}}">
+						          	<my-profiltype_operation name="my-profiltype_operation" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profiltype_operation>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilsociete')}}">
+						          	<my-profilsociete name="my-profilsociete" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilsociete>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilaire')}}">
+						          	<my-profilaire name="my-profilaire" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilaire>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilemplacement')}}">
+						          	<my-profilemplacement name="my-profilemplacement" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilemplacement>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilfamille')}}">
+						          	<my-profilfamille name="my-profilfamille" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilfamille>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilfamillesejour')}}">
+						          	<my-profilfamillesejour id="[[item.id]]" name="my-profilfamillesejour" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilfamillesejour>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilfamillemembre')}}">
+						          	<my-profilfamillemembre id="[[item.id]]" name="my-profilfamillemembre" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilfamillemembre>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilcompte_ecriture')}}">
+						          	<my-profilcompte_ecriture id="[[item.id]]" name="my-profilcompte_ecriture" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilcompte_ecriture>
+						          </template>
+								  <template is="dom-if" if="{{show_element(detail_code,'my-profilfacture')}}">
+						          	<my-profilfacture id="[[item.id]]" name="my-profilfacture" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" parent="{{parent}}"></my-profilfacture>
+						          </template>						          						          		
+					        
+					    </li>
+					</template>
+				</ul>
 			</div>
 			<paper-fab class="add-button" hidden$="[[createbutton_hide]]" mini icon="add" title="Créer" on-tap="add"></paper-fab>
 		</div>

@@ -3,9 +3,7 @@
   "version": "1.1.0",
   "description": "inspirenode",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1",
-  },
+  "scripts": {"test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"},
   "repository": "https://github.com/petitraoul/inspirenode_server.git",
   "keywords": [
     "node.js",

@@ -40,7 +40,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			dropdown_selobj="{{dropdown_selobj}}"
   			
   			edited_item_id="{{edited_item_id}}"
-  			liste_objets="{{liste_objets}}"  		>
+  			liste_objets="{{liste_objets}}"  		
+  			
+  			showwhereisnull="[[showwhereisnull]]"
+		   	 >
 			
 		</my-sous_liste_behavior>
   </template>
@@ -66,6 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true},
+		 showwhereisnull:{type:String,notify:true,value:"facture_num"},
    		 solde:{type:Number,
 	    	 	notify : true,
 	    	 	computed: '_compute_solde(liste_objets,liste_objets.length,edited_item_id)'},
@@ -74,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  if (titulaire && titulaire.id && titulaire.id>=0){
 			  return {creation:true,
 					 modification:false,
-					 suppression:false,
+					 suppression:true,
 					 impression:true};
 		  } else {
 			  return {creation:false,

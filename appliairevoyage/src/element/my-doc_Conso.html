@@ -1,0 +1,195 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="my-doc_Conso">
+		  <template>
+			  <style>
+			  
+			  	
+			    .databrutes { color:grey;white-space: pre;width:500px; font-family: monospace; font-size: 10px;}
+			  	
+			  	.cadre {
+		        	display :block;
+		            margin: 5px;
+		            padding:5px;
+		          	position: relative;
+		            background-color: white;
+			        box-shadow: 1px 1px 1px 1px;
+			        border-radius: 3px;
+			     }
+			  	.facture{
+			  		color:green;
+			  	}
+				.sejour{
+					color:red;
+					margin-left:10px
+				}
+				.famille{
+					color:blue;
+					margin-left:20px;
+				}
+			  </style>
+			  
+			 <iron-ajax
+				id="charge_facture"			    method="GET"
+			    url="{{charge_facture_url}}"	    headers="{{app.header_auth}}"
+			    params="{{params_get_facture}}"    handle-as="json"   	on-error="_disconnect"
+			    last-response="{{factures}}"   		debounce-duration="300">
+			</iron-ajax>
+			 <iron-ajax
+				id="charge_famille"			    method="GET"
+			    url="{{charge_famille_url}}"	headers="{{app.header_auth}}"
+			    params="{{params_get_famille}}"	handle-as="json"    on-error="_disconnect"
+			    last-response="{{familles}}"	    debounce-duration="300">
+			</iron-ajax>
+			<iron-ajax
+				id="charge_famillesejours"	    		method="GET"
+			    url="{{charge_famillesejours_url}}"	    headers="{{app.header_auth}}"
+			    params="{{params_get_sejours}}"		    handle-as="json"    on-error="_disconnect"
+			    last-response="{{sejours}}"			    debounce-duration="300">
+			</iron-ajax>
+			<iron-ajax
+				id="charge_societes"	    		method="GET"
+			    url="{{charge_societes_url}}"	    headers="{{app.header_auth}}"
+			    params="{{params_get_societes}}"	handle-as="json"    on-error="_disconnect"
+			    last-response="{{societes}}"		debounce-duration="300">
+			</iron-ajax>
+			<iron-ajax
+				id="charge_aires"	    		method="GET"
+			    url="{{charge_aires_url}}"	    headers="{{app.header_auth}}"
+			    params="{{params_get_aires}}"	handle-as="json"    on-error="_disconnect"
+			    last-response="{{aires}}"		debounce-duration="300">
+			</iron-ajax>
+			
+			<table>
+			<tr>
+			   <th style=" border-radius:4px; border:1px solid #636363;width: 40%">
+				<h2>[[aire_sel.nom]]</h2>
+				<h2>géré par [[societe_sel.nom]]</h2>
+				Route des Epesses <br/>
+				85500 LES HERBIERS<br/>
+				02 51 64 84 90
+			   </th>	
+			   <th style=" width: 20%">
+				
+			   </th>	
+			   <th style=" border-radius:4px; border:1px solid #636363;width: 40%">
+				<h2>[[famille_sel.nom]] [[famille_sel.prenom1]]</h2>
+				[[famille_sel.adresse]]<br/>
+				[[famille_sel.codepostal]] [[famille_sel.ville]]<br/>
+				[[famille_sel.phone]]
+			   </th>	
+			</tr>		
+			</table>			
+			<div class="cadre">
+				  <p class="facture"><b>facture N°{{facture_sel.facture_num}}</b></p></br>				  
+				  Pour une facture {{facture_sel.facture_num}} {{facture_sel.libelle}} du {{facture_sel.date}}
+				  
+				  </br><b>Dates de séjours :</b>
+				  <template is="dom-repeat" items="[[sejours]]" as="sejour">
+				  	<div class="sejour">du {{sejour.date_debut}} au {{sejour.date_fin}}</div>
+				  </template>
+				  </br>
+		  	 </div>
+			<table style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<tr>
+				   <th style="width: 40%">
+					signature du gestionnaire<br/><br/><br/><br/><br/><br/>
+				   </th>	
+				   <th style=" width: 20%">
+					
+				   </th>	
+				   <th style="width: 40%">
+					signature de l'usager<br/><br/><br/><br/><br/><br/>
+				   </th>	
+				</tr>		
+			</table>
+		  
+		  </template>
+		
+		  <script>
+		    Polymer({
+		
+		      is: 'my-doc_Conso',
+
+		      properties: {
+		 	     app: {
+			          type: Object
+		        	},    
+		    	 selection_query:{type : Object,
+	  				  notify:true,
+	  				  value:{}},
+		  		 params_get_facture:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'detailcompte_ecriture',id:-1}},
+		  		 params_get_famille:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'detailpersonne',id:-1}},
+		   		 params_get_sejours:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'listsejour',titulaire_id:"=-1"}},
+		   		 params_get_societes:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'listsociete'}},
+		   		 params_get_aires:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'listaire'}},
+			      facture_sel:{type:Object,
+			    	  notify:true,
+			    	  computed: 'computefacture_sel(factures,familles)'},
+			      famille_sel:{type:Object,
+			    	  notify:true,
+			    	  computed: 'computefamille_sel(familles)'},
+			      societe_sel:{type:Object,
+			    	  notify:true,
+			    	  computed: 'computesociete_sel(societes)'},
+			      aire_sel:{type:Object,
+			    	  notify:true,
+			    	  computed: 'computeaire_sel(aires)'},
+		      },
+	    	  observers: [
+		                  '_selection_query_change(selection_query)'	                  
+		                ],
+		      
+		      _selection_query_change: function(selection_query) {
+			        this.app = document.querySelector('#app');
+			    	this.set('params_get_facture.id',"="+selection_query.facture_id);
+			    	this.set('params_get_famille.id',"="+selection_query.titulaire_id);
+			    	this.set('params_get_sejours.titulaire_id',"="+selection_query.titulaire_id);
+			    	
+			        this.charge_facture_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_facture.generateRequest();
+			        this.charge_famille_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_famille.generateRequest();
+			        this.charge_famillesejours_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_famillesejours.generateRequest();
+
+			        this.charge_societes_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_societes.generateRequest();
+			        this.charge_aires_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_aires.generateRequest();
+			  },
+			  
+			  computefacture_sel:function(factures,familles){
+				  if (factures) return factures[0];
+				  else return null;
+			  },
+			  computefamille_sel:function(familles){
+				  if (familles) return familles[0];
+				  else return null;
+			  },
+			  computeaire_sel:function(aires){
+				  if (aires) return aires[0];
+				  else return null;
+			  },
+			  computesociete_sel:function(societes){
+				  if (societes) return societes[0];
+				  else return null;
+			  },
+			  
+			  _disconnect: function(obj){
+		    	  this.app = document.querySelector('#app');
+		    	  return this.app.disconnect();
+		      }
+		    });
+		  </script>
+		</dom-module>

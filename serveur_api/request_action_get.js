@@ -745,7 +745,7 @@ module.exports =function(variables,res,user){
 					" from sejour s ,tag t" +
 					" where s.date_debut<=date('now')" +
 					" and (s.date_fin isnull or s.date_fin>=date('now'))" +
-					" and t.nom=s.emplacement_id" +
+					" and t.id=s.emplacement_id" +
 					" and t.uuid='"+variables['uuid']+"'";
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
@@ -756,6 +756,7 @@ module.exports =function(variables,res,user){
 					res.end(rep);
 				});
 			break;
+
 
 		default:
 			var complsql="";
@@ -769,12 +770,37 @@ module.exports =function(variables,res,user){
 				variables.id='='+variables.id;
 			}
 			for (d in variables){
-				if (d!='action' && d!='type' && variables[d]){
+				if (d!='etat' && d!='action' && d!='type'  && d!='query'  && d!='queryfields'  && d!='limit' && variables[d]){
 					complsql+= " and "+d+" "+variables[d];
 				} 
 			}
+			
+			if (variables['query'] && variables['queryfields']){
+				var complsqlq=" 1=0 "
+				var fields=variables['queryfields'].split(';');
+				for (var f in fields){
+					complsqlq+= " or "+fields[f]+" like '%"+variables['query']+"%'";
+				}
+				complsql+=" and ("+complsqlq+")";
+			} 
+			var complsqllimit=" ";
+			if (variables['limit']){
+				complsqllimit=" limit "+variables['limit'];
+			}
+			if (variables['etat'] ){
+				switch (variables['etat']) {
+					case 'actif' :
+						complsql+=' and ( exists (select * from sejour s where s.titulaire_id=personne.id and (clos =0 or clos is null))) ';
+					break;
+					case 'clos' :
+						complsql+=' and ( not exists  (select * from sejour s where s.titulaire_id=personne.id and (clos =0 or clos is null))) ';
+					break;
+				}
+			}
+			
 			if (variables.action.substr(0,4)=='list'){
-				var sql='Select * from '+variables.action.substr(4,100)+ ' where 1=1 '+complsql+' order by 1 desc;';
+				var sql='Select * from '+variables.action.substr(4,100)+ ' where 1=1 '+complsql+' order by 1 desc '+complsqllimit+';';
+				//console.log(sql);
 				var tabledb=GLOBAL.obj.app.core.findobj(variables.action.substr(4,100),'tables');
 				if (tabledb && tabledb.object){
 					var rep = JSON.stringify(tabledb.object);

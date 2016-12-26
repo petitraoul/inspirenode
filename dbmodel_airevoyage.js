@@ -688,6 +688,7 @@ var database = {"name" : "mydb_airevoyage.db",
 						             {"name" : "phone" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "email" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "profession" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "livretcirc_num" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "cartegrise" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "commentaire" , "type" : "TEXT","formulaire" : "input"}
 						             ],					
@@ -756,7 +757,12 @@ var database = {"name" : "mydb_airevoyage.db",
 						             {"name" : "valeur2" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "valeur3" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "valeur4" , "type" : "TEXT","formulaire" : "input"},
-						             {"name" : "valeur5" , "type" : "TEXT","formulaire" : "input"}
+						             {"name" : "valeur5" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "service_eau" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "service_elec" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "service_chauffeeau" , "type" : "TEXT","formulaire" : "input"},
+						             {"name" : "clos" , "type" : "TEXT","formulaire" : "input"}
+						             
 						             ],					
 						"actionsreturnlist" : [{"name" : "Supprimer", "type" : "button", "action" : "index?type=maj&action=delete"},
 						                       {"name" : "Annuler", "type" : "button", "action" : "index?type=maj&action=keep"},
@@ -782,7 +788,8 @@ var database = {"name" : "mydb_airevoyage.db",
 						             {"name" : "editable" , "type" : "TEXT","formulaire" : "input"},
 						             {"name" : "printable" , "type" : "TEXT","formulaire" : "input"},
 							         {"name" : "signe" , "type" : "TEXT","formulaire" : "input"},
-							         {"name" : "calcul_solde" , "type" : "TEXT","formulaire" : "input"}
+							         {"name" : "calcul_solde" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "deleted" , "type" : "TEXT","formulaire" : "input"}
 						             
 						             ],					
 						"actionsreturnlist" : [{"name" : "Supprimer", "type" : "button", "action" : "index?type=maj&action=delete"},
@@ -844,7 +851,9 @@ var database = {"name" : "mydb_airevoyage.db",
 							         {"name" : "nom" , "type" : "TEXT","formulaire" : "input"},
 							         {"name" : "code" , "type" : "TEXT","formulaire" : "input"},
 							         {"name" : "signe" , "type" : "TEXT","formulaire" : "input"},
-							         {"name" : "calcul_solde" , "type" : "TEXT","formulaire" : "input"}
+							         {"name" : "calcul_solde" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "montant_fixe" , "type" : "TEXT","formulaire" : "input"},
+							         {"name" : "code_annulation" , "type" : "TEXT","formulaire" : "input"}
 							         
 						             
 						             ],					

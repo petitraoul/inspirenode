@@ -54,9 +54,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	        },
 	  	 grants:{type:Object,
 	  	 		 notify : true,
-	  	 		 value : {creation:true,
-		  	 			 modification:true,
-		  	 			 suppression:true,
+	  	 		 value : {creation:false,
+		  	 			 modification:false,
+		  	 			 suppression:false,
 		  	 			 impression:false}
 	  	 	 },
 	     liste_type_operation:{type:Array,
@@ -65,9 +65,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true}
-	  }
+	  },
 
-	  
+
+	  ready:function(){
+	 		this.app = document.querySelector('#app');
+	  		if (this.app.droit_tarif=='N'){
+	  			this.set('grants.creation',false);
+	  			this.set('grants.modification',false);
+	  			this.set('grants.suppression',false);
+	  		} else {
+	  			this.set('grants.creation',false);
+	  			this.set('grants.modification',true);
+	  			this.set('grants.suppression',false);
+	  		}
+	}
 
 
   })

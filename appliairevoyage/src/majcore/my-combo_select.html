@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				  </paper-listbox>
   
 			  </paper-dropdown-menu>
-			  <paper-icon-button style="right:35px" suffix on-tap="_refreshtable" icon="restore" alt="Releve auto" title="Releve auto">
+			  <paper-icon-button style="right:35px" suffix on-tap="_refreshtable" icon="cached" alt="Rafraichir la liste" title="Rafraichir la liste">
 			</div>
 			  	<iron-ajax
 					id="charge"
@@ -68,6 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		    	 	notify:true,
 		    	 	computed:'_dropdown_selobj(value_sel,liste)'
 		     },
+		     where:{type:Array,notify:true,value:[]},
 		     charge_table:{type:Boolean,
 		    	notify:true,
 		    	value:false},
@@ -75,9 +76,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		   		    notify : true}
 	  },
 	  observers:[
-		  '_charge(table,charge_table)'  
+		  '_charge(table,charge_table,where)'  
 		  ],
-	  _charge(table,charge_table){
+	  _charge(table,charge_table,where){
 		  if(charge_table) {
 			  this.set('show_loading',1);
 	    	  this.app = document.querySelector('#app');
@@ -87,7 +88,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	  if ( this.app.listcombo['list'+table]){
 	    		  this.set('liste',this.app.listcombo['list'+table]);
 	    	  } else {
-	        	  this.set('params_get.action','list'+table);
+	    		  this.set('params_get',{type:'get',action:'list'+table});
+
+	        	/*  for (var w in where){
+	        		  this.set('params_get.'+where[w].column,where[w].value);
+	        	  }*/
 	    	      this.charge_url=this.app.url_api+':'+this.app.port_api+'/index'
 	    	      this.$.charge.generateRequest();
 	    	  }

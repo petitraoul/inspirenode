@@ -19,7 +19,8 @@
     "paper-scroll-header-panel": "^1.0.16",
     "paper-spinner": "^1.2.0",
     "paper-fab": "^1.2.1",
-    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0"
+    "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0",
+    "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

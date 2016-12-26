@@ -1,0 +1,383 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="my-doc_Occupation">
+		  <template>
+			  <style>
+			  
+			  	
+			    .databrutes { color:grey;white-space: pre;width:500px; font-family: monospace; font-size: 10px;}
+			  	
+			  	.cadre {
+		        	display :block;
+		            margin: 5px;
+		            padding:5px;
+		          	position: relative;
+		            background-color: white;
+			        box-shadow: 1px 1px 1px 1px;
+			        border-radius: 3px;
+			     }
+			  	.facture{
+			  		color:green;
+			  	}
+			  	.titre{
+			  		color:black;
+					font-size: 14px;
+					text-align: center;
+				}
+				.sejour{
+					color:red;
+					margin-left:10px
+				}
+				.famille{
+					color:blue;
+					margin-left:20px;
+				}
+			  </style>
+			  
+
+			
+			<div class="cadre">
+				  <p class="titre">
+					<b>Bilan d'occupation</b>
+					</br>	
+					<b>Extraction du {{occupation_sel.date_deb}} au {{occupation_sel.date_fin}}</b>
+				  </p>					 
+		  	 </div>
+			 <div>
+			 <h2>[[aire_sel.nom]]</h2>
+			 </div>
+			 
+			<table>
+			<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+			   <th style="width: 80%">
+				Nombre total de personnes accueillies <br/>
+				Dont personnes de moins de 18 ans<br/>
+				Nombre de caravanes
+			   </th>	
+			   
+			   <th style=" width: 20%">							   
+				[[nb_pers]] <br/>
+				[[nb_pers_18]]<br/>
+				[[nb_caravannes]]
+			   </th>				
+			</tr>		
+			</table>	
+
+			<br/>
+			
+			<table>
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<p class="titre">DUREE DES SEJOUR</p>			
+				</tr>	
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<table>
+					<tr>
+					   <th style="width: 50%">
+						Moins d'un mois <br/>
+						De 1 à 3 mois<br/>
+						De 3 à 6 mois<br/>
+						De 6 à 9 mois<br/>
+						De 9 à 12 mois<br/>
+						> 12 mois<br/>
+						<br/>
+						Total
+					   </th>	
+					   
+					   <th style=" width: 20%">	
+						[[dur_sej_0]]<br/>
+						[[dur_sej_1]]<br/>
+						[[dur_sej_3]]<br/>
+						[[dur_sej_6]]<br/>
+						[[dur_sej_9]]<br/>
+						[[dur_sej_12]]<br/>
+						_____<br/>
+						[[dur_sej_tot]]
+					   </th>
+					   
+					   <th style=" width: 30%">	
+						[[dur_sej_0_pourc]]<br/>
+						[[dur_sej_1_pourc]]<br/>
+						[[dur_sej_3_pourc]]<br/>
+						[[dur_sej_6_pourc]]<br/>
+						[[dur_sej_9_pourc]]<br/>
+						[[dur_sej_12_pourc]]<br/>
+						<br/>
+						<br/>
+					   </th>				
+					</tr>		
+					</table>					
+				</tr>		
+			</table>	
+			<br/>
+			<table>
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<p class="titre">ETAT CIVIL</p>			
+				</tr>	
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<table>
+					<tr>
+					   <th style="width: 50%">
+						   <template is="dom-repeat" items="[[stat_etatcivil]]" as="lig">
+								{{lig.nom}} <br/>
+							</template>
+						<br/>
+						Total
+					   </th>	
+					   
+					   <th style=" width: 20%">	
+						   <template is="dom-repeat" items="[[stat_etatcivil]]" as="lig">
+								{{lig.nb}} <br/>
+							</template>
+						_____<br/>
+						{{stat_etatcivil_nbpersonne}}
+					   </th>
+					   
+					   <th style=" width: 30%">	
+						   <template is="dom-repeat" items="[[stat_etatcivil]]" as="lig">
+								{{lig.pourc}} <br/>
+							</template>
+						<br/>
+						<br/>
+					   </th>				
+					</tr>		
+					</table>					
+				</tr>		
+			</table>
+			<br/>
+			<table>
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<p class="titre">COMPOSITION DES MENAGES ACCUEILLIS</p>			
+				</tr>	
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<table>
+					<tr>
+					   <th style="width: 50%">
+						Isolé <br/>
+						Isolé + 1<br/>
+						Isolé + 2<br/>
+						Isolé + 3<br/>
+						Isolé + 4 et plus<br/>
+						<br/>
+						Couple <br/>
+						Couple + 1<br/>
+						Couple + 2<br/>
+						Couple + 3<br/>
+						Couple + 4 et plus<br/>
+						<br/>
+						Total
+					   </th>	
+					   
+					   <th style=" width: 20%">	
+						[[nb_Isol]]<br/>
+						[[nb_Isol1]]<br/>
+						[[nb_Isol2]]<br/>
+						[[nb_Isol3]]<br/>
+						[[nb_Isol4]]<br/>
+						<br/>
+						[[nb_cpl]]<br/>
+						[[nb_cpl1]]<br/>
+						[[nb_cpl2]]<br/>
+						[[nb_cpl3]]<br/>
+						[[nb_cpl4]]<br/>
+						_____<br/>
+						[[nb_men_tot]]
+					   </th>
+					   
+					   <th style=" width: 30%">	
+						[[nb_Isol_pourc]]<br/>
+						[[nb_Isol1_pourc]]<br/>
+						[[nb_Isol2_pourc]]<br/>
+						[[nb_Isol3_pourc]]<br/>
+						[[nb_Isol4_pourc]]<br/>
+						<br/>
+						[[nb_cpl_pourc]]<br/>
+						[[nb_cpl1_pourc]]<br/>
+						[[nb_cpl2_pourc]]<br/>
+						[[nb_cpl3_pourc]]<br/>
+						[[nb_cpl4_pourc]]<br/>
+						<br/>
+						<br/>
+					   </th>				
+					</tr>		
+					</table>					
+				</tr>		
+			</table>
+			<br/>
+			<table>
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<p class="titre">AGE DES PERSONNES HEBERGEES</p>			
+				</tr>	
+				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
+					<table>
+					<tr>
+					   <th style="width: 50%">
+						0-17 ans <br/>
+						18-24 ans<br/>
+						25-39 ans<br/>
+						40-65 ans<br/>
+						Plus de 65 ans<br/>
+						<br/>
+						Non défini <br/>
+						<br/>
+						Total
+					   </th>	
+					   
+					   <th style=" width: 20%">	
+						[[nb_17]]<br/>
+						[[nb_24]]<br/>
+						[[nb_39]]<br/>
+						[[nb_65]]<br/>
+						[[nb_66]]<br/>
+						<br/>
+						[[nb_0]]<br/>
+						_____<br/>
+						[[nb_age_tot]]
+					   </th>
+					   
+					   <th style=" width: 30%">	
+						[[nb_17_pourc]]<br/>
+						[[nb_24_pourc]]<br/>
+						[[nb_39_pourc]]<br/>
+						[[nb_65_pourc]]<br/>
+						[[nb_66_pourc]]<br/>
+						<br/>
+						[[nb_0_pourc]]<br/>
+						<br/>
+						<br/>
+					   </th>				
+					</tr>		
+					</table>					
+				</tr>		
+			</table>
+
+			<!-- pour chargement de la table sejours suivant selection des dates -->
+				<iron-ajax
+					id="charge_famillesejours"	    		method="GET"
+				    url="{{charge_famillesejours_url}}"	    headers="{{app.header_auth}}"
+				    params="{{params_get_sejours}}"		    handle-as="json"    on-error="_disconnect"
+				    last-response="{{sejours}}"			    debounce-duration="300">
+				</iron-ajax>
+				
+			<!-- pour chargement des autres table entiere -->
+				<my-combo_select id="charge_sexe" hidden charge_table liste="{{sexes}}"   table="sexe" ></my-combo_select>
+				<my-combo_select id="charge_tag" hidden charge_table liste="{{emplacements}}"   table="tag_voyage"  ></my-combo_select>
+				<my-combo_select id="charge_operat" hidden charge_table  liste="{{type_operations}}"   table="type_operation"  ></my-combo_select>
+				<my-combo_select id="charge_typecaf" hidden charge_table liste="{{typecafs}}"   table="typecaf"  ></my-combo_select>
+				<my-combo_select id="charge_paiement" hidden charge_table liste="{{type_paiements}}"   table="type_paiement"  ></my-combo_select>
+				<my-combo_select id="charge_tarif" hidden charge_table liste="{{tarifs}}"   table="tarif"  ></my-combo_select>
+				<my-combo_select id="charge_aire" hidden charge_table liste="{{aires}}"   table="aire"  ></my-combo_select>
+				<my-combo_select id="charge_societe" hidden charge_table liste="{{societes}}"   table="societe"  ></my-combo_select>
+				<my-combo_select id="charge_personne" hidden charge_table liste="{{personnes}}"   table="personne"  ></my-combo_select>
+				
+		  </template>
+		
+		  <script>
+		    Polymer({
+		
+		      is: 'my-doc_Occupation',
+
+		      properties: {
+		 	     app: {
+			          type: Object
+		        	},    
+		    	 selection_query:{type : Object,
+	  				  notify:true,
+	  				  value:{}},
+
+		   		 params_get_sejours:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'listsejour'}},
+		   		 
+			      societe_sel:{type:Object,
+			    	  notify:true,
+			    	  computed: 'computesociete_sel(societes)'},
+			      aire_sel:{type:Object,
+			    	  notify:true,
+			    	  computed: 'computeaire_sel(aires)'},
+			     
+			     sexes:{type:Array,notify:true},
+			     sejours:{type:Array,notify:true},
+			     personnes:{type:Array,notify:true},
+			    	  
+			     stat_etatcivil:{type:Array,notify:true,computed: 'compute_etatcivil(sexes,personnes,sejours,selection_query)'},
+			     stat_etatcivil_nbpersonne:{type:Number,notify:true,value:0}
+		      },
+	    	  observers: [
+		                  '_selection_query_change(selection_query)'	                  
+		                ],
+		      
+		      _selection_query_change: function(selection_query) {
+			        this.app = document.querySelector('#app');
+			        /*prise en compte des dates dans la requete envoyée au serveur pour la liste des séjours*/
+			        if (this.params_get_sejours && selection_query && selection_query.date1 && selection_query.date2) {
+			        	this.params_get_sejours.date=" between '"+selection_query.date1+"' and '"+selection_query.date2+"'";
+			        } else if (this.params_get_sejours && selection_query && selection_query.date1) {
+			        	this.params_get_sejours.date=">='"+selection_query.date1+"'";
+			        } else if (this.params_get_sejours && selection_query && selection_query.date2) {
+			        	this.params_get_sejours.date="<='"+selection_query.date2+"'";
+			        } else if (this.params_get_sejours) {
+			        	this.params_get_sejours.date='';
+			        }
+			        /*chargement a partir du serveur des sejours*/
+			        this.charge_famillesejours_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_famillesejours.generateRequest();
+			  },
+			  compute_etatcivil:function(sexes,personnes,sejours,selection_query){
+				  
+				  for (var s in sexes){
+					  sexes[s].nb=0;
+				  }
+				  var nb_personnes=0;
+				  for (var s in sejours){ /*boucle sejour*/
+					  for (var t in personnes){ /*boucle titulaire*/
+						 if (!personnes[t].titulaire_id && sejours[s].titulaire_id==personnes[t].id){ /*si titulaire du sejour*/
+							 this._getobjinliste(sexes,personnes[t].sexe).nb += 1
+							 nb_personnes+= 1;
+							for (var m in personnes){ /*boucle membre*/
+								if (personnes[m].titulaire_id=personnes[t.id]){ /*si membre du titulaire*/
+									this._getobjinliste(sexes,personnes[t].sexe).nb += 1;
+									nb_personnes+= 1;
+								}
+							} 
+						 } 
+					  }
+				  }
+				  
+				  for (var s in sexes){
+					  sexes[s].pourc=Math.round(sexes[s].nb/nb_personnes*1000)/10;
+				  }
+				  this.set('stat_etatcivil_nbpersonne',nb_personnes);
+				  
+				  return sexes;
+			  },
+			  computeaire_sel:function(aires){
+				  return this._getobjinliste(aires,0);
+			  },
+			  computesociete_sel:function(societes){
+				  return this._getobjinliste(societes,0);
+			  },
+			  
+			  
+			  
+			  _getobjinliste:function(liste,searchval,searchcolumn){
+				  if(!liste){
+					  return {};
+				  }
+				  if (!searchcolumn){
+					  searchcolumn='id';
+				  }
+				  for (var o in liste){
+					  if(liste[o][searchcolumn]==searchval){
+						  return liste[o];
+					  }
+				  }
+				  return {};
+				  
+			  },
+			  _disconnect: function(obj){
+		    	  this.app = document.querySelector('#app');
+		    	  return this.app.disconnect();
+		      }
+		    });
+		  </script>
+		</dom-module>

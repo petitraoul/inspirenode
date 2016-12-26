@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- uuid ... -->
     <app-route  route="{{uuidroute}}"  pattern="/:page"   data="{{uuidrouteData}}"></app-route>
   
-	<my-liste_familles charge_table selitem="{{uuidrouteData.page}}" ></my-liste_familles>
+	<my-liste_familles charge_table selitem="[[selitem]]" ></my-liste_familles>
 	
 
   </template>
@@ -45,8 +45,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 
       is: 'my-famillepage',
-    	  properties: {  
-    	  }
+	  properties: {  
+		     selitem:{type:Number,
+		    	 	notify : true,
+		    	 	computed:'_selitem(subrouteData.page,uuidrouteData.page)'  
+		    	 },   
+	  },
+	  _selitem:function(subroutepage,uuidroutepage){
+		  //console.log(subroutepage,uuidroutepage);
+		  if (subroutepage=='famillepage') {
+			  return uuidroutepage;
+		  } else {
+			  return null;
+		  }
+		  
+	  }
     });
   </script>
 

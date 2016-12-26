@@ -91,16 +91,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
   	 	 	hidealwaysbottombutton=true
   	 	 	return_onsave$=false
+  	 	 	group_modificationbuttonint_hide="{{modificationbuttonint_hide}}"
+  	 	 	group_refreshbuttonint_hide="{{refreshbuttonint_hide}}"
   		> 
   		
 		
 	  		
 	  		<div class="reduit">
-					Famille {{objet.nom}} {{objet.prenom1}}<div style="float:right;margin-right:110px">Solde : {{soldecompta}}</div>
+					{{objet.nom}} {{objet.prenom1}}<div style="float:right;margin-right:110px">Solde : {{soldecompta}}€</div>
 					</br>
-					Adresse {{objet.adresse}} {{objet.codepostal}} {{objet.ville}} {{objet.pays}}</br>
+					<div style="font-size:smaller">
+					{{objet.adresse}}</br> {{objet.codepostal}} {{objet.ville}} {{objet.pays}}</br>
 					
-					{{objet.commentaire}} [[editmodehide]]
+					{{objet.commentaire}} </div>
 					
 	  		</div>
 	  		<div class="edition" style="display:flex">
@@ -129,9 +132,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					            <paper-input class="input1col" id="ville" label="Ville" type="text" value="{{objet.ville}}"></paper-input>
 					        </div>
 					        <div class="ligne">
-					            <paper-input class="input1col" id="phone" label="Telephone" type="text" value="{{objet.phone}}"><iron-icon icon="communication:phone" prefix></iron-icon></paper-input>
-					            <paper-input class="input1col" id="email" label="Courriel" type="text" value="{{objet.email}}"><iron-icon icon="communication:email" prefix></iron-icon></paper-input>
-					            <paper-input class="input1col" id="profession" label="Profession" type="text" value="{{objet.profession}}"></paper-input>
+					            <paper-input class="input2cols" id="phone" label="Telephone" type="text" value="{{objet.phone}}"><iron-icon icon="communication:phone" prefix></iron-icon></paper-input>
+					            <paper-input class="input2cols" id="email" label="Courriel" type="text" value="{{objet.email}}"><iron-icon icon="communication:email" prefix></iron-icon></paper-input>
+					            
+					        </div>
+					        <div class="ligne">
+					            <paper-input class="input2cols" id="livretcirc_num" label="N° Livret circulation" type="text" value="{{objet.livretcirc_num}}"></paper-input>
+					            <paper-input class="input2cols" id="profession" label="Profession" type="text" value="{{objet.profession}}"></paper-input>
 					        </div>
 					        <div class="ligne">
 					            <paper-input class="input1col" id="datenaissance" label="Date de naissance" type="date" value="{{objet.datenaissance}}"><iron-icon icon="event-available" prefix></iron-icon></paper-input>
@@ -145,8 +152,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					            <paper-input class="input3cols" id="commentaire" label="Commentaires" type="textarea" value="{{objet.commentaire}}"></paper-input>
 					        </div> 
 							<paper-fab  class="reply-button" mini icon="reply" title="Annuler" on-tap="reply"></paper-fab>
-							<paper-fab  class="reload-button"  mini icon="cached" title="Réactualiser" on-tap="refreshthis"></paper-fab>
-							<paper-fab  class="valid-button" mini icon="check" title="Valider" on-tap="savethis"></paper-fab>
+							<paper-fab  class="reload-button" hidden$="[[refreshbuttonint_hide]]" mini icon="cached" title="Réactualiser" on-tap="refreshthis"></paper-fab>
+							<paper-fab  class="valid-button" hidden$="[[modificationbuttonint_hide]]" mini icon="check" title="Valider" on-tap="savethis"></paper-fab>
 							
 						</div>
 			
@@ -154,8 +161,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<my-liste_famillemembres  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillemembres>
 				</li>
 				<li style="display:block;width:1000px;margin-left:auto;margin-right:auto;margin-top:-40px;margin-bottom:0">
-					<my-liste_compte_ecritures liste_soustable="{{liste_soustable}}" charge_table class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}"></my-liste_compte_ecritures>
-					<my-liste_factures  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" ></my-liste_factures>
+					<my-liste_compte_ecritures class="fam_liste_compte_ecritures" id="{{_listeecr_id(objet.id)}}" liste_objets="{{liste_compte_ecriture}}" liste_soustable="{{liste_soustable}}" charge_table class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}"></my-liste_compte_ecritures>
+					<my-liste_factures liste_soustable2="{{liste_compte_ecriture}}" liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" ></my-liste_factures>
 					<my-liste_famillesejours  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillesejours>
 				</li>
 				</div>			
@@ -182,7 +189,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'personne'/*v:'voyage.1.1.1'*/}}
 	        },
 	     edited_item_id:{notify : true},
-	     
+	     modificationbuttonint_hide:{type:Boolean,notify:true},
+	     refreshbuttonint_hide:{type:Boolean,notify:true},
 	     doc_print_link:{type:String,
 	    	 notify:true,
 	    	 computed:'_getprintlink(objet)'},
@@ -210,6 +218,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  _getparams_get:function(obj_id,objet){
 		  return {type:'get',action:'detailpersonne',id:obj_id}
+	  },
+	  _listeecr_id:function(obj_id){
+		  return 'fam_liste_compte_ecritures'+obj_id;
 	  },
 	  _is_edited:function(objet,edited_item_id){
 		  if(objet && objet.id && objet.id==edited_item_id){

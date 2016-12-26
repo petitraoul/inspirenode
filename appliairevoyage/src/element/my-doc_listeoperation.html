@@ -4,13 +4,32 @@
 		  <template>
 			  <style>
 				
-				table
-				{
-				    border-collapse: collapse;
+				.databrutes { color:grey;white-space: pre;width:500px; font-family: monospace; font-size: 10px;}
+			  	
+			  	.cadre {
+		        	display :block;
+		            margin: 5px;
+		            padding:5px;
+		          	position: relative;
+		            background-color: white;
+			        box-shadow: 1px 1px 1px 1px;
+			        border-radius: 3px;
+			     }
+			  	.facture{
+			  		color:green;
+			  	}
+			  	.titre{
+			  		color:black;
+					font-size: 14px;
+					text-align: center;
 				}
-				td, th 
-				{
-				    border: 1px solid black;
+				.sejour{
+					color:red;
+					margin-left:10px
+				}
+				.famille{
+					color:blue;
+					margin-left:20px;
 				}
 			  </style>
 			  
@@ -21,26 +40,39 @@
 			    last-response="{{operation}}"   		debounce-duration="300">
 			</iron-ajax>
 			
-			
-			<b>Liste des operations</b>
+			<div class="cadre">
+				  <p class="titre">
+					<b>Régie de recette avec cautions</b>
+					</br>	
+					<b>du {{occupation_sel.date_deb}} au {{occupation_sel.date_fin}}</b>
+				  </p>					 
+		  	 </div>
+			 <div>
+			 <h2>[[aire_sel.nom]]</h2>
+			 </div>
 			<table>
 			
+			<thead>
 			   <tr>
 			       <th>Date</th>
 			       <th>Opération</th>
 			       <th>Montant</th>
 			       <th>Numéros</th>
-			   </tr>
-			
+			       <th>Usager</th>
+			   </tr>			
+			</thead>		
+			<tbody>
 				<template is="dom-repeat" items="[[operation]]" as="lig">
 				   <tr>
 				       
 				       <td>[[lig.date]]</td>
-				       <td>[[lig.type_operation]] en [[lig.mode_paiement]]</td>
-				       <td>[[lig.qte]] x [[lig.pu]] = [[lig.montant]]</td>
-				       <td>recu [[lig.recu_num]] facture [[lig.facture_num]]</td>
+				       <td>[[lig.type_operation]]</td>
+				       <td>[[lig.montant]]</td>
+				       <td>[[lig.recu_num]]</td>
+				       <td>[[personne.Nom]] [[personne.prenom]]</td>
 				   </tr>
-			   	</template>
+			   	</template>						
+			</tbody>
 			</table>
 				
 		  </template>

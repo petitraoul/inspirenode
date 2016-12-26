@@ -11,14 +11,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/iron-location/iron-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route-converter.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
-
+<link rel="import" href="../majcore/my-combo_select.html">
 
 <link rel="import" href="../element/my-doc_facture.html">
 <link rel="import" href="../element/my-doc_recu.html">
+
 <link rel="import" href="../element/my-doc_listefamilles_selection.html">
 <link rel="import" href="../element/my-doc_listefamilles.html">
+
 <link rel="import" href="../element/my-doc_listeoperation_selection.html">
 <link rel="import" href="../element/my-doc_listeoperation.html">
+
+<link rel="import" href="../element/my-doc_ALT2_selection.html">
+<link rel="import" href="../element/my-doc_ALT2.html">
+
+<link rel="import" href="../element/my-doc_Conso_selection.html">
+<link rel="import" href="../element/my-doc_Conso.html">
+
+<link rel="import" href="../element/my-doc_Occupation_selection.html">
+<link rel="import" href="../element/my-doc_Occupation.html">
 <dom-module id="my-docPrint">
 
   <template>
@@ -30,18 +41,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<div hidden$="{{printmode}}">
 	  <iron-location path="{{path}}" ></iron-location>
 
-      <iron-pages role="main" selected="[[params.doc]]" attr-for-selected="name">
-      	<my-doc_recu name="doc_recu" selection_query='{{params}}'></my-doc_recu>
-      	<my-doc_facture name="doc_facture" selection_query='{{params}}'></my-doc_facture>
-      	<my-doc_listefamilles name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles>
-      	<my-doc_listeoperation name="doc_listeoperation" selection_query='{{params}}'></my-doc_listeoperation>    
-	  </iron-pages>
+      	<template is="dom-if" if="{{show_element(params.doc,'doc_recu')}}">
+      		<my-doc_recu name="doc_recu" selection_query='{{params}}'></my-doc_recu>
+      	</template>
+      	<template is="dom-if" if="{{show_element(params.doc,'doc_facture')}}">
+      		<my-doc_facture name="doc_facture" selection_query='{{params}}'></my-doc_facture>
+      	</template>
+      	<template is="dom-if" if="{{show_element(params.doc,'doc_listefamilles')}}">
+      		<my-doc_listefamilles name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles>
+      	</template>
+      	<template is="dom-if" if="{{show_element(params.doc,'doc_listeoperation')}}">
+      		<my-doc_listeoperation name="doc_listeoperation" selection_query='{{params}}'></my-doc_listeoperation>
+      	</template>
+      	<template is="dom-if" if="{{show_element(params.doc,'doc_ALT2')}}">
+      		<my-doc_ALT2 name="doc_ALT2" selection_query='{{params}}'></my-doc_ALT2> 
+      	</template>
+      	<template is="dom-if" if="{{show_element(params.doc,'doc_Conso')}}">
+      		<my-doc_Conso name="doc_Conso" selection_query='{{params}}'></my-doc_Conso>
+      	</template>
+      	<template is="dom-if" if="{{show_element(params.doc,'doc_Occupation')}}">
+      		<my-doc_Occupation name="doc_Occupation" selection_query='{{params}}'></my-doc_Occupation>
+      	</template>      	
+      	
 	  
 	</div>
 	
 	<div hidden$="{{!printmode}}">
+		<my-doc_ALT2_selection name="doc_ALT2" selection_query='{{params}}'></my-doc_ALT2_selection>
+		<my-doc_Conso_selection name="doc_Conso" selection_query='{{params}}'></my-doc_Conso_selection>
+		<my-doc_Occupation_selection name="doc_Occupation" selection_query='{{params}}'></my-doc_Occupation_selection>  
 		<my-doc_listefamilles_selection name="doc_listefamilles" selection_query='{{params}}'></my-doc_listefamilles_selection>  
-		<my-doc_listeoperation_selection name="doc_listeoperation" selection_query='{{params}}'></my-doc_listeoperation_selection>  
+		<my-doc_listeoperation_selection name="doc_listeoperation" selection_query='{{params}}'></my-doc_listeoperation_selection>
 	</div>
   </template>
 
@@ -76,7 +106,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    		  this.set('printmode',true);
 	    	  }
 	    	  
-	      }
+	      },
+	      show_element: function (type1,type2) {
+	    	    //console.log('OK',periph.nom,periph.uuid,ecriture_type,periph.ecriture_type,periph.ecriture_type==ecriture_type);	
+
+	    	    return type1==type2;
+	    	 },
     });
   </script>
 

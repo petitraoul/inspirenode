@@ -61,6 +61,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		              <!-- <iron-icon prefix height="60" width="60" src="{{app.url_http}}:{{app.port_http}}/[[value_icon_sel]]"></iron-icon> -->
 		            </paper-input>
 		 		    <paper-input class="input05cols" id="date_fin" label="Date Fin" type="date" value="{{objet.date_fin}}"></paper-input>
+					
+					<paper-checkbox class="input1col" style="margin:auto" id="clos" checked="{{objet.clos}}"><b>Séjour Clos</b></paper-checkbox>
+				 	 
 				</div>
 				<div class="ligne">
 				 	 <paper-input class="input05cols" id="valeur0" label="depart Kwh" type="number" value="{{objet.valeur0}}">
@@ -78,6 +81,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				 	 <paper-input class="input05cols" id="valeur3" label="fin M3" type="number" value="{{objet.valeur3}}">
 				 	  <paper-icon-button  suffix on-tap="getcompteureau3" icon="restore" alt="Releve auto" title="Releve auto">
 				 	 </paper-input>
+				</div>
+				<div class="ligne">
+				 	 <paper-checkbox class="input1col" id="service_eau" checked="{{objet.service_eau}}">Eau</paper-checkbox>
+				 	 <paper-checkbox class="input1col" id="service_elec" checked="{{objet.service_elec}}">Electricité</paper-checkbox>
+				 	 <paper-checkbox class="input1col" id="service_chauffeeau"  checked="{{objet.service_chauffeeau}}">Chauffe eau</paper-checkbox>
 				</div>
 	  		</div>
   		 		
@@ -126,6 +134,72 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 computed:'_getprintlink(objet)'}
 	     
 	  },
+	  observers: [
+	              '_calculdate(objet)',
+	              '_calculservice1(objet.service_eau)',
+	              '_calculservice12(objet.service_elec)',
+	              '_calculservice13(objet.service_chauffeeau)',
+	              '_calculclos(objet.clos)'
+	              ]
+	  ,
+      _calculservice1:function(service_eau){
+    	  if (service_eau=="1"){
+    		  this.set('objet.service_eau',true);
+    	  } else {
+    		  this.set('objet.service_eau',false);
+    	  }
+      },
+      _calculservice12:function(service_elec){
+    	  if (service_elec=="1"){
+    		  this.set('objet.service_elec',true);
+    	  } else {
+    		  this.set('objet.service_elec',false);
+    	  }
+      },
+      _calculservice13:function(service_chauffeeau){
+    	  if (service_chauffeeau=="1"){
+    		  this.set('objet.service_chauffeeau',true);
+    	  } else {
+    		  this.set('objet.service_chauffeeau',false);
+    	  }
+      },
+      _calculclos:function(clos){
+    	  if (clos=="1"){
+    		  this.set('objet.clos',true);
+    		  if (!this.objet.date_fin) {
+    			  var today_3m = new Date();
+    			  today_3m.setMonth(today_3m.getMonth()+3);
+    			  dd = today_3m.getDate()+"";
+    			  mm = today_3m.getMonth()+1+""; //January is 0!
+    			  if (dd.length<2) {dd="0"+dd;}
+    			  if (mm.length<2) {mm="0"+mm;}
+    			  yyyy = today_3m.getFullYear();
+    			  this.set('objet.date_fin',yyyy+'-'+mm+'-'+dd);
+    		  }
+    	  } else {
+    		  this.set('objet.clos',false);
+    	  }
+      },
+	  _calculdate:function(objet){
+		  if (!objet.date_debut && !objet.date_fin) {
+			  var today = new Date();
+			  var dd = today.getDate()+"";
+			  var mm = today.getMonth()+1+""; //January is 0!
+			  if (dd.length<2) {dd="0"+dd;}
+			  if (mm.length<2) {mm="0"+mm;}
+			  var yyyy = today.getFullYear();
+			  this.set('objet.date_debut',yyyy+'-'+mm+'-'+dd);
+			  
+			  var today_3m = new Date();
+			  today_3m.setMonth(today_3m.getMonth()+3);
+			  dd = today_3m.getDate()+"";
+			  mm = today_3m.getMonth()+1+""; //January is 0!
+			  if (dd.length<2) {dd="0"+dd;}
+			  if (mm.length<2) {mm="0"+mm;}
+			  yyyy = today_3m.getFullYear();
+			  this.set('objet.date_fin',yyyy+'-'+mm+'-'+dd);
+		  }
+	  },
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
 			  return "doc_sejour&id="+objet.id;
@@ -140,6 +214,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  
 	  
       gettagclicked:function(){
+    	    this.$.profilfamillesejour.app.$.location.path="/appliairevoyage/periphListPage/"+this.emplobj_sel.uuid;
 			this.$.profilfamillesejour.app.$.location.path="/appliairevoyage/periphListPage/"+this.emplobj_sel.uuid;
 	  },
 
@@ -147,7 +222,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  this.app = document.querySelector('#app');
 		  var eleccounter=this.app.lastetat[this.emplobj_sel.periph_elec_uuid];
 		  if (eleccounter && eleccounter.expression){
-			  this.set('objet_temp.valeur0',eleccounter.expression.etat);
+			  this.set('objet.valeur0',eleccounter.expression.etat);
 		  }
 		  
 	  },
@@ -155,21 +230,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  this.app = document.querySelector('#app');
 		  var eleccounter=this.app.lastetat[this.emplobj_sel.periph_elec_uuid];
 		  if (eleccounter && eleccounter.expression){
-		  	this.set('objet_temp.valeur2',eleccounter.expression.etat);
+		  	this.set('objet.valeur2',eleccounter.expression.etat);
 		  }
 	  },
 	  getcompteureau1:function(elem){
 		  this.app = document.querySelector('#app');
 		  var eaucounter=this.app.lastetat[this.emplobj_sel.periph_eau_uuid];
 		  if (eaucounter && eaucounter.expression){
-		  	this.set('objet_temp.valeur1',eaucounter.expression.etat);
+		  	this.set('objet.valeur1',eaucounter.expression.etat);
 		  }
 	  },
 	  getcompteureau3:function(elem){
 		  this.app = document.querySelector('#app');
 		  var eaucounter=this.app.lastetat[this.emplobj_sel.periph_eau_uuid];
 		  if (eaucounter && eaucounter.expression){
-		  	this.set('objet_temp.valeur3',eaucounter.expression.etat);
+		  	this.set('objet.valeur3',eaucounter.expression.etat);
 		  }
 	  },
   });

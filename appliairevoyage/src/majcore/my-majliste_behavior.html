@@ -21,6 +21,10 @@
  	     liste_objets:{type: Array,
 	    	 notify : true
 	     },
+	     liste_nb_column:{type:Number,
+	    	 notify:true,
+	    	 value:1
+	     },
 	     show_loading:{type:Number,
 	    	 notify : true,
 	    	 value:0
@@ -51,9 +55,9 @@
   	 	 max_heightliste:{type:String,
   	 		 notify:true,
   	 		 value:0},
-  	  	 scroll_actif:{type:Boolean,
+  	  	 scrollactif:{type:Boolean,
   	  	 		 notify:true,
-  	  	 		 value:false},
+  	  	 		 value:true},
   	  	 		 
   	 	 grants_acces:{type:Object,
 	    	 	notify : true,
@@ -66,7 +70,10 @@
 	    	 	notify : true,
 	    	 	computed:'_createbuttonishide(grants_acces.creation,edited_item_id)'  
 	    	 },    
-
+	     refreshbutton_hide:{type:Boolean,
+	    	 	notify : true,
+	    	 	computed:'_refreshbuttonishide(edited_item_id)'  
+	    	 },    
 	     dropdown_selobj:{type:Object,
 	    	 	notify:true,
 	    	 	computed:'_dropdown_selobj(value_sel,liste_objets)'
@@ -76,29 +83,102 @@
 	    	 notify : true,
 	    	 value:false
 	     },
-	     
+	     searchquery:{type:String,
+	    	 notify:true,
+	    	 value:""
+	     },
+	     query:{type:String,
+	    	 notify:true
+	     },
+	     queryfields:{type:String,
+	    	 notify:true},
+	     filter:{type:String,
+	    	 notify:true
+	     },
 	     charge_table:{type:Boolean,
 	    	notify:true,
 	    	value:false},
 	   	 value_sel: {type:String, 
-	   		    notify : true}
+	   		    notify : true},
+		 selitem:{type:String,notify:true},
+		 showwhereisnull:{type:String,notify:true}
 	  },
 	  observers:[
 		  '_show_loading(show_loading)',
 		  'params_chang(params,detail_code,charge_table)'  ,
 		  'detail_code_change(detail_code)',
-		  '_activescroll(scroll_actif,edited_item_id,max_heightliste)',
-		  'title_background_color_change(title_background_color)'  
+		  '_activescroll(scrollactif,edited_item_id,max_heightliste)',
+		  'title_background_color_change(title_background_color)',
+		  '_changecolumnnb(liste_nb_column,edited_item_id)',
+		  '_selitemroute(selitem)'
 	  ],
 	  listeners: {
           'reply_delete': 'handleReplydelete',
+          'searchbox-search':'handlesearch',
+          'searchbox-clear':'handleclear',
+          'searchbox-filter':'handlefilter'
         },
-      params_chang:function(params,detail_code,charge_table){
+      _selitemroute:function(selitem){
+    	  if (selitem>0) {
+		 		delete this.params.query;
+  		 		delete this.params.queryfields;
+  		 		this.set('params.id',selitem);
+    	  }
     	  
+    	  if (selitem<0) {
+    		  this._refreshdata();  
+    		  this.app.$.location.path="/appliairevoyage/famillepage/-1";
+    	  }
+    	  
+      },
+  	  handlesearch:function(e,detail){
+  		 	if (this.params && this.searchquery && this.queryfields){
+  		 		delete this.params.id;
+  		 		this.set('params.query',this.searchquery);
+  		 		this.set('params.queryfields',this.queryfields);
+  		 		
+  		 	} else  {
+  		 		delete this.params.query;
+  		 		delete this.params.queryfields;
+  		 		delete this.params.id;
+  		 	
+  		 	}
+  		 	this.set('edited_item_id',-2);
+  		 	this._refreshdata();  
+  		 	this.app.$.location.path="/appliairevoyage/famillepage/-1";
+	  },
+	  handleclear:function(e,detail){
+		 	if (this.params){
+  		 		delete this.params.query;
+  		 		delete this.params.queryfields;
+  		 		delete this.params.id;
+  		 	}
+		 	this._refreshdata();  
+  		 	this.set('edited_item_id',-2);
+  		 	this._refreshdata();  
+  		 	this.app.$.location.path="/appliairevoyage/famillepage/-1";
+	  },
+	  handlefilter:function(e,detail){
+		  this.set('filter',this.searchquery);
+	  },
+
+      params_chang:function(params,detail_code,charge_table){
+
     	  if (charge_table){
     		  this._refreshdata();  
     	  }
     	    
+      },
+      _changecolumnnb:function(liste_nb_column,edited_item_id){
+    	  
+    	  if (edited_item_id==-2){
+    		  this.customStyle['--app-grid-columns'] = this.liste_nb_column+"";
+              this.updateStyles();
+    	  } else {
+    		  this.customStyle['--app-grid-columns'] = '1';
+              this.updateStyles();
+    	  }
+    	  console.log('_changecolumnnb',liste_nb_column,edited_item_id);
       },
       detail_code_change:function(detail_code){
     	  this.app = document.querySelector('#app');
@@ -126,10 +206,10 @@
     		  this.$.load_dialog.close();
     	  }
       },
-      _activescroll:function(scroll_actif,edited_item_id,max_heightliste){
+      _activescroll:function(scrollactif,edited_item_id,max_heightliste){
     	  if(max_heightliste && max_heightliste!="0"){
     		  var ele = document.querySelector('#regionscroll');
-    		  if(scroll_actif && edited_item_id<-1){
+    		  if(scrollactif && edited_item_id<-1){
     		    this.customStyle['--liste_maxheight']=max_heightliste;
     		    this.customStyle['--liste_overflow']='auto';
     		    this.updateStyles();
@@ -164,11 +244,19 @@
     		  return false;
     	  }
       },
+      _refreshbuttonishide:function(edited_item_id){
+    	  if (edited_item_id!=-2){
+    		  return true;
+    	  } else {
+    		  return false;
+    	  }
+      },
 	  ready:function(){
 	        this.app = document.querySelector('#app');
 	         
 	  },
 	  refreshthis:function(){
+		  this.set('edited_item_id',-2);
 		  this._refreshdata();
 	  },
       _refreshdata:function(){
@@ -202,7 +290,20 @@
 		    	this.$.charge_alltarifs.generateRequest();
 		  /*}*/
 	  },
+      show_element: function (type1,type2) {
+  	    //console.log('OK',periph.nom,periph.uuid,ecriture_type,periph.ecriture_type,periph.ecriture_type==ecriture_type);	
 
+  	    return type1==type2;
+  	 },
+     show_thisline: function (obj) {
+   	    //console.log('OK',periph.nom,periph.uuid,ecriture_type,periph.ecriture_type,periph.ecriture_type==ecriture_type);	
+		if (this.showwhereisnull && obj[this.showwhereisnull]){
+			return false;
+		} else {
+			return true;
+		}
+   	    
+   	 },
 	  _disconnect: function(obj){
 	    	  this.app = document.querySelector('#app');
 	    	  return this.app.disconnect();

@@ -210,8 +210,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<!-- </div> -->
 		</li>
 		<li  hidden$="[[!editmode]]" style="display:block">
-	   		<my-liste_compte_ecritures class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}" seltitulaire="{{objet.id}}" hidden$="[[!editmode]]" contextePrint="{{contextePrint}}"></my-liste_compte_ecritures>
-	   		<my-liste_factures class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]" hidden$="[[!editmode]]" contextePrint="{{contextePrint}}"></my-liste_factures>
+	   		<my-liste_compte_ecritures compte_ecritures_Response="{{compte_ecritures_Response}}" class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}" seltitulaire="{{objet.id}}" hidden$="[[!editmode]]" contextePrint="{{contextePrint}}"></my-liste_compte_ecritures>
+	   		<my-liste_factures compte_ecritures_Response="{{compte_ecritures_Response}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]" hidden$="[[!editmode]]" contextePrint="{{contextePrint}}"></my-liste_factures>
 	   		<my-liste_famillesejours class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]" hidden$="[[!editmode]]" contextePrint="{{contextePrint}}"></my-liste_famillesejours>
 	   		<my-liste_famillemembres class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}" seltitulaire="[[selitem]]" hidden$="[[!editmode]]" contextePrint="{{contextePrint}}"></my-liste_famillemembres>
 	   		<!-- <my-liste_compteurs class="card cardprinc listecompteur" titulaire="{{objet}}" seltitulaire="[[selitem]]" hidden$="[[!editmode]]"></my-liste_compteurs> -->
@@ -382,9 +382,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       	sous_table_addable:{type:Boolean,
       		notify:true,
       		computed: '_computesous_table_addable(objet,objet.id)'
-      		}
-      	
-
+      		},
+   	     compte_ecritures_Response:{type: Object,
+	    	 notify : true
+	     }
 	  },
 	     observers: [
 	                  '_objetchange(selitem,objet)',

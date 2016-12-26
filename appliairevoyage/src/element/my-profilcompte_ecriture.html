@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
   	 	 	return_onsave=true
+  	 	 	on_delete_fire=true
   		> 
   		
 
@@ -54,8 +55,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<my-combo_select liste="{{liste_soustable.type_paiement}}"  dropdown_selobj="{{mode_paiement_sel}}" class="input05cols" table="mode_paiement" id="mode_paiement" label="Mode de paiement" value_sel="{{objet.mode_paiement}}"></my-combo_select>
 				</div>
 				<div class="ligne">
-				 	 <paper-input class="input1col" id="qte" label="Quantité" required type="number" step=0.01 value="{{objet.qte}}"></paper-input>
-				 	 <paper-input class="input1col" id="pu" label="Prix Unit." required type="number" step=0.01 value="{{objet.pu}}"><div suffix>€</div> </paper-input>
+				 	 <paper-input class="input1col" disabled$="[[montant_disabled]]" id="qte" label="Quantité" required type="number" step=0.01 value="{{objet.qte}}"></paper-input>
+				 	 <paper-input class="input1col" disabled$="[[montant_disabled]]" id="pu" label="Prix Unit." required type="number" step=0.01 value="{{objet.pu}}"><div suffix>€</div> </paper-input>
 				 	 <paper-input class="input1col" id="montant" label="Montant" type="number" step=0.01 value="{{objet.montant}}"><div suffix>€</div> </paper-input>
 				</div>
 				<div class="ligne">
@@ -73,7 +74,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    params="{{params_new_recu.params}}"	handle-as="json"   	on-error="_disconnect"
 	    last-response="{{new_recu}}"   		debounce-duration="300"
 	    on-response="set_recu">
-	</iron-ajax>
+	  </iron-ajax>
+	  <iron-ajax
+		id="get_new_recu_num_delete"			    method="GET"
+	    url="{{new_recu_url}}"	    		headers="{{app.header_auth}}"
+	    params="{{params_new_recu.params}}"	handle-as="json"   	on-error="_disconnect"
+	    last-response="{{new_recu_delete}}"   		debounce-duration="300"
+	    on-response="set_recu_delete">
+	  </iron-ajax>
   </template>
   <script>
   Polymer({
@@ -104,10 +112,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     objet:{type: Object,
 	    	 notify : true
 	     },
+	     montant_disabled:{type:Boolean,notify:true,value:false},
 	     doc_print_link:{type:String,
 	    	 notify:true,
 	    	 computed:'_getprintlink(objet)'}
 	     
+	  },
+	  listeners:{
+			'delete':'delete_fire'  
 	  },
 	  observers: [
           '_calculmontant(objet.qte,objet.pu)',
@@ -119,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ],
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
-			  return "doc_recu&id="+objet.id;
+			  return "doc_recu&recu_id="+objet.id+"&titulaire_id="+objet.titulaire_id;
 		  } else {
 			  return null;
 		  }
@@ -137,12 +149,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     		  this.set('objet.signe',"+");
     		  this.set('objet.calcul_solde',"N");
     	  }
+    	  if (type_operation_sel && type_operation_sel.montant_fixe){
+    		  this.set('montant_disabled',true);
+    		  this.set('objet.qte',1);
+    		  this.set('objet.pu',type_operation_sel.montant_fixe);
+    		  
+    	  } else {
+    		  this.set('montant_disabled',false);
+    	  }
       },
 	  _calculdate:function(objet){
 		  if (!objet.date) {
 			  var today = new Date();
-			  var dd = today.getDate();
-			  var mm = today.getMonth()+1; //January is 0!
+			  var dd = today.getDate()+"";
+			  var mm = today.getMonth()+1+""; //January is 0!
+			  if (dd.length<2) {dd="0"+dd;}
+			  if (mm.length<2) {mm="0"+mm;}
 			  var yyyy = today.getFullYear();
 			  this.set('objet.date',yyyy+'-'+mm+'-'+dd);
 		  }
@@ -169,15 +191,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  _calculrecu_num:function(id,objet){
 			if(id<0 && objet &&	(objet.recu_num=="" || !objet.recu_num)){
+				this.app = document.querySelector('#app');
 				this.set('objet.recu_num','...');
-				this.set('app',this.$.profil_compteecriture.app);
-		        this.$.profil_compteecriture.app = document.querySelector('#app');
-				this.$.get_new_recu_num.url=this.$.profil_compteecriture.app.url_api+':'+this.$.profil_compteecriture.app.port_api+'/index';//?action=setprogrammation&v=piscine.1.1.1';
+				
+				this.$.get_new_recu_num.url=this.app.url_api+':'+this.app.port_api+'/index';//?action=setprogrammation&v=piscine.1.1.1';
 		        this.$.get_new_recu_num.generateRequest();
 			}
 	  },
+	  delete_fire:function(){
+		  this.set('objet.deleted','O');
+		  this.objet.facture_num='Annulé'
+		  for (var t in this.liste_soustable.type_operation){
+			  if( this.liste_soustable.type_operation[t].code_annulation=='O'){
+				  this.objet.type_operation=this.liste_soustable.type_operation[t].id;
+			  }
+		  }
+		  
+		  this.$.profil_compteecriture.savethis();
+		  
+			this.app = document.querySelector('#app');
+			this.$.get_new_recu_num_delete.url=this.app.url_api+':'+this.app.port_api+'/index';//?action=setprogrammation&v=piscine.1.1.1';
+	        this.$.get_new_recu_num_delete.generateRequest();
+
+	  },
 	  set_recu:function(){
 			this.set('objet.recu_num',this.new_recu.num)  ;
+	  },
+	  set_recu_delete:function(){
+		  var rep=this.objet;
+		  rep.facture_num='Annulé'
+		  rep.id=null;
+		  rep.deleted='O'
+		  rep.uuid=null;
+		  rep.montant=-rep.montant;
+		  rep.pu=-rep.pu;
+		  rep.recu_num=this.new_recu_delete.num;
+		this.$.profil_compteecriture.savethis();
+		this.fire('reply_delete');
 	  },
   });
   

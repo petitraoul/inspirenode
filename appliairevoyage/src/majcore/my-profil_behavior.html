@@ -101,21 +101,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		 	color: var(--paper-blue-500);
 		 }
   		</style>
-	<div class="card" hidden$="[[reduitmodehide]]" >		
+	<div class="card" hidden$="[[reduitmodehide]]" >
 		<paper-icon-button hidden$="[[impressionbutton_hide]]" class="print-button" mini icon="print" title="Imprimer" on-tap="printthis"></paper-icon-button>
 		<paper-icon-button hidden$="[[modificationbutton_hide]]" class="edit-button" mini icon="create" title="Edit" on-tap="editthis"></paper-icon-button>
 		<paper-icon-button hidden$="[[suppressionbutton_hide]]" class="delete-button" mini icon="delete" title="Edit" on-tap="deletethis"></paper-icon-button>
 		<div on-tap="consultethis">
-			<content select=".reduit"></content>
+			<content id="{{obj_id}}" select=".reduit"></content>
 		</div>
 	</div>
 
-	<div class="card" hidden$="[[editmodehide]]">		
-	
+	<div class="card" hidden$="[[editmodehide]]">
 	    <paper-fab hidden$="[[hidealwaysbottombutton]]" class="reply-button" mini icon="reply" title="Annuler" on-tap="reply"></paper-fab>
-		<paper-fab hidden$="[[hidealwaysbottombutton]]" class="reload-button"  mini icon="cached" title="Réactualiser" on-tap="refreshthis"></paper-fab>
+		<paper-fab hidden$="[[refreshbuttonint_hide]]" class="reload-button"  mini icon="cached" title="Réactualiser" on-tap="refreshthis"></paper-fab>
 		<paper-fab hidden$="[[modificationbuttonint_hide]]" class="valid-button" mini icon="check" title="Valider" on-tap="savethis"></paper-fab>
-		<content select=".edition"></content>
+			<content id="{{obj_id}}" select=".edition"></content>
    </div>
      
 	 <iron-ajax
@@ -214,7 +213,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 	notify : true,
 	    	 	computed:'_reduitmodehide(obj_id,edited_item_id,hideother_onedit)'
 		 } ,
-
+	   	 on_delete_fire:{type:Boolean,
+	    	 	notify : true
+		 } ,
    	 	 grants_acces:{type:Object,
     	 		 notify : true,
     	 		 value : {creation:true,
@@ -230,7 +231,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     	 modificationbuttonint_hide:{type:Boolean,
     		 notify:true,
     		 computed:'_modificationbuttonint_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton)'
+    		
     	 },
+    	 refreshbuttonint_hide:{type:Boolean,
+    		 notify:true,
+    		 computed:'_refreshbuttonint_hide(hidealwaysbottombutton,edited_item_id)'
+    		
+    	 },
+
+    	 group_modificationbuttonint_hide:{type:Boolean,
+    		 notify:true,
+    		 computed:'_group_modificationbuttonint_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton)'
+    		 },
+    	 group_refreshbuttonint_hide:{type:Boolean,
+    		 notify:true,
+    		 computed:'_group_refreshbuttonint_hide(obj_id,edited_item_id,hidealwaysbottombutton)'
+    		 },
        	 suppressionbutton_hide:{type:Boolean,
        		 notify:true,
        		 computed:'_suppressionbutton_hide(grants_acces.suppression,hideothereditbutton_onedit,obj_id,edited_item_id)'
@@ -265,6 +281,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			  return false;
 		  }
 	    },
+	  _refreshbuttonint_hide:function(hidealwaysbottombutton,edited_item_id){
+			if(hidealwaysbottombutton){
+				return true;
+			}  else if (edited_item_id<0){
+				return true;
+			} else {
+				return false;
+			}
+	  },
 	  _modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton){
 		  var table=this.table_code;
 		  var id=this.objet.id;
@@ -281,6 +306,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  } else {
 			  return false;
 		  }
+	    },
+	  _group_modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton){
+		  var table=this.table_code;
+		  var id=this.objet.id;
+		  if (consulte_mode){
+			  return true;
+		  } /*else if (hidealwaysbottombutton){
+			  return true;
+		  }*/ else if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
+			  return true;
+		  } else if (edited_item_id==-1){
+			  return false;
+		  } else if (!acces_modification){
+			  return true;
+		  } else {
+			  return false;
+		  }
+	    },
+	    _group_refreshbuttonint_hide:function(obj_id,edited_item_id,hidealwaysbottombutton){
+	    	if ((edited_item_id<0 && obj_id==edited_item_id) ) {
+				  return true;
+			  } else {
+				  return false;
+			  }
 	    },
 	  _suppressionbutton_hide:function(acces_suppression,hideothereditbutton_onedit,obj_id,edited_item_id){
 			  if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
@@ -362,16 +411,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       save_validate:function(e,r,t){
 		  if (this.save_Response.element){
 			  this.set('objet',this.save_Response.element);
+			  
 			  /*for (var p in this.save_Response.element){
 				  this.set('objet.'+p,this.save_Response.element[p]);
 				  //this.notifyPath('objet.'+p);
 			  }	*/
+			  this.set('edited_item_id',this.save_Response.element.id);
 			  this.set('show_loading',0);
 		  }
 		  if (this.return_onsave){
 			  this.reply();
 		  }
-		  
+		  this.fire('save_validate');
 	  },
 
 	  reply:function (event) {
@@ -385,6 +436,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  this.$.delete_dialog.open();
       },
       _send_delete:function (event) {
+    	  if (this.on_delete_fire ) {
+			  this.fire('delete');
+    	  }else {
+    		  this._send_delete2(event);
+    	  }
+
+      },
+      _send_delete2:function (event){
     	  this.set('show_loading',1);
 		  this.set('params_delete.body',{data:this.objet});
 		  this.$.delete.url=this.app.url_api+':'+this.app.port_api+'/index';//?action=setprogrammation&v=piscine.1.1.1';

@@ -48,8 +48,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<div class="item-title" >Factures</div>
 		
     <template is="dom-repeat" items="{{titulaire.factures}}">
-    		
 			<my-profilfacture comptesecritures={{titulaire.compte_ecritures}} contextePrint="{{contextePrint}}" objet="{{item}}" selfacture="{{selfacture}}" editbuttonhide="{{editbuttonhide}}" ></my-profilfacture>
+			
 	</template>
 	<paper-fab class="add-button" hidden$="[[!button_add_show]]" mini icon="add" title="Créer" on-tap="add"></paper-fab>
 
@@ -92,6 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 computed:'_compute_isaddable(addable,editbuttonhide)'
 	     },
 	     factures_Response:{type: Object,
+	    	 notify : true
+	     },
+   	     compte_ecritures_Response:{type: Object,
 	    	 notify : true
 	     }
 	  },
