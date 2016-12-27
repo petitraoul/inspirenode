@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 	  		
 	  		<div class="reduit">
-				{{objet.facture_num}}, {{objet.date}}, Montant {{objet.libelle}}
+				{{objet.facture_num}}, {{objet.date}}, {{objet.libelle}}
 	  		</div>
 	  		
 	  		
@@ -59,6 +59,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					</template>
 				</template>
 	  		</div>
+	 <iron-ajax
+		id="charge_compte_ecr"
+	    method="GET"
+	    url="{{charge_url}}"
+	    headers="{{app.header_auth}}"
+	    params="{{params_get_compte_ecr}}"
+	    handle-as="json"
+	    on-error="_disconnect"
+	    last-response="{{liste_soustable2}}"
+	    on-response="retour_cpt_ecr"
+	    debounce-duration="300">
+	</iron-ajax>
 	  	<iron-ajax
 			id="save_ecritures"
 		    method="POST"
@@ -95,6 +107,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		   	 	  notify : true,
 		   	 	  computed:'_getparams_get(objet.id,objet)'
 		     },
+		 params_get_compte_ecr:{type: Object,
+	   	 	  notify : true,
+	   	 	  value:{type:'get',action:'listcompte_ecriture',facture_num:''}
+	     },
 	     params_save:{type: Object,
 	   	 	  notify : true,
 	   	 	  value: {body:{},params:{action:'save',type:'maj',element:'facture'/*v:'voyage.1.1.1'*/}}
@@ -124,6 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  observers: [
           '_calculfacture_num(objet.id,objet)',
           '_calculdate(objet)',
+          '_edited_item_change(edited_item_id,objet)',
         ],
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
@@ -135,6 +152,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  _getparams_get:function(obj_id,objet){
 		  return {type:'get',action:'detailfacture',id:obj_id}
+	  },
+	  _edited_item_change:function(edited_item_id,objet){
+		  if (objet && objet.id==edited_item_id && edited_item_id>0){
+			  if (objet && objet.facture_num ){
+				  this.set('params_get_compte_ecr.facture_num',"='"+objet.facture_num+"'");
+			  } else {
+				  this.set('params_get_compte_ecr.facture_num',"='aucune'");
+			  }
+		  	  this.set('show_loading',1);
+			  this.app = document.querySelector('#app');
+		      this.charge_url=this.app.url_api+':'+this.app.port_api+'/index'
+		      this.$.charge_compte_ecr.generateRequest();  
+		  }
+	  },
+	  retour_cpt_ecr:function(){
+		  this.set('show_loading',0);
 	  },
 	  _calculfacture_num:function(id,objet){
 

@@ -14,6 +14,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<style >
 			my-sous_liste_behavior{
 				--max_widthliste:var(--max_width_liste);
+				--liste_maxheight:var(--liste_max_height);
+		 		--liste_overflow:var(--liste_over_flow);
 			}
   		</style>
   		<my-sous_liste_behavior class="parametres_zone"
@@ -34,6 +36,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			
   			liste_soustable2="{{liste_soustable2}}"
   			liste_soustable="{{liste_soustable}}"
+  			queryfields="facture_num"
+  			searchquery="{{searchquery}}"
   			parent="{{titulaire}}"
   			charge_table$="{{charge_table}}"
   			dropdowntype$="{{dropdowntype}}"
@@ -41,7 +45,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			dropdown_selobj="{{dropdown_selobj}}"
   			
   			liste_objets="{{liste_objets}}"  		>
-	
+	  		<div class="selection">
+  				<my-searchbox placeholder="Filtre" query="{{searchquery}}"></my-searchbox>	
+  			</div>
 		</my-sous_liste_behavior>
   </template>
   <script>
@@ -58,18 +64,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  	 		 notify : true,
 	  	 		computed:'_get_grants(titulaire)'
 	  	 	 },
-		  	 titulaire:{type:Object,notify:true},
+		 titulaire:{type:Object,notify:true},
 	     liste_factures:{type:Array,
 	    	 notify:true},
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
-	     charge_table:{type:Boolean,notify:true}
+	     charge_table:{type:Boolean,notify:true},
+	     searchquery:{type:String,
+	    	 notify:true,
+	    	 value:""
+	     },
 	  },
 	 
 
 	  _getparams_get:function(titulaire){
 		  if (titulaire) {
-			  return  {type:'get',action:'listfacture',titulaire_id:'='+titulaire.id} ;
+			  if (titulaire.id!=''){
+				  return  {type:'get',action:'listfacture',titulaire_id:'='+titulaire.id} ; 
+			  } else {
+				  return  {type:'get',action:'listfacture'} ; 
+			  }
+			  
 		  } else {
 			  return null;
 		  }
@@ -78,6 +93,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  _get_grants:function(titulaire){
 		  if (titulaire && titulaire.id && titulaire.id>=0){
 			  return {creation:true,
+					 modification:true,
+					 suppression:false,
+					 impression:true};
+		  } if (titulaire && titulaire.spe && titulaire.spe=='listfactures'){
+			  return {creation:false,
 					 modification:true,
 					 suppression:false,
 					 impression:true};

@@ -108,6 +108,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			</iron-ajax>
 				<div class="item-title" >{{title}}</div>
 				<paper-icon-button  class="refresh-button" mini icon="cached" title="Rafraichir" on-tap="refreshthis"></paper-icon-button>
+				<div>
+			 		<content style="float:left" select=".selection"></content>
+			 	</div>
+			
 			<div id="regionscroll" class="regionscroll">
 				<ul class="app-grid" >
 				    <template id="temp_liste" is="dom-repeat" items="{{liste_objets}}">

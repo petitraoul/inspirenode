@@ -341,7 +341,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			  }
 		},
 	  _impressionbutton_hide:function(acces_impression,hideothereditbutton_onedit,obj_id,edited_item_id){
-		  if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
+		  if ((edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) && obj_id<0) {
 			  return true;
 		  } else if (!acces_impression){
 			  return true;
