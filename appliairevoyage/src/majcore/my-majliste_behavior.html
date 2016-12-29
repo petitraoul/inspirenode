@@ -52,12 +52,12 @@
   	 		 notify : true,
   	 		 value:-1
   	 	 },
-  	 	 max_heightliste:{type:String,
+  	 	/* max_heightliste:{type:String,
   	 		 notify:true,
   	 		 value:0},
   	  	 scrollactif:{type:Boolean,
   	  	 		 notify:true,
-  	  	 		 value:true},
+  	  	 		 value:true},*/
   	  	 		 
   	 	 grants_acces:{type:Object,
 	    	 	notify : true,
@@ -107,7 +107,7 @@
 		  '_show_loading(show_loading)',
 		  'params_chang(params,detail_code,charge_table)'  ,
 		  'detail_code_change(detail_code)',
-		  '_activescroll(scrollactif,edited_item_id,max_heightliste)',
+		  '_activescroll(edited_item_id)',
 		  'title_background_color_change(title_background_color)',
 		  '_changecolumnnb(liste_nb_column,edited_item_id)',
 		  '_selitemroute(selitem)'
@@ -206,18 +206,21 @@
     		  this.$.load_dialog.close();
     	  }
       },
-      _activescroll:function(scrollactif,edited_item_id,max_heightliste){
-    	  if(max_heightliste && max_heightliste!="0"){
+      _activescroll:function(edited_item_id){
+    	 /* if (!this.max_heightliste){
+    		  this.set('max_heightliste',this.getComputedStyleValue('--liste_maxheight'));
+    	  }
+    	  if(this.max_heightliste && this.max_heightliste!="0"){*/
     		  var ele = document.querySelector('#regionscroll');
-    		  if(scrollactif && edited_item_id<-1){
-    		    this.customStyle['--liste_maxheight']=max_heightliste;
-    		    this.customStyle['--liste_overflow']='auto';
-    		    this.updateStyles();
+    		  if(/*scrollactif &&*/ edited_item_id<-1){
+    		   /* this.customStyle['--liste_maxheight']=this.max_heightliste;
+    		    this.customStyle['--liste_overflow']='auto';*/
+    		    /*this.updateStyles();*/
     		    this.$.regionscroll.classList.add('regionscroll');
     		  } else {
     			  this.$.regionscroll.classList.remove('regionscroll');
     		  }
-    	  }
+    	  /*}*/
       },
       title_background_color_change:function(title_background_color){
     	  this.customStyle['--title_background_color']=title_background_color;

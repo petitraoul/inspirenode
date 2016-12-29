@@ -12,9 +12,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
 		<style >
-			my-sous_liste_behavior{
-				--max_widthliste:var(--max_width_liste);
-			}
   		</style>
   		<my-sous_liste_behavior class="parametres_zone"
   			
@@ -64,16 +61,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  	 titulaire:{type:Object,notify:true},
 		 liste_objets:{type:Array,
 	    	 notify:true},
-	  	 	 edited_item_id:{type:String,
+	  	 edited_item_id:{type:String,
 	   	 		notify:true,},
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true},
-		 showwhereisnull:{type:String,notify:true,value:"facture_num"},
+		 showwhereisnull:{type:String,notify:true,
+			computed:'_showwhereisnull(liste_objets)'},
    		 solde:{type:Number,
 	    	 	notify : true,
 	    	 	computed: '_compute_solde(liste_objets,liste_objets.length,edited_item_id)'},
 	  },
+
+      _showwhereisnull : function(liste_objets){
+        	for (var o in liste_objets){
+        		if (liste_objets[o].facture_num) {
+        			liste_objets[o].hide=true;	
+        		} else {
+        			liste_objets[o].hide=false;	
+        		}
+        	}
+        	return 'hide';
+        },
 	  _get_grants:function(titulaire){
 		  if (titulaire && titulaire.id && titulaire.id>=0){
 			  return {creation:true,
@@ -110,7 +119,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  return solde_calc;
 	  }
 
-	  
 
 
   })

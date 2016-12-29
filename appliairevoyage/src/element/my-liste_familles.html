@@ -17,9 +17,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
 		<style >
-			my-liste_behavior{
-				--max_widthliste:var(--max_width_liste);
-			}
   		</style>
   		
 		<my-combo_select id="charge_sexe" hidden charge_table liste="{{liste_soustable.sexe}}"   table="sexe" ></my-combo_select>
@@ -42,8 +39,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			hideothereditbutton_onedit=true
   			grants="{{grants}}"
   			
-  			scrollactif=true
-  			max_heightliste="74vh"
+  			scrollactif=false
+  			
   			liste_nb_column=3
   			selitem="{{selitem}}"
   			queryfields="nom;prenom1;prenom2;prenom3;ville;adresse;codepostal"
