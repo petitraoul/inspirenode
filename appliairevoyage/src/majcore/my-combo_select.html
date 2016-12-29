@@ -21,13 +21,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			  <paper-dropdown-menu style="width:100%"  id="[[id]]" label="[[label]]" >
 				  <paper-listbox class="dropdown-content" attr-for-selected="value" selected="{{value_sel}}">
 					  <template is="dom-repeat" items="{{liste}}">
-					    <paper-item value="[[item.id]]">[[item.nom]]
+					    <paper-item value="[[item.id]]">[[item.nom]][[item.facture_num]]
 					     </paper-item>
 					  </template>
 				  </paper-listbox>
   
 			  </paper-dropdown-menu>
-			  <paper-icon-button style="right:35px" suffix on-tap="_refreshtable" icon="cached" alt="Rafraichir la liste" title="Rafraichir la liste">
+			  <paper-icon-button hidden$="[[hiderefresh]]" style="right:35px" suffix on-tap="_refreshtable" icon="cached" alt="Rafraichir la liste" title="Rafraichir la liste">
 			</div>
 			  	<iron-ajax
 					id="charge"
@@ -64,6 +64,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		   	 charge_url: {type:String, 
 		   		    notify : true,
 		   		  	value:null },	
+		   	 hiderefresh:{type:Boolean,
+		   		  			notify:true,
+		   		  			value:false  },
 	   	     dropdown_selobj:{type:Object,
 		    	 	notify:true,
 		    	 	computed:'_dropdown_selobj(value_sel,liste)'
@@ -114,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
       _dropdown_selobj:function(value_sel,liste_objets){
     	  for (var e in liste_objets){
-    		  if (liste_objets[e].id==value_sel){
+    		  if (liste_objets[e] && liste_objets[e].id==value_sel){
     			  return liste_objets[e];
     		  }
     	  }

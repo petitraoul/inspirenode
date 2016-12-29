@@ -38,12 +38,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		     	min-width: 350px;
 		     	max-width:500px;
 		     }
-		     		
+		     .liste_compte_ecritures {
+		        --liste_maxheight:30vh;
+				--liste_overflow:auto;
+		     }
 		     .listemembre {
 		     	/*margin : 5px auto;*/
 		     	min-width: 350px;
-		     	--liste_maxheight:30vh;
-				--liste_overflow:auto;
+		     	
 		     }
 		     .listesejour {
 		     	margin-top : 25px;
@@ -169,8 +171,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<my-liste_famillemembres  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillemembres>
 				</li>
 				<li style="display:block;width:1000px;margin-left:auto;margin-right:auto;margin-top:-40px;margin-bottom:0">
-					<my-liste_compte_ecritures class="fam_liste_compte_ecritures" id="{{_listeecr_id(objet.id)}}" liste_objets="{{liste_compte_ecriture}}" liste_soustable="{{liste_soustable}}" charge_table class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}"></my-liste_compte_ecritures>
-					<my-liste_factures liste_soustable2="{{liste_compte_ecriture}}" liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" ></my-liste_factures>
+					<my-liste_compte_ecritures class="liste_compte_ecritures" id="{{_listeecr_id(objet.id)}}" liste_soustable2="[[liste_factures]]" liste_objets="{{liste_compte_ecriture}}" liste_soustable="{{liste_soustable}}" charge_table class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}"></my-liste_compte_ecritures>
+					<my-liste_factures liste_soustable2="{{liste_compte_ecriture}}" liste_objets="{{liste_factures}}" liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" ></my-liste_factures>
 					<my-liste_famillesejours  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillesejours>
 				</li>
 				</div>			

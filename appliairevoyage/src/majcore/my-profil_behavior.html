@@ -409,7 +409,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       
       save_validate:function(e,r,t){
-		  if (this.save_Response.element){
+		  if (this.save_Response && this.save_Response.element){
 			  this.set('objet',this.save_Response.element);
 			  
 			  /*for (var p in this.save_Response.element){

@@ -40,13 +40,14 @@
 				  <p class="titre">
 					<b>Bilan d'occupation</b>
 					</br>	
-					<b>Extraction du {{occupation_sel.date_deb}} au {{occupation_sel.date_fin}}</b>
+					<b>Extraction du {{selection_query.date1}} au {{selection_query.date2}}</b>
 				  </p>					 
 		  	 </div>
 			 <div>
 			 <h2>[[aire_sel.nom]]</h2>
 			 </div>
 			 
+			<div class="cadre">
 			<table>
 			<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
 			   <th style="width: 80%">
@@ -107,8 +108,10 @@
 					</tr>		
 					</table>					
 				</tr>		
-			</table>	
+			</table>
+			</div>			
 			<br/>
+			<div class="cadre">
 			<table>
 				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
 					<p class="titre">ETAT CIVIL</p>			
@@ -143,7 +146,9 @@
 					</table>					
 				</tr>		
 			</table>
+			</div>			
 			<br/>
+			<div class="cadre">
 			<table>
 				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
 					<p class="titre">COMPOSITION DES MENAGES ACCUEILLIS</p>			
@@ -202,7 +207,9 @@
 					</table>					
 				</tr>		
 			</table>
+			</div>			
 			<br/>
+			<div class="cadre">
 			<table>
 				<tr style=" border-radius:4px; border:1px solid #636363;width: 100%">
 					<p class="titre">AGE DES PERSONNES HEBERGEES</p>			
@@ -249,6 +256,7 @@
 					</table>					
 				</tr>		
 			</table>
+			</div>
 
 			<!-- pour chargement de la table sejours suivant selection des dates -->
 				<iron-ajax
@@ -322,8 +330,25 @@
 			        this.charge_famillesejours_url=this.app.url_api+':'+this.app.port_api+'/index'
 			    	this.$.charge_famillesejours.generateRequest();
 			  },
-			  compute_etatcivil:function(sexes,personnes,sejours,selection_query){
+			  compute_etatcaf:function(typecafs,sejours,selection_query){				  
+				  for (var s in typecafs){
+					  typecafs[s].nb=0;
+				  }
+				  var nb_tpcaf=0;
+				  for (var s in sejours){ /*boucle sejour*/
+					   
+							 this._getobjinliste(typecafs).nb += 1
+							 nb_tpcaf+= 1;
+				  }
 				  
+				  for (var s in sexes){
+					  sexes[s].pourc=Math.round(sexes[s].nb/nb_personnes*1000)/10;
+				  }
+				  this.set('stat_etatcivil_nbpersonne',nb_personnes);
+				  
+				  return sexes;
+			  },
+			  compute_etatcivil:function(sexes,personnes,sejours,selection_query){				  
 				  for (var s in sexes){
 					  sexes[s].nb=0;
 				  }
@@ -350,6 +375,7 @@
 				  
 				  return sexes;
 			  },
+			  
 			  computeaire_sel:function(aires){
 				  return this._getobjinliste(aires,0);
 			  },

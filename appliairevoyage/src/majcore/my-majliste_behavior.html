@@ -127,7 +127,7 @@
     	  
     	  if (selitem<0) {
     		  this._refreshdata();  
-    		  this.app.$.location.path="/appliairevoyage/famillepage/-1";
+    		 // this.app.$.location.path="/appliairevoyage/famillepage/-1";
     	  }
     	  
       },
@@ -136,12 +136,10 @@
   		 		delete this.params.id;
   		 		this.set('params.query',this.searchquery);
   		 		this.set('params.queryfields',this.queryfields);
-  		 		
   		 	} else  {
   		 		delete this.params.query;
   		 		delete this.params.queryfields;
   		 		delete this.params.id;
-  		 	
   		 	}
   		 	this.set('edited_item_id',-2);
   		 	this._refreshdata();  

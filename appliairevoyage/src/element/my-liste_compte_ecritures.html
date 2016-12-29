@@ -29,6 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			scroll_actif=false
   			max_heightliste="20vh"
   			
+  			liste_soustable2="{{liste_soustable2}}"
   			liste_soustable="{{liste_soustable}}"
   			parent="{{titulaire}}"
   			charge_table$="{{charge_table}}"
@@ -75,7 +76,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showwhereisnull : function(liste_objets){
         	for (var o in liste_objets){
-        		if (liste_objets[o].facture_num) {
+        		var d=new Date(liste_objets[o].date);
+        		var difference = (new Date-d)/1000/60/60/24;
+        		if (liste_objets[o].facture_num && difference>7) {
         			liste_objets[o].hide=true;	
         		} else {
         			liste_objets[o].hide=false;	

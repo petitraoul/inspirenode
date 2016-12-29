@@ -32,6 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
   	 	 	return_onsave=true
   	 	 	on_delete_fire=true
+  	 	 	modificationbuttonint_hide="{{modificationbuttonint_hide}}"
   		> 
   		
 
@@ -63,6 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<paper-input class="input05cols" id="date" label="Date" required type="date" value="{{objet.date}}"></paper-input>
 		            <paper-input class="input05cols" id="recu_num" label="Numéro reçu" disabled type="text" value="{{objet.recu_num}}"></paper-input>
 		            <paper-input class="input05cols" id="facture_num" label="Numéro facture" disabled type="text" value="{{objet.facture_num}}"></paper-input>
+					<my-combo_select hidden="[[modificationbuttonint_hide]]" hiderefresh liste="{{listes_factures}}" dropdown_selobj="{{facture}}" class="input05cols" table="facture" id="facture" label="Facture existante" ></my-combo_select>
 				</div>
 	  		</div>
   		 		
@@ -112,6 +114,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     objet:{type: Object,
 	    	 notify : true
 	     },
+	     modificationbuttonint_hide:{notify:true},
+	     facture:{notify:true},
+	     listes_factures:{type:Array,
+	    	 notify:true,
+	    	 computed:'_getlistefacturesel(liste_soustable2)'
+	     },
 	     montant_disabled:{type:Boolean,notify:true,value:false},
 	     doc_print_link:{type:String,
 	    	 notify:true,
@@ -127,8 +135,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           '_calculdate(objet)',
           '_calculrecu_num(objet.id,objet)',
           '_type_operation_sel_change(type_operation_sel)',
-          '_calculrecu_num(objet.id,objet)'
+          '_calculrecu_num(objet.id,objet)',
+          '_combofacturechange(facture)'
         ],
+      _combofacturechange:function(facture){
+    	if (facture) {
+    		this.set('objet.facture_num',facture.facture_num);
+    	}  else {
+    		this.set('objet.facture_num',null);
+    	}
+      },
+      _getlistefacturesel:function(liste_soustable2){
+    	var listfact = [null];
+    	for (var f in liste_soustable2){
+    		listfact.push(liste_soustable2[f]);
+    	}
+    	return listfact;
+      },
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
 			  return "doc_recu&recu_id="+objet.id+"&titulaire_id="+objet.titulaire_id;
