@@ -197,7 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		    	this.set('objet.qte',1);
 		    }
 			if (qte && pu) {
-				this.set('objet.montant',qte*pu);
+				this.set('objet.montant',Math.round(qte*pu*100)/100);
 			}  else {
 				this.set('objet.montant',0);
 			}
@@ -207,7 +207,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		    	this.set('objet.qte',1);
 		    }
 			if (this.objet.qte && this.objet.pu) {
-				this.set('objet.montant',this.objet.qte*this.objet.pu);
+				this.set('objet.montant',Math.round(this.objet.qte*this.objet.pu*100)/100);
 			}  else {
 				this.set('objet.montant',0);
 			}

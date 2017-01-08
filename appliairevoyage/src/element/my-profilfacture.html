@@ -144,7 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ],
 	  _getprintlink:function(objet){
 		  if (objet && objet.id) {
-			  return "doc_facture&facture_id="+objet.id+"&titulaire_id="+objet.titulaire_id;
+			  return "doc_facture&facture_id="+objet.id+"&titulaire_id="+objet.titulaire_id+"&facture_num="+objet.facture_num;
 		  } else {
 			  return null;
 		  }

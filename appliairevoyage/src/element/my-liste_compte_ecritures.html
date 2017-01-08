@@ -25,12 +25,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			hideother_onedit=false
   			hideothereditbutton_onedit=true
   			grants="{{grants}}"
-  			
-  			scroll_actif=false
-  			max_heightliste="20vh"
-  			
+  			  			
   			liste_soustable2="{{liste_soustable2}}"
   			liste_soustable="{{liste_soustable}}"
+  			queryfields="recu_num"
+  			searchquery="{{searchquery}}"
   			parent="{{titulaire}}"
   			charge_table$="{{charge_table}}"
   			dropdowntype$="{{dropdowntype}}"
@@ -38,11 +37,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			dropdown_selobj="{{dropdown_selobj}}"
   			
   			edited_item_id="{{edited_item_id}}"
-  			liste_objets="{{liste_objets}}"  		
-  			
+  			liste_objets="{{liste_objets}}"  	
   			showwhereisnull="[[showwhereisnull]]"
 		   	 >
-			
+			<div class="selection">
+  				<my-searchbox placeholder="Filtre" query="{{searchquery}}"></my-searchbox>	
+  			</div>
 		</my-sous_liste_behavior>
   </template>
   <script>
@@ -67,18 +67,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true},
+	     searchquery:{type:String,
+	    	 notify:true,
+	    	 value:""
+	     },
 		 showwhereisnull:{type:String,notify:true,
-			computed:'_showwhereisnull(liste_objets)'},
+			computed:'_showwhereisnull(liste_objets,titulaire)'},
    		 solde:{type:Number,
 	    	 	notify : true,
 	    	 	computed: '_compute_solde(liste_objets,liste_objets.length,edited_item_id)'},
 	  },
 
-      _showwhereisnull : function(liste_objets){
+      _showwhereisnull : function(liste_objets,titulaire){
         	for (var o in liste_objets){
         		var d=new Date(liste_objets[o].date);
         		var difference = (new Date-d)/1000/60/60/24;
-        		if (liste_objets[o].facture_num && difference>7) {
+        		if (titulaire && titulaire.id!='' && liste_objets[o].facture_num && difference>7) {
         			liste_objets[o].hide=true;	
         		} else {
         			liste_objets[o].hide=false;	
@@ -102,7 +106,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 	  _getparams_get:function(titulaire){
 		  if (titulaire) {
-			  return  {type:'get',action:'listcompte_ecriture',titulaire_id:'='+titulaire.id} ;
+			  if (titulaire.id!=''){
+				  return  {type:'get',action:'listcompte_ecriture',titulaire_id:'='+titulaire.id} ;
+			  } else {
+				  return  {type:'get',action:'listcompte_ecriture'} ;
+			  }
 		  } else {
 			  return null;
 		  }
