@@ -809,6 +809,7 @@ module.exports =function(variables,res,user){
 								 'Access-Control-Allow-Origin': '*'});
 					res.end(rep);
 				} else {
+					console.log('get',sql);
 					GLOBAL.obj.app.db.sqlorder(sql,
 					function(rows){
 						var rep = JSON.stringify(rows);
@@ -824,6 +825,7 @@ module.exports =function(variables,res,user){
 				
 			} else if (variables.action.substr(0,6)=='detail'){
 				var sql='Select * from '+variables.action.substr(6,100)+' where 1=1 '+complsql+';';
+				console.log('get',sql);
 				GLOBAL.obj.app.db.sqlorder(sql,
 					function(rows){
 						var rep = JSON.stringify(rows);

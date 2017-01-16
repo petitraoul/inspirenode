@@ -459,14 +459,14 @@ function refreshSallesCombo(){
 			//nbsalle++;
 			var empl=data[s];
 			if (empl.childs){
-				htmlselect+='<optgroup label="'+empl.nom+'" taguuid="'+empl.uuid+'" tagtype="'+empl.type+'">';
+				htmlselect+='<option  style="font-weight: bolder;" taguuid="'+empl.uuid+'" tagtype="'+empl.type+'" value="'+empl.id+'">'+empl.nom+'</option>';
 				for (var c in empl.childs){
-					htmlselect+='<option taguuid="'+empl.childs[c].uuid+'" tagtype="'+empl.childs[c].type+'" value="'+empl.childs[c].id+'"'+optselected+'>'+empl.childs[c].nom+'</option>';
+					htmlselect+='<option style="font-weight: normal;display: block;white-space: pre;" taguuid="'+empl.childs[c].uuid+'" tagtype="'+empl.childs[c].type+'" value="'+empl.childs[c].id+'"'+optselected+'>'+empl.childs[c].nom+'</option>';
 					nbsalle++;
 					optselected="";
 				}
 			} else {
-				htmlselect+='<option taguuid="'+empl.uuid+'" tagtype="'+empl.type+'" value="'+empl.id+'"'+optselected+'>'+empl.nom+'</option>';
+				htmlselect+='<option tyle="font-weight: normal;display: block;white-space: pre;" taguuid="'+empl.uuid+'" tagtype="'+empl.type+'" value="'+empl.id+'"'+optselected+'>'+empl.nom+'</option>';
 				nbsalle++;
 				optselected="";
 			}

@@ -649,7 +649,8 @@ function traitementSwitch(variables,res,user,userreq,req){
 		case 'infosparametres':
 			var sql=" select t.id,t.uuid,t.nom,pt.nom parent_nom" +
 					" from tag t left outer join tag pt on pt.id=t.parent_tag" +
-					" where t.visible!='N' and t.type!='Batiment'" +
+					" where t.visible!='N' " +
+					" and t.typeprog='Reservation'"
 					" order by pt.nom,t.nom";
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
@@ -1378,22 +1379,25 @@ function getCompleteDispo(vstarttime,vendtime,salleselected,user,userreq,callbac
 	if (!user) {
 		user={id:-1};
 	}
-	var sql="with resa as (select r.*,"+nbplace+" nbplaces from reservations r where clientid!='"+user.id+"'"; 
+	var sql="with resa as (select r.*,"+nbplace+" nbplaces " +
+			" , case when (select max(1) from tag t where t.parent_tag="+salleselected+" and t.id=r.salle)=1 then 100 else 1 end coef_enfant " +
+			" , case when (select max(1) from tag t where t.id="+salleselected+" and t.parent_tag=r.salle)=1 then 100 else 1 end coef_parent " +
+			"from reservations r where clientid!='"+user.id+"'"; 
 	sql+="				 	and (datetime(start)>=datetime('"+vstarttime+"')";
 	sql+="				      or datetime(end)>=datetime('"+vstarttime+"'))";
 	sql+="				 	and (datetime(start)<=datetime('"+vendtime+"')";
 	sql+="				      or datetime(end)<=datetime('"+vendtime+"'))";
-	sql+="                  and salle='"+salleselected+"'";
+	sql+="                  and (salle='"+salleselected+"' or exists (select 1 from tag t where t.parent_tag='"+salleselected+"' and t.id=r.salle) or exists (select 1 from tag t where t.id='"+salleselected+"' and t.parent_tag=r.salle))	";
 	sql+="				  	and (etat='ACTIF' or etat='PAIEMENT'))";
-	sql+=" , 	  startend as ( select salle,'start' type,1 val,start dat,id,nbplaces from resa";
+	sql+=" , 	  startend as ( select salle,'start' type,1*coef_enfant*coef_parent val,start dat,id,nbplaces from resa";
 	sql+=" 						union all";
 	sql+=" 						select "+salleselected+" salle,'start' type,0 val,'"+vstarttime+"' dat,0 id,"+nbplace+" nbplaces";
 	sql+=" 						union all";
 	sql+=" 						select "+salleselected+" salle,'end' type,0 val,'"+vendtime+"' dat,0 id,"+nbplace+" nbplaces";
 	sql+=" 						union all";
-	sql+=" 					 	select salle,'end' type,-1 val,end dat,id,nbplaces from resa )";
+	sql+=" 					 	select salle,'end' type,-1*coef_enfant*coef_parent val,end dat,id,nbplaces from resa )";
 			 
-	sql+=" select salle,type,val,dat,sum(cumul) cumul,nbplaces,nbplaces-sum(cumul) reste";
+	sql+=" select '"+salleselected+"' salle,type,val,dat,sum(cumul) cumul,nbplaces,case when nbplaces-sum(cumul)>=0 then nbplaces-sum(cumul) else 0 end reste";
 	sql+=" from (";					 
 
 	sql+=" 	select a.salle,a.type,a.val,a.dat,a.id,b.val cumul ,a.nbplaces";

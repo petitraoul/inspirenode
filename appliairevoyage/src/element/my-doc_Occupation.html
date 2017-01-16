@@ -256,8 +256,8 @@
 			          type: Object
 		        	},    
 		    	 selection_query:{type : Object,
-	  				  notify:true,
-	  				  value:{}},
+	  				  notify:true/*,
+	  				  value:{}*/},
 
 		   		 params_get_sejours:{type: Object,
 			   	 	  notify : true,
@@ -306,13 +306,13 @@
 			        this.app = document.querySelector('#app');
 			        /*prise en compte des dates dans la requete envoyée au serveur pour la liste des séjours*/
 			        if (this.params_get_sejours && selection_query && selection_query.date1 && selection_query.date2) {
-			        	this.params_get_sejours.date=" between '"+selection_query.date1+"' and '"+selection_query.date2+"'";
+			        	this.params_get_sejours.date_debut=" between '"+selection_query.date1+"' and '"+selection_query.date2+"'";
 			        } else if (this.params_get_sejours && selection_query && selection_query.date1) {
-			        	this.params_get_sejours.date=">='"+selection_query.date1+"'";
+			        	this.params_get_sejours.date_debut=">='"+selection_query.date1+"'";
 			        } else if (this.params_get_sejours && selection_query && selection_query.date2) {
-			        	this.params_get_sejours.date="<='"+selection_query.date2+"'";
+			        	this.params_get_sejours.date_debut="<='"+selection_query.date2+"'";
 			        } else if (this.params_get_sejours) {
-			        	this.params_get_sejours.date='';
+			        	this.params_get_sejours.date_debut='';
 			        }
 			        /*url (toujours la même structure)*/
 			        this.charge_famillesejours_url=this.app.url_api+':'+this.app.port_api+'/index'
