@@ -163,8 +163,7 @@ function on_instrusion(periph_alarm,periph_detect,previous_etat,new_etat_express
 			logger('INFO',{msg:'envoi mail sur  '+rows[int].mail ,alarme_nom:periph_alarm.nom,alarme_id:periph_alarm.id},'automation_alarme');
 			
 			smssender.sendmailbyhttp(function(err,body){
-				logger('INFO',{msg:'retour envoi mail',body:body },'automation_alarme');
-				
+				logger('INFO',{msg:'retour envoi mail',body:body },'automation_alarme');	
 			});									
 		}
 	});

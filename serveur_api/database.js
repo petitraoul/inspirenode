@@ -64,13 +64,28 @@ module.exports = function() {
 	};
 
 	this.sqltrans=function (order,callback,dataarray){
-		this.sqlsaexecute.push({type:'trans',order:order,dataarray:dataarray,callback:callback});
-		this.execspoolsql();
+		//console.log(order);
+		if (!order) {
+			logger('ERROR',{order:'ordre sql null !'},'database_sql');
+			callback();
+		} else {
+			this.sqlsaexecute.push({type:'trans',order:order,dataarray:dataarray,callback:callback});
+			this.execspoolsql();
+		}
+
 		
 	};
 	this.sqlorder=function (order,callback,dataarray){
-		this.sqlsaexecute.push({type:'order',order:order,dataarray:dataarray,callback:callback});
-		this.execspoolsql();
+		//console.log(order);
+		if (!order) {
+			//console.trace('ordre null !!!',order);
+			logger('ERROR',{order:'ordre sql null !'},'database_sql');
+			callback();
+		} else {
+			this.sqlsaexecute.push({type:'order',order:order,dataarray:dataarray,callback:callback});
+			this.execspoolsql();
+		}
+
 	};
 	this.execspoolsql=function(){
 		if (!this.executionencours && this.sqlsaexecute.length>0){
@@ -110,7 +125,7 @@ module.exports = function() {
 	};
 	
 	this.sqltransexec=function (order,callback,dataarray){
-		
+
 		var selfdb=this;
 		
 		if (Array.isArray(order)){
@@ -187,6 +202,7 @@ module.exports = function() {
 			      }
 				var lastID=null;
 				//console.log(selfdb.nbsqlencours,order,dataarray);
+			
 				selfdb.database.run(order,dataarray,function(err) {
 					selfdb.nbsqlencours--;
 					//console.log(selfdb.nbsqlencours + ' '+selfdb.nbsqltotal+ ' '+selfdb.nbsqlerror);

@@ -36,6 +36,9 @@ var class_peripherique = function peripherique(){
 		if (self.last_etat && self.last_etat.expression){
 			console.log(self.uuid +" : "+self.last_etat.expression.etat);
 		}*/
+		
+		logger('DEBUG',{msg:'Set_last_etat peripherique.js',nom:obj.nom,id:obj.id,originesetetat:originesetetat,new_etat:new_etat+ ' , ' + self.last_etat.expression},'changement_etat');
+
 		function setON(id,callback){
 			//console.log('ON '+id);
 			if (!callback) callback=function(){};
@@ -82,15 +85,10 @@ var class_peripherique = function peripherique(){
 		var new_etat={};
 		if (self.last_etat && self.last_etat.expression)
 			new_etat=JSON.parse(JSON.stringify(self.last_etat.expression));
+		
 		new_etat.etat=valm;
-		self.box.set_etat(self,cmd,valm,function(majetat){
-			if (majetat==false) {
-				
-			} else {
-				GLOBAL.obj.app.core.set_last_etat(self,new_etat,originesetetat,user);
-			}
-			if (callback) callback();
-		});
+		
+		self.set_etat_box(self,cmd,valm,new_etat,originesetetat,user,callback);
 				
 		
 		if (cmd=='ON' && self.ecriture_etat_ON && self.ecriture_etat_ON+""!=""){
@@ -110,6 +108,18 @@ var class_peripherique = function peripherique(){
 		}
 
 	}
+	
+	self.set_etat_box=function(self,cmd,valm,new_etat,originesetetat,user,callback){
+		self.box.set_etat(self,cmd,valm,function(majetat){
+			if (majetat==false) {
+				
+			} else {
+				GLOBAL.obj.app.core.set_last_etat(self,new_etat,originesetetat,user);
+			}
+			if (callback) callback();
+		});
+	}
+	
 	self.get_expr=function(callback){
 		self =this;
 
@@ -176,6 +186,14 @@ var class_peripherique = function peripherique(){
 				res.expr2_unit=result.expr(self.lecture_expr2_unit);
 				res.expr3_val=result.expr(self.lecture_expr3);
 				res.expr3_unit=result.expr(self.lecture_expr3_unit);
+				res.expr4_val=result.expr(self.lecture_expr4);
+				res.expr4_unit=result.expr(self.lecture_expr4_unit);
+				res.expr5_val=result.expr(self.lecture_expr5);
+				res.expr5_unit=result.expr(self.lecture_expr5_unit);
+				res.expr6_val=result.expr(self.lecture_expr6);
+				res.expr6_unit=result.expr(self.lecture_expr6_unit);
+				res.expr7_val=result.expr(self.lecture_expr7);
+				res.expr7_unit=result.expr(self.lecture_expr7_unit);
 				res.etat2=result.expr(self.etat2);
 				
 				callback(res);

@@ -947,7 +947,7 @@ module.exports =function(variables,res,user,req){
 			//variables.pin		
 			var md5=calcMD5('alarm');
 			if (variables.uuid==calcMD5('alarm')){
-				req.constante.get_etat('code_pin_alarme',function(val){
+				GLOBAL.req.constante.get_etat('code_pin_alarme',function(val){
 					var rep ={};
 					if (val==variables.pin || val=='0000' || val==null) {
 						rep = {res:'OK'};	
@@ -967,7 +967,7 @@ module.exports =function(variables,res,user,req){
 
 			var md5=calcMD5('alarm');
 			if (variables.uuid==calcMD5('alarm')){
-				req.constante.get_etat('code_pin_alarme',function(val){
+				GLOBAL.req.constante.get_etat('code_pin_alarme',function(val){
 					var rep ={};
 					if (val==variables.data.pin || val=='0000' || val==null) {
 						var mode=obj.app.core.findobj(variables.data.mode,'modes');
@@ -996,7 +996,7 @@ module.exports =function(variables,res,user,req){
 			
 			var md5=calcMD5('alarm');
 			if (variables.uuid==calcMD5('alarm')){
-				req.constante.get_etat('code_pin_alarme',function(val){
+				GLOBAL.req.constante.get_etat('code_pin_alarme',function(val){
 					var rep ={};
 					if (val==variables.data.pin || val=='0000' || val==null) {
 						
@@ -1032,12 +1032,12 @@ module.exports =function(variables,res,user,req){
 			}
 			
 			if (data.uuid==calcMD5('alarm')){
-				req.constante.get_etat('code_pin_alarme',function(val){
+				GLOBAL.req.constante.get_etat('code_pin_alarme',function(val){
 					var rep ={};
 					if (val==data.pin || val=='0000' || val==null) {
 						
 						var new_md5pin=data.pina;
-						req.constante.set_etat('code_pin_alarme',new_md5pin,function(){
+						GLOBAL.req.constante.set_etat('code_pin_alarme',new_md5pin,function(){
 							var rep ={};
 							res.writeHead(200, 
 									{'Content-Type': 'text/plain',

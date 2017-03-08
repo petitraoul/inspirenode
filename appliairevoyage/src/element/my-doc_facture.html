@@ -74,6 +74,12 @@
 			    params="{{params_get_aires}}"	handle-as="json"    on-error="_disconnect"
 			    last-response="{{aires}}"		debounce-duration="300">
 			</iron-ajax>
+			<iron-ajax
+				id="charge_typeop"	    		method="GET"
+			    url="{{charge_typeop_url}}"	    headers="{{app.header_auth}}"
+			    params="{{params_get_typeop}}"	handle-as="json"    on-error="_disconnect"
+			    last-response="{{typeop}}"		debounce-duration="300">
+			</iron-ajax>
 			<div >
 			<table style="width: 100%">
 			<tr>
@@ -114,34 +120,110 @@
 							<th> Montant </th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody>						
 						<tr>
 							   <td style="width: 40%">
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
-										{{lig.libelle}} <br/>
+								   <template is="dom-repeat" items="[[ecriture_sel]]" as="lig">
+										{{lig.desc}} {{lig.libelle}} <br/>
 									</template>
+								</td>		
 								
 							   
 							   <td style=" width: 20%">	
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
+								   <template is="dom-repeat" items="[[ecriture_sel]]" as="lig">
 										{{lig.pu}} €<br/>
 									</template>
 								
 							   </td>
 							   
 							   <td style=" width: 2%">	
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
+								   <template is="dom-repeat" items="[[ecriture_sel]]" as="lig">
 										{{lig.qte}} <br/>
 									</template>
 								
 							   </td>
 							   <td style=" width: 20%">	
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
+								   <template is="dom-repeat" items="[[ecriture_sel]]" as="lig">
 										{{lig.montant}} €<br/>
 									</template>
 								
-							   </td>	
-							</td>				
+							   </td>			
+						</tr>	
+						<tr>
+							   <td style="width: 40%">
+								  
+								</td>		
+								
+							   
+							   <td style=" width: 20%">	
+								   
+								
+							   </td>
+							   
+							   <td style=" width: 20%">	
+								   
+										Total Prépaiement<br/>
+									
+								
+							   </td>
+							   <td style=" width: 20%">	
+								   
+										{{total_fluide}} €<br/>
+								
+								
+							   </td>			
+						</tr>	
+						<tr>
+							   <td style="width: 40%">
+								   <template is="dom-repeat" items="[[ecriture_caution]]" as="lig">
+										{{lig.desc}} {{lig.libelle}} <br/>
+									</template>
+							</td>		
+								
+							   
+							   <td style=" width: 20%">	
+								   <template is="dom-repeat" items="[[ecriture_caution]]" as="lig">
+										{{lig.pu}} €<br/>
+									</template>
+								
+							   </td>
+							   
+							   <td style=" width: 2%">	
+								   <template is="dom-repeat" items="[[ecriture_caution]]" as="lig">
+										{{lig.qte}} <br/>
+									</template>
+								
+							   </td>
+							   <td style=" width: 20%">	
+								   <template is="dom-repeat" items="[[ecriture_caution]]" as="lig">
+										{{lig.montant}} €<br/>
+									</template>
+								
+							   </td>			
+						</tr>
+						<tr>
+							   <td style="width: 40%">
+								  
+								</td>		
+								
+							   
+							   <td style=" width: 20%">	
+								   
+								
+							   </td>
+							   
+							   <td style=" width: 20%">	
+								   
+										Total caution à rendre<br/>
+									
+								
+							   </td>
+							   <td style=" width: 20%">	
+								   
+										{{total_caution}} €<br/>
+								
+								
+							   </td>			
 						</tr>	
 					</tbody>
 				</table>	
@@ -172,8 +254,8 @@
 			          type: Object
 		        	},    
 		    	 selection_query:{type : Object,
-	  				  notify:true,
-	  				  value:{}},
+	  				  notify:true/*,
+	  				  value:{}*/},
 				 /*action: detail.... pour un enregistrement
 				           list...    pour plusieurs enregistrements*/
 		  		 params_get_facture:{type: Object,
@@ -194,13 +276,19 @@
 		   		 params_get_aires:{type: Object,
 			   	 	  notify : true,
 			   	 	  value: {type:'get',action:'listaire'}},
+		   		 params_get_typeop:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'listtype_operation'}},
 					  
 			      facture_sel:{type:Object,
 			    	  notify:true,
 			    	  computed: 'computefacture_sel(factures)'},
-			      famille_sel:{type:Object,
+			      ecriture_sel:{type:Object,
 			    	  notify:true,
-			    	  computed: 'computeecriture_sel(ecritures)'},
+			    	  computed: 'computeecriture_sel(ecritures, typeop)'},
+			      ecriture_caution:{type:Object,
+			    	  notify:true,
+			    	  computed: 'computeecriture_caution(ecritures, typeop)'},
 			      famille_sel:{type:Object,
 			    	  notify:true,
 			    	  computed: 'computefamille_sel(familles)'},
@@ -210,6 +298,9 @@
 			      aire_sel:{type:Object,
 			    	  notify:true,
 			    	  computed: 'computeaire_sel(aires)'},
+				 /*nombres calculés*/
+				 total_fluide:{type:Number,notify:true,value:0},
+				 total_caution:{type:Number,notify:true,value:0},
 		      },
 	    	  observers: [
 		                  '_selection_query_change(selection_query, params_get_facture, params_get_famille, params_get_sejours, params_get_ecriture)'	                  
@@ -262,6 +353,9 @@
 					// info de l'aire
 			        this.charge_aires_url=this.app.url_api+':'+this.app.port_api+'/index'
 			    	this.$.charge_aires.generateRequest();
+					// info des types d'operation
+			        this.charge_typeop_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_typeop.generateRequest();
 			  },
 			  
 			  computefacture_sel:function(factures){
@@ -271,10 +365,47 @@
 				  return this._getobjinliste(familles,this.selection_query.titulaire_id);
 			  },
 			  /*calcul des sous totaux*/
-			  computeecriture_sel:function(ecritures){ 
+			  computeecriture_sel:function(ecritures, typeop){ 
+				 var fluides=[];
+				 var i=0;
+				 var total=0;
+				 for (var s in ecritures){
+					if (ecritures[s].type_operation == 4 || ecritures[s].type_operation == 6 || ecritures[s].type_operation == 9 ){
+					  fluides[i]=ecritures[s];
+					  fluides[i].desc = this._getobjinliste(typeop,ecritures[s].type_operation).nom;
+					  i = i + 1;
+					  if (ecritures[s].type_operation == 4){
+						total= total + Number(ecritures[s].montant);
+					  }
+					  if (ecritures[s].type_operation == 6 || ecritures[s].type_operation == 9){
+						total= total - Number(ecritures[s].montant);
+					  }
+					}
+				  }
 			  
+				  this.set('total_fluide',total);
+				  return fluides;
+			  },
+			  computeecriture_caution:function(ecritures, typeop){  
+				 var caution=[];
+				 var i=0;
+				 var total1=0;
+				 for (var s in ecritures){
+					if (ecritures[s].type_operation == 1 || ecritures[s].type_operation == 3 ){
+					  caution[i]=ecritures[s];
+					  caution[i].desc = this._getobjinliste(typeop,ecritures[s].type_operation).nom;
+					  i  = i + 1;
+					  if (ecritures[s].type_operation == 1){
+						total1= total1 + Number(ecritures[s].montant);
+					  }
+					  if (ecritures[s].type_operation == 3){
+						total1= total1 - Number(ecritures[s].montant);
+					  }
+					}
+				  }
 			  
-				  return ecritures;
+				  this.set('total_caution',total1);
+				  return caution;			  
 			  },
 			  computeaire_sel:function(aires){		  
 				  return this._getobjinliste(aires,1);

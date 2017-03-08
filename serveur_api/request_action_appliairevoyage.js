@@ -109,6 +109,7 @@ module.exports =function(variables,res,user,req){
 							pemin.id=pe.id;
 							pemin.uuid=pe.uuid;
 							pemin.nom=pe.nom;
+							pemin.box_type=pe.box_type;
 							pemin.ecriture_type=pe.ecriture_type;
 							pemin.ecriture_max_value=pe.ecriture_max_value;
 							pemin.ecriture_min_value=pe.ecriture_min_value;

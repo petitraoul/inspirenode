@@ -156,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    debounce-duration="300">
 	</iron-ajax>
     
-        <paper-dialog id="delete_dialog">
+    <paper-dialog id="delete_dialog">
 	  <h2>Suppression</h2>
 	  <p>Voulez vous supprimer cette ligne</p>
 	  <div class="buttons">
@@ -196,6 +196,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 notify : true,
 	    	 value:0
 	     },
+  	 	searchmode:{type:Boolean,
+  	 		notify:true,
+  	 		value:false
+  	 	},
 	     obj_id:{type:String,
 	    	 	notify : true},
 	     doc_print_link:{notify:true},	 	
@@ -230,7 +234,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     	 },
     	 modificationbuttonint_hide:{type:Boolean,
     		 notify:true,
-    		 computed:'_modificationbuttonint_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton)'
+    		 computed:'_modificationbuttonint_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton,searchmode)'
     		
     	 },
     	 refreshbuttonint_hide:{type:Boolean,
@@ -241,7 +245,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     	 group_modificationbuttonint_hide:{type:Boolean,
     		 notify:true,
-    		 computed:'_group_modificationbuttonint_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton)'
+    		 computed:'_group_modificationbuttonint_hide(grants_acces.modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton,searchmode)'
     		 },
     	 group_refreshbuttonint_hide:{type:Boolean,
     		 notify:true,
@@ -249,11 +253,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     		 },
        	 suppressionbutton_hide:{type:Boolean,
        		 notify:true,
-       		 computed:'_suppressionbutton_hide(grants_acces.suppression,hideothereditbutton_onedit,obj_id,edited_item_id)'
+       		 computed:'_suppressionbutton_hide(grants_acces.suppression,hideothereditbutton_onedit,obj_id,edited_item_id,searchmode)'
        	 },
        	 impressionbutton_hide:{type:Boolean,
        		 notify:true,
-       		 computed:'_impressionbutton_hide(grants_acces.impression,hideothereditbutton_onedit,obj_id,edited_item_id)'
+       		 computed:'_impressionbutton_hide(grants_acces.impression,hideothereditbutton_onedit,obj_id,edited_item_id,searchmode)'
        	 } 
     	 
 	  },
@@ -290,10 +294,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				return false;
 			}
 	  },
-	  _modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton){
+	  _modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton,searchmode){
 		  var table=this.table_code;
-		  var id=this.objet.id;
-		  if (consulte_mode){
+		  //var id=this.objet.id;
+		  if (consulte_mode || searchmode){
 			  return true;
 		  } else if (hidealwaysbottombutton){
 			  return true;
@@ -307,10 +311,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			  return false;
 		  }
 	    },
-	  _group_modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton){
+	  _group_modificationbuttonint_hide:function(acces_modification,hideothereditbutton_onedit,obj_id,edited_item_id,consulte_mode,hidealwaysbottombutton,searchmode){
 		  var table=this.table_code;
-		  var id=this.objet.id;
-		  if (consulte_mode){
+		  //var id=this.objet.id;
+		  if (consulte_mode || searchmode){
 			  return true;
 		  } /*else if (hidealwaysbottombutton){
 			  return true;
@@ -331,17 +335,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				  return false;
 			  }
 	    },
-	  _suppressionbutton_hide:function(acces_suppression,hideothereditbutton_onedit,obj_id,edited_item_id){
+	  _suppressionbutton_hide:function(acces_suppression,hideothereditbutton_onedit,obj_id,edited_item_id,searchmode){
 			  if (edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) {
 				  return true;
-			  } else if (!acces_suppression){
+			  } else if (!acces_suppression || searchmode){
 				  return true;
 			  } else {
 				  return false;
 			  }
 		},
-	  _impressionbutton_hide:function(acces_impression,hideothereditbutton_onedit,obj_id,edited_item_id){
-		  if ((edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) && obj_id<0) {
+	  _impressionbutton_hide:function(acces_impression,hideothereditbutton_onedit,obj_id,edited_item_id,searchmode){
+		  if (searchmode){
+			  return false;
+		  } else if ((edited_item_id>=-1 && obj_id!=edited_item_id && hideothereditbutton_onedit) && obj_id<0) {
 			  return true;
 		  } else if (!acces_impression){
 			  return true;

@@ -8,6 +8,7 @@ var parserxml2json = new GLOBAL.req.xml2js.Parser();
 var ipx800 = function(adresseip) {
 	this.adresseip=adresseip;
 	
+
 	
 	this.set_etat=function(periph,cmd,val,callbackfunc){
 		var self=this;
@@ -20,60 +21,85 @@ var ipx800 = function(adresseip) {
 			inverse=true;
 		}
 			
-			/*var etat=periph.last_etat.expression.etat;*/
-			/*var need_switch=true;*/
-			if (cmd && !inverse) {
-				/*if (etat==1 && cmd=='ON' && type!='btn') need_switch=false;
-				if (etat==0 && cmd=='OFF' && type!='btn') need_switch=false;
-				if (etat=='up' && cmd=='ON' && type=='btn') need_switch=false;
-				if (etat!='up' && cmd=='OFF' && type=='btn') need_switch=false;*/
-				if (cmd=='ON') val=1;
-				if (cmd=='OFF') val=0;
-				if (cmd=='STOP') val=0;
-				//if ($cmd=='DIM' && isset($val)) $url.=$val;
-			} else {
-				/*if (etat==0 && cmd=='ON' && type!='btn') need_switch=false;
-				if (etat==1 && cmd=='OFF' && type!='btn') need_switch=false;
-				if (etat=='up' && cmd=='OFF' && type=='btn') need_switch=false;
-				if (etat!='up' && cmd=='ON' && type=='btn') need_switch=false;*/
-				if (cmd=='ON') val=0;
-				if (cmd=='OFF') val=1;
-				if (cmd=='STOP') val=1;
+		
+		/*var etat=periph.last_etat.expression.etat;*/
+		/*var need_switch=true;*/
+		if (cmd && !inverse) {
+			/*if (etat==1 && cmd=='ON' && type!='btn') need_switch=false;
+			if (etat==0 && cmd=='OFF' && type!='btn') need_switch=false;
+			if (etat=='up' && cmd=='ON' && type=='btn') need_switch=false;
+			if (etat!='up' && cmd=='OFF' && type=='btn') need_switch=false;*/
+			if (cmd=='ON') val=1;
+			if (cmd=='OFF') val=0;
+			if (cmd=='STOP') val=0;
+			//if ($cmd=='DIM' && isset($val)) $url.=$val;
+		} else {
+			/*if (etat==0 && cmd=='ON' && type!='btn') need_switch=false;
+			if (etat==1 && cmd=='OFF' && type!='btn') need_switch=false;
+			if (etat=='up' && cmd=='OFF' && type=='btn') need_switch=false;
+			if (etat!='up' && cmd=='ON' && type=='btn') need_switch=false;*/
+			if (cmd=='ON') val=0;
+			if (cmd=='OFF') val=1;
+			if (cmd=='STOP') val=1;
+		}
+		
+		var rep={};
+		rep.cmd=cmd;
+		rep.val=val;
+		rep.inverse=inverse;
+		//console.log('p'+periph.id+' c'+cmd+' v'+val+' i'+inverse/*' s'+need_switch+' e'+etat*/);
+
+		if (isNaN(ident)) {ident=9999};
+		var url ="";
+		
+		if (type=='count' && cmd=='DIM') {
+			var coef_ecriture=periph.box_coeff;
+			if (!coef_ecriture || isNaN(coef_ecriture)){
+				coef_ecriture=1;
 			}
-			
-			var rep={};
-			rep.cmd=cmd;
-			rep.val=val;
-			rep.inverse=inverse;
-			console.log('p'+periph.id+' c'+cmd+' v'+val+' i'+inverse/*' s'+need_switch+' e'+etat*/);
+			val=val*coef_ecriture;
+			url="/protect/assignio/counter1.htm?"+"num="+ident+"&counter="+val;//(val*coef_ecriture);
+			GLOBAL.req.comm.perso_get(self.ip,url,self.port,function(err,httpResponse,body){
+				if (err) {
+					logger('ERROR',{nom:self.nom,id:self.id,msg:err},'box_ipx800');
+				}
+				if (!body){
+					logger('ERROR',{nom:self.nom,id:self.id,msg:'reponse vide'},'box_ipx800');
+				}
+				logger('INFO',{nom:self.nom,id:self.id,msg:"Reponse box ipx",rep:body,lien:self.ip+url},'box_ipx800');
+				rep.body=body;
+				/*rep.need_switch=true;*/
+				//periph.last_etat.expression.etat=val;
+				callbackfunc(rep);
+			},self.user_auth,self.password_auth);
+		} else {
 			if (cmd=='DIM' || cmd=='DOWN' || cmd=='UP'){
 				logger('WARNING',{nom:self.nom,id:self.id,msg:"l'ipx800 gere pas la commande "+cmd},'box_ipx800');
 				rep.body="l'ipx800 gere pas la commande "+cmd;
 				need_switch=false;
 			}
-			if (isNaN(ident)) {ident=9999};
-			var url ="/preset.htm?"+type+(parseInt(ident)+1)+"="+val;
+			url ="/preset.htm?"+type+(parseInt(ident)+1)+"="+val;
 			//console.log('ordre to box ipx800 '+self.ip+url);
 			//if (need_switch) {
-				logger('INFO',{nom:self.nom,id:self.id,msg:"Ordre envoyé a la box ",lien:self.ip+url},'box_ipx800');
-				GLOBAL.req.comm.perso_get(self.ip,url,self.port,function(err,httpResponse,body){
-					if (err) {
-						logger('ERROR',{nom:self.nom,id:self.id,msg:err},'box_ipx800');
-					}
-					if (!body){
-						logger('ERROR',{nom:self.nom,id:self.id,msg:'reponse vide'},'box_ipx800');
-					}
-					logger('INFO',{nom:self.nom,id:self.id,msg:"Reponse box ipx",rep:body,lien:self.ip+url},'box_ipx800');
-					rep.body=body;
-					/*rep.need_switch=true;*/
-					//periph.last_etat.expression.etat=val;
-					callbackfunc(rep);
-				},self.user_auth,self.password_auth);
+			logger('INFO',{nom:self.nom,id:self.id,msg:"Ordre envoyé a la box ",lien:self.ip+url},'box_ipx800');
+			GLOBAL.req.comm.perso_get(self.ip,url,self.port,function(err,httpResponse,body){
+				if (err) {
+					logger('ERROR',{nom:self.nom,id:self.id,msg:err},'box_ipx800');
+				}
+				if (!body){
+					logger('ERROR',{nom:self.nom,id:self.id,msg:'reponse vide'},'box_ipx800');
+				}
+				logger('INFO',{nom:self.nom,id:self.id,msg:"Reponse box ipx",rep:body,lien:self.ip+url},'box_ipx800');
+				rep.body=body;
+				/*rep.need_switch=true;*/
+				//periph.last_etat.expression.etat=val;
+				callbackfunc(rep);
+			},self.user_auth,self.password_auth);
 			//} else {
 			//	rep.need_switch=false;
 			//	callbackfunc(rep);
 			//}
-
+		}
 			
 			
 	

@@ -17,9 +17,14 @@ var reqarray=[	{name:'request',require:'request'},
 	            {name:'async',require:'async'},
 	            {name:'os',require:'os'},
 	            {name:'moment',require:'moment'},
-	            {name:'emailjs',require:'emailjs'},
+	            /*{name:'emailjs',require:'emailjs'},*/
 	            {name:'i2c',require:'i2c'},
+	            {name:'jsmodbus',require:'jsmodbus'},
+	            {name:'sonos',require:'sonos'},
+	            {name:'soap',require:'soap'},
 	            {name:'child_process',require:'child_process'},
+	            {name:'serialport',require:'serialport'},
+	            {name:'schedule',require:'node-schedule'},
 
 	            {name :"logger",require:'./serveur_api/logger'},
 	            {name :"logger_request",require:'./serveur_api/logger_request'},
@@ -27,15 +32,23 @@ var reqarray=[	{name:'request',require:'request'},
 	            
 	            {name:'comm_with_virtuel',require:'./serveur_api/comm_with_virtuel'},
 	            {name:'comm_with_ipx800',require:'./serveur_api/comm_with_ipx800'},
+	            {name:'comm_with_ipxV4',require:'./serveur_api/comm_with_ipxV4'},
 	            {name:'comm_with_eco_device',require:'./serveur_api/comm_with_eco_device'},
 	            {name:'comm_with_cameradomesony',require:'./serveur_api/comm_with_cameradomesony'},
 	            {name:'comm_with_cameraipfoscam',require:'./serveur_api/comm_with_cameraipfoscam'},
 	            {name:'comm_with_sonos',require:'./serveur_api/comm_with_sonos'},
 	            {name:'comm_with_infoOS',require:'./serveur_api/comm_with_infoOS'},
 	            {name:'comm_with_onduleur',require:'./serveur_api/comm_with_onduleur'},
+	            
 	            {name:'comm_with_zway',require:'./serveur_api/comm_with_zway'},
 	            {name:'comm_with_i2c',require:'./serveur_api/comm_with_i2c'},
+	            {name:'comm_with_modbus',require:'./serveur_api/comm_with_modbus'},
+	            {name:'comm_with_modbuscoils',require:'./serveur_api/comm_with_modbuscoils'},
+				{name:'comm_with_modbusinteger',require:'./serveur_api/comm_with_modbusinteger'},
+				{name:'comm_with_modbus_real',require:'./serveur_api/comm_with_modbus_real'},
 	            {name:'comm_with_domoticz',require:'./serveur_api/comm_with_domoticz'},
+	            {name:'comm_with_arduino_pwm',require:'./serveur_api/comm_with_arduino_pwm'},
+	            {name:'comm_with_arduino_meteo',require:'./serveur_api/comm_with_arduino_meteo'},
 	            {name:'comm_with_sms',require:'./serveur_api/comm_with_sms'},
 	            {name:'comm_with_mail',require:'./serveur_api/comm_with_mail'},
 	            {name:'comm_with_inspirenode_box',require:'./serveur_api/comm_with_inspirenode_box'},
@@ -107,6 +120,10 @@ var app = function(){
 		    }
 		}
 		//console.log(addresses);
+		if (addresses.length==0){
+			addresses.push('127.0.0.1');
+		}
+		
 		return addresses;
 	}
 	

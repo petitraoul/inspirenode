@@ -117,6 +117,7 @@ module.exports =function(variables,res,user){
 
 		case 'listbox':
 			var sql='Select * from box order by id;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -150,6 +151,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'listconsigne_temp':
 			var sql='Select * from consigne_temp order by mode,tag;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -161,6 +163,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'detailconsigne_temp':
 			var sql='Select * from consigne_temp where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -174,6 +177,7 @@ module.exports =function(variables,res,user){
 			var sql='Select * from consigne_temp_jours';
 			if (variables.id) sql+= " where id_consigne_temp='"+variables.id+"'";
 			sql+=';'
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 				GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -193,6 +197,7 @@ module.exports =function(variables,res,user){
 			break;	
 		case 'detailbox':
 			var sql='Select * from box where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -204,6 +209,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'listcategorie':
 			var sql='Select * from categorie order by id;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -215,6 +221,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'detailcategorie':
 			var sql='Select * from categorie where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -226,6 +233,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'listtype':
 			var sql='Select * from type order by id;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -237,6 +245,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'detailtype':
 			var sql='Select * from type where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -248,6 +257,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'listmode':
 			var sql='Select * from mode order by id;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -259,6 +269,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'detailmode':
 			var sql='Select * from mode where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -271,6 +282,7 @@ module.exports =function(variables,res,user){
 		case 'listtag':
 			var sql='Select * from tag order by id';
 			sql+=';'
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 				GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -286,6 +298,7 @@ module.exports =function(variables,res,user){
 					"			  left outer join peripherique pe on pe.id=t.periph_eau_id" +
 					" order by id";
 			sql+=';'
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 				GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -297,6 +310,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'detailtag':
 			var sql='Select * from tag where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -310,6 +324,7 @@ module.exports =function(variables,res,user){
 			var sql='Select * from peripherique_tag';
 			if (variables.id) sql+= " where id_peripherique='"+variables.id+"'";
 			sql+=';'
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 				GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -323,6 +338,7 @@ module.exports =function(variables,res,user){
 			var sql='Select * from peripherique_user_acceuil';
 			if (variables.id) sql+= " where id_peripherique='"+variables.id+"'";
 			sql+=';'
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 				GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -388,6 +404,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'detailperipherique':
 			var sql='Select * from peripherique where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -551,6 +568,7 @@ module.exports =function(variables,res,user){
 
 		case 'listconstantes':
 			var sql='Select * from constantes order by id;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -562,6 +580,7 @@ module.exports =function(variables,res,user){
 			break;		
 		case 'detailconstantes':
 			var sql='Select * from constantes where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -573,6 +592,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'listbox_virtuel_etat':
 			var sql='Select * from box_virtuel_etat;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -584,6 +604,7 @@ module.exports =function(variables,res,user){
 			break;		
 		case 'detailbox_virtuel_etat':
 			var sql='Select * from box_virtuel_etat where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -595,6 +616,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'listutilisateurs':
 			var sql='Select u.user nom,u.* from utilisateurs u;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -607,6 +629,7 @@ module.exports =function(variables,res,user){
 
 		case 'detailutilisateurs':
 			var sql='Select * from utilisateurs where id=\''+variables.id+'\';';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -652,6 +675,7 @@ module.exports =function(variables,res,user){
 			break;
 		case 'listmodelbox':
 			var sql='Select * from modelbox;';
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -666,6 +690,7 @@ module.exports =function(variables,res,user){
 
 		case 'listlog':
 			var sql='Select * from utilisateurs;';
+			logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -747,6 +772,8 @@ module.exports =function(variables,res,user){
 					" and (s.date_fin isnull or s.date_fin>=date('now'))" +
 					" and t.id=s.emplacement_id" +
 					" and t.uuid='"+variables['uuid']+"'";
+					
+			logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 			GLOBAL.obj.app.db.sqlorder(sql,
 				function(rows){
 					var rep = JSON.stringify(rows);
@@ -809,7 +836,8 @@ module.exports =function(variables,res,user){
 								 'Access-Control-Allow-Origin': '*'});
 					res.end(rep);
 				} else {
-					console.log('get',sql);
+					//console.log('get',sql);					
+					logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 					GLOBAL.obj.app.db.sqlorder(sql,
 					function(rows){
 						var rep = JSON.stringify(rows);
@@ -825,7 +853,7 @@ module.exports =function(variables,res,user){
 				
 			} else if (variables.action.substr(0,6)=='detail'){
 				var sql='Select * from '+variables.action.substr(6,100)+' where 1=1 '+complsql+';';
-				console.log('get',sql);
+				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');
 				GLOBAL.obj.app.db.sqlorder(sql,
 					function(rows){
 						var rep = JSON.stringify(rows);

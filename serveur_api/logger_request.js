@@ -2,7 +2,7 @@
  * New node file
  */
 
-var dir =__dirname+'/../temp';
+var dir =__dirname+'/../../Log';
 
 var tracelevelsr = {ERROR:0,WARNING:1,INFO:2,DEBUG:3}
 var tracagelevelr=3;

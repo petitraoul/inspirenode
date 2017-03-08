@@ -131,7 +131,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     
 	     doc_print_link:{type:String,
 	    	 notify:true,
-	    	 computed:'_getprintlink(objet)'}
+	    	 computed:'_getprintlink(objet)'},
+		 // index de compteur	 
+		 index_fac_eau:{type:Number,notify:true,value:0},
+		 index_fac_elec:{type:Number,notify:true,value:0},
+		 date_fac:{type:Number,notify:true,value:0}
 	     
 	  },
 	  listeners: {
@@ -192,6 +196,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  },
 	  set_facture:function(){
 	        this.set('objet.facture_num',this.new_facture.num)  ;
+	        this.set('objet.solde',this.soldecompta);
 		  
 	  },
 	  show_ecriture_lgn_choice: function (facture_id,ecriture_id,facture_num,ecriture_factnum) {
@@ -220,6 +225,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     			  //console.log('acquitement '+list[c].uuid);
     			  list[c].obj.facture_num=this.objet.facture_num;
     			  rep.push(list[c].obj);
+				   
+					if (list[c].obj.type_operation == '9' && list[c].obj.libelle == 'Emplacement') { this.date_fac = list[c].obj.index_fin;}
+					else if (list[c].obj.type_operation == '9' && list[c].obj.libelle == 'Electricité') {this.index_fac_elec = list[c].obj.index_fin;}
+					else if (list[c].obj.type_operation == '9' && list[c].obj.libelle == 'Eau') {this.index_fac_eau = list[c].obj.index_fin;}
+				  
     		  } else {
     			 // console.log('non acquit� '+list[c].uuid);
     		  }

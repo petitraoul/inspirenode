@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/iron-location/iron-location.html">
 <link rel="import" href="../../bower_components/app-route/app-route-converter.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../majcore/my-combo_select2.html">
 <link rel="import" href="../majcore/my-combo_select.html">
 
 <link rel="import" href="../element/my-doc_facture.html">
@@ -35,8 +36,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
     <style>
+		 .print-button{
+		 	/*position:fixed;
+		 	bottom:50px;*/
+		 	top:25px;
+		 	left:15%;
+		 	float:right top;
+		 	z-index :9999;
+		 	--paper-fab-background: var(--paper-red-400);
+		    --paper-fab-keyboard-focus-background: var(--paper-red-900);
+		    font-size: 55px;
+		 }
 
+		 @media print {
+		  .print-button{ display:none; }
+		}
     </style>
+	<paper-fab hidden$="{{printmode}}" class="print-button"  icon="print" title="Imprimer" on-tap="print"></paper-fab>
 
 	<div hidden$="{{printmode}}">
 	  <iron-location path="{{path}}" ></iron-location>
@@ -102,10 +118,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		    		  queryobjet[queryparts[0]]=queryparts[1];
 		    	  }
 		    	  this.set('params',queryobjet);
+		    	  
 	    	  } else {
 	    		  this.set('printmode',true);
+	    		  
 	    	  }
 	    	  
+	      },
+	      print:function(){
+	    	  window.print();
 	      },
 	      show_element: function (type1,type2) {
 	    	    //console.log('OK',periph.nom,periph.uuid,ecriture_type,periph.ecriture_type,periph.ecriture_type==ecriture_type);	

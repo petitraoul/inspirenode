@@ -99,7 +99,7 @@ function appliqueconsigne(forceprevious){
 			
 			for (var categ_item in GLOBAL.obj.categories){
 				if (GLOBAL.obj.categories[categ_item].programmable=='O'){
-					get_nextprevious_consigne(GLOBAL.obj.categories[categ_item],mode_actuel,
+					get_typejouractuel(GLOBAL.obj.categories[categ_item],mode_actuel,
 							function(rep,categorie){
 						
 								
@@ -145,10 +145,10 @@ function appliqueconsigne(forceprevious){
 													logger('INFO',{msg:'consigne a appliquer car difference time entre previous consigne ok',ecart_min:rep[t].previous.ecart_minutes,val:consigneaappliquer.valeur ,tag: ' tag ' +t},'automation_'+programmation_all_test.nom);
 													
 												}  if (rep[t].previous && (!peripheriques_chauffage[c].last_etat ||
-																		!peripheriques_chauffage[c].last_etat.expression ||
-																		!peripheriques_chauffage[c].last_etat.expression.etat)){
+																		!peripheriques_chauffage[c].last_etat.expression /*||
+																		!peripheriques_chauffage[c].last_etat.expression.etat*/)){
 													consigneaappliquer=rep[t].previous;
-													logger('INFO',{msg:'consigne a appliquer car pas d etat pour ce periph de chauffe',val:consigneaappliquer.valeur ,tag: ' tag ' +t},'automation_'+programmation_all_test.nom);
+													logger('WARNING',{msg:'consigne a appliquer car pas d etat pour ce periph de chauffe',val:consigneaappliquer.valeur ,id: ' id ' +t,etat:peripheriques_chauffage[c].last_etat+', '+peripheriques_chauffage[c].last_etat.expression+', '+peripheriques_chauffage[c].last_etat.expression.etat },'automation_'+programmation_all_test.nom);
 													
 												} if (rep[t].next && rep[t].next.ecart_minutes<=periode_minutes) {
 													consigneaappliquer=rep[t].next;
@@ -205,6 +205,80 @@ function appliqueconsigne(forceprevious){
 }
 
 
+function get_typejouractuel(categorie,mode_id,callback){
+	
+	var sql="select j.typejour from joursconsigne j" +
+			"  where date(date_debut)<=date('now')" +
+			"    and date(date_fin)>=date('now')" +
+			"  order by typejour asc limit 1";
+	
+	GLOBAL.obj.app.db.sqlorder(sql,
+	function (rows) {
+		if (rows && rows[0]){
+			if(rows[0].typejour=='FE'){
+				get_vacanceferie_consigne('FE',categorie,mode_id,callback);
+				
+			} else if (rows[0].typejour=='VA') {
+				get_vacanceferie_consigne('VA',categorie,mode_id,callback);
+				
+			} else {
+				/*type de jour inconnu = programmtion standard des jours de semaine*/
+				get_nextprevious_consigne(categorie,mode_id,callback);
+			}
+		} else {
+			/* pas d enregistrement = traitement programmtion standard des jours de semaine*/
+			get_nextprevious_consigne(categorie,mode_id,callback);
+			
+		}
+	});
+	
+}
+
+function get_vacanceferie_consigne(type_jour,categorie,mode_id,callback){
+	var sql="select * from ("+
+	" SELECT id tag,dateactuel,'now' source,  strftime('%w',dateactuel)+0 jour_num,"+
+	"		case when strftime('%w',dateactuel)+0=1 then 'Lu'  " +
+	"when strftime('%w',dateactuel)+0=2 then 'Ma'   " +
+	"when strftime('%w',dateactuel)+0=3 then 'Me'   " +
+	"when strftime('%w',dateactuel)+0=4 then 'Je'  " +
+	"when strftime('%w',dateactuel)+0=5 then 'Ve'   " +
+	"when strftime('%w',dateactuel)+0=6 then 'Sa'  " +
+	"when strftime('%w',dateactuel)+0=0 then 'Di'  end id_jours,"+
+	"	       strftime('%H',dateactuel)+0 heur_num,strftime('%M',dateactuel)+0 minu_num,'' valeur,'' categorie,null peripherique,'' heure"+
+	" from tag, (select datetime('now',/*'-3 day','-21 hours',*/'localtime') dateactuel)"+
+	" union"+
+	" SELECT tag.id tag,dateactuel,'now' source,  strftime('%w',dateactuel)+0 jour_num,"+
+	"		case when strftime('%w',dateactuel)+0=1 then 'Lu'  " +
+	"when strftime('%w',dateactuel)+0=2 then 'Ma'   " +
+	"when strftime('%w',dateactuel)+0=3 then 'Me'   " +
+	"when strftime('%w',dateactuel)+0=4 then 'Je'  " +
+	"when strftime('%w',dateactuel)+0=5 then 'Ve'   " +
+	"when strftime('%w',dateactuel)+0=6 then 'Sa'  " +
+	"when strftime('%w',dateactuel)+0=0 then 'Di'  end id_jours,"+
+	"	       strftime('%H',dateactuel)+0 heur_num,strftime('%M',dateactuel)+0 minu_num,'' valeur,'' categorie,p.id peripherique,'' heure"+
+	" from tag, peripherique_tag pt,peripherique p,categorie c, (select datetime('now',/*'-3 day','-21 hours',*/'localtime') dateactuel)"+
+	" where tag.id=pt.id_tag and p.id=pt.id_peripherique and c.id=p.categorie_id and c.programmable='O'"+
+	"  and c.id='"+categorie.id+"'"+
+	" union"+
+	" select tag,''|| id_consigne_temp source,''dateactuel," +
+	"         0+decal jour_num," +
+	"         id_jours," +
+	"         case when substr(heure,3,1)='h' then substr(heure,1,2)+0 else substr(heure,1,1)+0 end," +
+	"         case when substr(heure,3,1)='h' then substr(heure,4,2)+0 else substr(heure,3,2)+0 end," +
+	"         c.valeur,c.categorie,c.peripherique,c.heure" +
+	" from consigne_temp_jours j" +
+	"  inner join consigne_temp c on c.id=j.id_consigne_temp" +
+	"  cross join (select -1 decal union select 0 decal union select 1 decal union select 2 decal union" +
+	"              select 3 decal union select 4 decal union select 5 decal union select 6 decal union select 7 decal )	" +
+	" where mode='"+mode_id+"' and (categorie isnull or categorie='"+categorie.id+"')" +
+	"  and id_jours ='"+type_jour+"'"+ /*VA ou FE*/
+	" )			"+
+	" order by tag+0,peripherique+0, jour_num,heur_num+0,minu_num+0";
+	
+	get_consigne(sql,categorie,mode_id,callback)
+}
+
+
 function get_nextprevious_consigne(categorie,mode_id,callback){
 
 	var sql="select * from ("+
@@ -246,7 +320,10 @@ function get_nextprevious_consigne(categorie,mode_id,callback){
 			" )			"+
 			" order by tag+0,peripherique+0, jour_num,heur_num+0,minu_num+0";
 	//console.log(sql);
-	
+	get_consigne(sql,categorie,mode_id,callback);
+}
+
+function get_consigne(sql,categorie,mode_id,callback){
 	GLOBAL.obj.app.db.sqlorder(sql,
 		function (mode_id,categorie,callback) {
 			return function(r){

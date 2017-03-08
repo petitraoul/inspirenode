@@ -38,7 +38,10 @@ module.exports =function(variables,res,user,req){
 									  			 "href":"tagListPage"},
 									"progbutton": {"name":"Programmation",
 									  					   "visible":true,
-									  					   "href":"prog_modes"}/*,
+									  					   "href":"prog_modes"},
+									"graphbutton": {"name":"Graphiques",
+									  					   "visible":true,
+									  					   "href":"prog_graphiques"}/*,
 									"planbutton": {"name":"Plan",
 									  					   "visible":true,
 									  					   "href":"planpage"}*//*,									"graphiquebutton": {"name":"Graph.",
@@ -81,7 +84,8 @@ module.exports =function(variables,res,user,req){
 						for (t in GLOBAL.obj.peripheriques[p].tag) {
 							if ((GLOBAL.obj.peripheriques[p].tag[t] 
 							        && (GLOBAL.obj.peripheriques[p].tag[t].nom==variables.tagname 
-							    		 || GLOBAL.obj.peripheriques[p].tag[t].uuid==variables.taguuid 
+							    		 || GLOBAL.obj.peripheriques[p].tag[t].uuid==variables.taguuid
+							    		 || GLOBAL.obj.peripheriques[p].tag[t].id==variables.tagid
 							    		 || acceuil_coche) 
 								    && GLOBAL.obj.peripheriques[p].visibilite=="visible")
 								    	|| GLOBAL.obj.peripheriques[p].visibleifmanuel=='O'){
@@ -134,7 +138,10 @@ module.exports =function(variables,res,user,req){
 
 						}
 						for (t in GLOBAL.obj.peripheriques_chauffage[p].tag) {
-							if (GLOBAL.obj.peripheriques_chauffage[p].tag[t] && (GLOBAL.obj.peripheriques_chauffage[p].tag[t].nom==variables.tagname || GLOBAL.obj.peripheriques_chauffage[p].tag[t].uuid==variables.taguuid || acceuil_coche) && GLOBAL.obj.peripheriques_chauffage[p].visibilite=="visible"){
+							if (GLOBAL.obj.peripheriques_chauffage[p].tag[t] && (GLOBAL.obj.peripheriques_chauffage[p].tag[t].nom==variables.tagname 
+									|| GLOBAL.obj.peripheriques_chauffage[p].tag[t].uuid==variables.taguuid
+									|| GLOBAL.obj.peripheriques_chauffage[p].tag[t].id==variables.tagid 
+									|| acceuil_coche) && GLOBAL.obj.peripheriques_chauffage[p].visibilite=="visible"){
 								periphatraiter=true;						
 							}
 						}
@@ -182,7 +189,10 @@ module.exports =function(variables,res,user,req){
 								periphatraiter=true;
 						}
 						for (t in GLOBAL.obj.peripheriques_batterie[p].tag) {
-							if (GLOBAL.obj.peripheriques_batterie[p].tag[t] && (GLOBAL.obj.peripheriques_batterie[p].tag[t].nom==variables.tagname || GLOBAL.obj.peripheriques_batterie[p].tag[t].uuid==variables.taguuid || acceuil_coche) && GLOBAL.obj.peripheriques_batterie[p].visibilite=="visible"){
+							if (GLOBAL.obj.peripheriques_batterie[p].tag[t] && (GLOBAL.obj.peripheriques_batterie[p].tag[t].nom==variables.tagname 
+									|| GLOBAL.obj.peripheriques_batterie[p].tag[t].uuid==variables.taguuid
+									|| GLOBAL.obj.peripheriques_batterie[p].tag[t].id==variables.tagid 
+									|| acceuil_coche) && GLOBAL.obj.peripheriques_batterie[p].visibilite=="visible"){
 								periphatraiter=true;
 								
 							}							
@@ -237,7 +247,8 @@ module.exports =function(variables,res,user,req){
 						for (t in GLOBAL.obj.peripheriquesdeportes[p].tag) {
 							if ((GLOBAL.obj.peripheriquesdeportes[p].tag[t] 
 							        && (GLOBAL.obj.peripheriquesdeportes[p].tag[t].nom==variables.tagname 
-							    		 || GLOBAL.obj.peripheriquesdeportes[p].tag[t].uuid==variables.taguuid 
+							    		 || GLOBAL.obj.peripheriquesdeportes[p].tag[t].uuid==variables.taguuid
+							    		 || GLOBAL.obj.peripheriquesdeportes[p].tag[t].id==variables.tagid 
 							    		 || acceuil_coche) 
 								    && GLOBAL.obj.peripheriquesdeportes[p].visibilite=="visible")
 								    	|| GLOBAL.obj.peripheriquesdeportes[p].visibleifmanuel=='O'){
@@ -360,7 +371,7 @@ module.exports =function(variables,res,user,req){
 					pemin.nom=pe.nom;
 					pemin.parent_tag=[];
 					pemin.icon=pe.icon;
-					pemin.tag_uuid=pe.uuid;
+					pemin.tag_uuid=pe.id;
 					pemin.uuid=pe.uuid;
 					pemin.visible=pe.visible;
 					pemin.position_x=pe.position_x;
@@ -385,7 +396,7 @@ module.exports =function(variables,res,user,req){
 					pemin.ecriture_max_value=pe.ecriture_max_value;
 					pemin.ecriture_min_value=pe.ecriture_min_value;
 					
-					pemin.tag_uuid=pe.tag[0].uuid;
+					pemin.tag_uuid=pe.tag[0].id;
 					pemin.visible=pe.visible;
 					pemin.position_x=pe.position_x;
 					pemin.position_y=pe.position_y;
@@ -677,6 +688,7 @@ module.exports =function(variables,res,user,req){
 						//console.log('-');
 					},sql_bind);
 				}
+				GLOBAL.obj.app.serveur.emit('applipiscine.acquitementrecu');
 				rep={};
 				res.writeHead(200, 
 						{'Content-Type': 'text/plain',

@@ -234,7 +234,9 @@
 	          <my-acceuilPage name="acceuilPage" lastupdatetime="{{lastupdatetime}}"></my-acceuilPage>
 	          <my-tagListPage name="tagListPage"></my-tagListPage>
 	          <my-progmodepage name="progmodepage" ></my-progmodepage>
+	          
 	          <my-prog_modes name="prog_modes" ></my-prog_modes>
+	          <my-prog_graphiques name="prog_graphiques" ></my-prog_graphiques>
 	          <my-planpage name="planpage" lastupdatetime="{{lastupdatetime}}" header_auth="{{header_auth}}"></my-planpage>
 	          <my-periphListPage name="periphListPage" lastupdatetime="{{lastupdatetime}}" header_auth="{{header_auth}}"></my-periphListPage>
           </iron-pages>
@@ -507,7 +509,7 @@
     			  //console.log('acquitement '+list[c].uuid);
     			  rep.push(list[c].uuid);
     		  } else {
-    			 // console.log('non acquité '+list[c].uuid);
+    			 // console.log('non acquitï¿½ '+list[c].uuid);
     		  }
     	  }
     	  if (rep.length>0){

@@ -95,6 +95,12 @@ var class_box = function box(){
 						case 'modbuscoils':
 							var comm = new GLOBAL.req.comm_with_modbuscoils;
 							break;
+						case 'modbusinteger':
+							var comm = new GLOBAL.req.comm_with_modbusinteger;
+							break;
+						case 'modbus_real':
+							var comm = new GLOBAL.req.comm_with_modbus_real;
+							break;
 						case 'domoticz':
 							var comm = new GLOBAL.req.comm_with_domoticz;
 							if (isNaN(self.port) || self.port=="") self.port=8080;

@@ -171,9 +171,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					<my-liste_famillemembres  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listemembre" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillemembres>
 				</li>
 				<li style="display:block;width:1000px;margin-left:auto;margin-right:auto;margin-top:-40px;margin-bottom:0">
-					<my-liste_compte_ecritures class="liste_compte_ecritures" id="{{_listeecr_id(objet.id)}}" liste_soustable2="[[liste_factures]]" liste_objets="{{liste_compte_ecriture}}" liste_soustable="{{liste_soustable}}" charge_table class="card cardprinc listecompteur" addable="{{sous_table_addable}}" solde="{{soldecompta}}" titulaire="{{objet}}"></my-liste_compte_ecritures>
-					<my-liste_factures liste_soustable2="{{liste_compte_ecriture}}" liste_objets="{{liste_factures}}" liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listefacture" addable="{{sous_table_addable}}" titulaire="{{objet}}" ></my-liste_factures>
-					<my-liste_famillesejours  liste_soustable="{{liste_soustable}}" charge_table$="{{is_edited}}" class="card cardprinc listesejour" addable="{{sous_table_addable}}" titulaire="{{objet}}"></my-liste_famillesejours>
+					<my-liste_compte_ecritures hidesearchbox 
+					              liste_objets="{{liste_compte_ecriture}}" 
+					              liste_soustable2="[[liste_factures]]" 
+					              liste_soustable="{{liste_soustable}}" 
+					              class="liste_compte_ecritures" 
+					              id="{{_listeecr_id(objet.id)}}" 
+					              charge_table class="card cardprinc listecompteur" 
+					              addable="{{sous_table_addable}}" 
+					              solde="{{soldecompta}}" 
+					              titulaire="{{objet}}"></my-liste_compte_ecritures>
+					<my-liste_factures hidesearchbox 
+					              liste_objets="{{liste_factures}}" 
+					              liste_soustable2="{{liste_compte_ecriture}}" 
+					              liste_soustable="{{liste_soustable}}" 
+					              charge_table$="{{is_edited}}" 
+					              class="card cardprinc listefacture" 
+					              addable="{{sous_table_addable}}" 
+					              titulaire="{{objet}}" ></my-liste_factures>
+					<my-liste_famillesejours  liste_objets="{{liste_famillesejours}}" 
+					              liste_soustable2="{{liste_factures}}" 
+					              liste_soustable="{{liste_soustable}}"
+					              charge_table$="{{is_edited}}" 
+					              class="card cardprinc listesejour" 
+					              addable="{{sous_table_addable}}" 
+					              titulaire="{{objet}}"></my-liste_famillesejours>
 				</li>
 				</div>			
   		</my-profil_behavior>
@@ -198,6 +220,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	   	 	  notify : true,
 	   	 	  value: {body:{},params:{action:'delete',type:'maj',element:'personne'/*v:'voyage.1.1.1'*/}}
 	        },
+
 	     edited_item_id:{notify : true},
 	     modificationbuttonint_hide:{type:Boolean,notify:true},
 	     refreshbuttonint_hide:{type:Boolean,notify:true},
@@ -208,6 +231,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 notify:true,
 	    	 computed:'_is_edited(objet,edited_item_id)'
 	    	 }
+	  },
+      observers:[
+    	  '_soldecompta_change(soldecompta)',
+      ],
+	  _soldecompta_change(soldecompta){
+    	  console.log('soldecompta','change',soldecompta);
+		  this.set('liste_soustable.soldecompta',soldecompta);
 	  },
 	  savethis:function(){
 		  this.$.profilfamille.savethis();

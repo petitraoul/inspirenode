@@ -8,6 +8,7 @@ var smssender = function(numero,texte) {
 	var servicehttp='/adr/smsservice.php?'
 	this.numero=numero;
 	this.texte=texte;
+	
 	this.sendsmsbyhttp =function (callback){
 		var url=servicehttp+'numero='+this.numero;
 		url+= '&texte='+this.texte;

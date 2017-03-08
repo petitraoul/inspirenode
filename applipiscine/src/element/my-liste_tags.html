@@ -110,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        		<!-- <template is="dom-if" if="{{item.visible}}"> -->
 				  <li class="item card"  style="background-image: url({{app.url_http}}:{{app.port_http}}/{{item.icon}});">
 	                
-	                <paper-button style="z-index:10;" id="peripherique" on-tap="get_tag_periph" uuid="{{item.uuid}}" ></paper-button>
+	                <paper-button style="z-index:10;" id="peripherique" on-tap="get_tag_periph" tagid="{{item.id}}" uuid="{{item.uuid}}" ></paper-button>
 	                <div class="item-title" >[[item.nom]]</div>
 	               
 	              </li>
@@ -152,7 +152,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	      },
 	  get_tag_periph: function(e,a){
 	    	  this.taguuid=e.currentTarget.uuid;
-	    	  this.app.$.location.path="/applipiscine/periphListPage/"+this.taguuid;
+	    	  this.tagid=e.currentTarget.tagid;
+	    	  this.app.$.location.path="/applipiscine/periphListPage/"+this.tagid;
 	    	  
 	      },
 	  _disconnect: function(obj){

@@ -58,6 +58,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			            <paper-input class="input1col" id="phone" label="Telephone" type="text" value="{{objet.phone}}"><iron-icon icon="communication:phone" prefix></iron-icon></paper-input>
 			            <paper-input class="input2cols" id="email" label="Courriel" type="text" value="{{objet.email}}"><iron-icon icon="communication:email" prefix></iron-icon></paper-input>
 			        </div>
+			        <div class="ligne">
+				 	 	<paper-input class="input1col" id="part_fixe" label="ALT2 : Part fixe" required type="number" step=0.01 value="{{objet.part_fixe}}"><div suffix>€</div></paper-input>
+				 	 	<paper-input class="input1col" id="part_variable" label="ALT2 : Part variable" required type="number" step=0.01 value="{{objet.part_variable}}"><div suffix>€</div> </paper-input>
+					</div>
 	  		</div>
   		 		
   		

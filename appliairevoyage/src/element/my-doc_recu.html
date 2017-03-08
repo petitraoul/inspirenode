@@ -69,6 +69,12 @@
 			    params="{{params_get_aires}}"	handle-as="json"    on-error="_disconnect"
 			    last-response="{{aires}}"		debounce-duration="300">
 			</iron-ajax>
+			<iron-ajax
+				id="charge_typeop"	    		method="GET"
+			    url="{{charge_typeop_url}}"	    headers="{{app.header_auth}}"
+			    params="{{params_get_typeop}}"	handle-as="json"    on-error="_disconnect"
+			    last-response="{{typeop}}"		debounce-duration="300">
+			</iron-ajax>
 			<div >
 			<table style="width: 100%">
 			<tr>
@@ -112,31 +118,20 @@
 					<tbody>
 						<tr>
 							   <td style="width: 40%">
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
-										{{lig.libelle}} <br/>
-									</template>
-								
-							   
-							   <td style=" width: 20%">	
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
-										{{lig.pu}} €<br/>
-									</template>
-								
+										{{ecriture_sel.desc}} {{ecriture_sel.libelle}} <br/>
 							   </td>
-							   
+							   <td style=" width: 20%">	
+										{{ecriture_sel.pu}} €<br/>
+								
+							   </td>							   
 							   <td style=" width: 2%">	
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
-										{{lig.qte}} <br/>
-									</template>
+										{{ecriture_sel.qte}} <br/>
 								
 							   </td>
 							   <td style=" width: 20%">	
-								   <template is="dom-repeat" items="[[ecritures]]" as="lig">
-										{{lig.montant}} €<br/>
-									</template>
+										{{ecriture_sel.montant}} €<br/>
 								
-							   </td>	
-							</td>				
+							   </td>			
 						</tr>	
 					</tbody>
 				</table>	
@@ -167,8 +162,8 @@
 			          type: Object
 		        	},    
 		    	 selection_query:{type : Object,
-	  				  notify:true,
-	  				  value:{}},
+	  				  notify:true/*,
+	  				  value:{}*/},
 				 /*action: detail.... pour un enregistrement
 				           list...    pour plusieurs enregistrements*/
 		  		 
@@ -189,7 +184,10 @@
 			   	 	  value: {type:'get',action:'listaire'}},
 			     ecriture_sel:{type:Object,
 			    	  notify:true,
-			    	  computed: 'computeecriture_sel(ecritures)'},			      
+			    	  computed: 'computeecriture_sel(ecritures, typeop)'},		
+		   		 params_get_typeop:{type: Object,
+			   	 	  notify : true,
+			   	 	  value: {type:'get',action:'listtype_operation'}},	      
 
 			      famille_sel:{type:Object,
 			    	  notify:true,
@@ -245,13 +243,19 @@
 					// info de l'aire
 			        this.charge_aires_url=this.app.url_api+':'+this.app.port_api+'/index'
 			    	this.$.charge_aires.generateRequest();
+					// info des types d'operation
+			        this.charge_typeop_url=this.app.url_api+':'+this.app.port_api+'/index'
+			    	this.$.charge_typeop.generateRequest();
 			  },
 			  
 			  computefamille_sel:function(familles){ 
 				  return this._getobjinliste(familles,this.selection_query.titulaire_id);
 			  },
-			  computeecriture_sel:function(ecritures){ 			  
-				  return this._getobjinliste(ecritures,this.selection_query.recu_id);
+			  computeecriture_sel:function(ecritures, typeop){ 	
+				  var compt=[];		
+                  compt	= this._getobjinliste(ecritures,this.selection_query.recu_id);		  
+				  compt.desc = this._getobjinliste(typeop,compt.type_operation).nom;
+				  return compt;
 			  },
 			  computeaire_sel:function(aires){		  
 				  return this._getobjinliste(aires,1);

@@ -8,11 +8,21 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
+<link rel="import" href="../majcore/my-combo_select2.html">
+<link rel="import" href="../majcore/my-combo_select.html">
+
 <dom-module id="my-liste_compte_ecritures">
 
   <template>
 		<style >
   		</style>
+  		<my-combo_select id="charge_sexe" hidden charge_table liste="{{liste_soustable.sexe}}"   table="sexe" ></my-combo_select>
+		<my-combo_select id="charge_tag" hidden charge_table liste="{{liste_soustable.tag_voyage}}"   table="tag_voyage"  ></my-combo_select>
+		<my-combo_select id="charge_operat" hidden charge_table  liste="{{liste_soustable.type_operation}}"   table="type_operation"  ></my-combo_select>
+		<my-combo_select id="charge_typecaf" hidden charge_table liste="{{liste_soustable.typecaf}}"   table="typecaf"  ></my-combo_select>
+		<my-combo_select id="charge_paiement" hidden charge_table liste="{{liste_soustable.type_paiement}}"   table="type_paiement"  ></my-combo_select>
+		<my-combo_select id="charge_tarif" hidden charge_table liste="{{liste_soustable.tarif}}"   table="tarif"  ></my-combo_select>
+		
   		<my-sous_liste_behavior class="parametres_zone"
   			
   			detail_code="my-profilcompte_ecriture" 
@@ -31,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			queryfields="recu_num"
   			searchquery="{{searchquery}}"
   			parent="{{titulaire}}"
+  			
   			charge_table$="{{charge_table}}"
   			dropdowntype$="{{dropdowntype}}"
   			value_sel="{{value_sel}}"
@@ -39,9 +50,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			edited_item_id="{{edited_item_id}}"
   			liste_objets="{{liste_objets}}"  	
   			showwhereisnull="[[showwhereisnull]]"
+  			searchmode="[[searchmode]]"
 		   	 >
-			<div class="selection">
-  				<my-searchbox placeholder="Filtre" query="{{searchquery}}"></my-searchbox>	
+			<div class="selection" hidden="{{hidesearchbox}}" style="display:flex">
+  				<my-combo_select2 hiderefresh style="padding:0 16px;" limit=8 fullnamefields="nom;prenom1" queryfields="nom;prenom1;ville" charge_table dropdown_selobj="{{titulairesel}}" class="input3cols" table="personne" id="personne_id" label="Famille" value_sel="{{famille_id}}"></my-combo_select2>
+  				<my-searchbox placeholder="Numéro de reçu" query="{{searchquery}}"></my-searchbox>	
+   				
   			</div>
 		</my-sous_liste_behavior>
   </template>
@@ -62,8 +76,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  	 titulaire:{type:Object,notify:true},
 		 liste_objets:{type:Array,
 	    	 notify:true},
+	     liste_soustable:{type:Object,
+	    	 notify:true,value:{}
+	     },
+	     titulairesel:{type:Object,notify:true},
 	  	 edited_item_id:{type:String,
 	   	 		notify:true,},
+	   	 hidesearchbox:{type:Boolean,notify:true},
+	   	 
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true},
@@ -77,12 +97,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    	 	notify : true,
 	    	 	computed: '_compute_solde(liste_objets,liste_objets.length,edited_item_id)'},
 	  },
-
+	  observers:[
+		  '_selection_titulaire(titulairesel,searchmode)',
+	  ],
+	  _selection_titulaire(titulairesel,searchmode){
+		  if (searchmode) {
+			  this.set('titulaire',titulairesel);	  
+		  } 
+		  
+	  },
       _showwhereisnull : function(liste_objets,titulaire){
         	for (var o in liste_objets){
         		var d=new Date(liste_objets[o].date);
         		var difference = (new Date-d)/1000/60/60/24;
-        		if (titulaire && titulaire.id!='' && liste_objets[o].facture_num && difference>7) {
+        		if (this.hidesearchbox && titulaire && titulaire.id!='' && liste_objets[o].facture_num && difference>7) {
         			liste_objets[o].hide=true;	
         		} else {
         			liste_objets[o].hide=false;	
@@ -111,8 +139,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			  } else {
 				  return  {type:'get',action:'listcompte_ecriture'} ;
 			  }
+		  } else if (!this.hidesearchbox){
+			  return  {type:'get',action:'listcompte_ecriture'};
 		  } else {
-			  return null;
+			  return  {type:'get',action:'listcompte_ecriture',titulaire_id:'=-1'} ;
 		  }
 		  
 	  },

@@ -12,6 +12,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../bower_components/app-layout/app-grid/app-grid-style.html">
 
+<link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html">
+
 <dom-module id="my-liste_periphs_tag">
 
   <template>
@@ -119,6 +121,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       	</ul>
      </div>
+     
+     <iron-ajax
+		id="charge_historique"			    method="GET"
+	    url="{{charge_historique_url}}"	    headers="{{app.header_auth}}"
+	    params="{{params_get_historique}}"    handle-as="json"   	on-error="_disconnect"
+	    last-response="{{historiques}}"   		debounce-duration="300">
+	</iron-ajax>
+	
+    <highcharts-chart 
+           hidden="{{hidegraphique}}"
+           data="{{grap_histo_data}}" 
+           title='Températures' 
+           type='line'
+           x-zoom 
+           legend
+           loading$="[[loading]]"
+           vs-time="true"
+           x-label="Temps" 
+           y-label="°C">
+    </highcharts-chart>
   </template>
   <script>
   Polymer({
@@ -132,41 +154,78 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     tagname:{type:String,
 	    	 notify :true,
 	    	 value:null,
-	    	 observer: '_chargenewtag'},
-	     taguuid:{type:String,
+	    	 observer: '_chargenewtagname'},
+	     tagid:{type:String,
 	    	 notify :true,
 	    	 value:null,
-	    	 observer: '_chargenewtag'},
+	    	 observer: '_chargenewtagid'},
   		 params_allconfiglite:{type: Object,
 	   	 	  notify : true,
 	   	 	  value: {action:'allconfiglite',v:'piscine.1.1.1'}},
 	   	 charge_allconfiglite_url: {type:String, 
 	   		    notify : true,
-	   		  	value:null }
+	   		  	value:null },
+	     periphs_tag_Response:{type:Array,notify:true},
+         params_get_historique:{type: Object,
+	   	 	  notify : true,
+	   	 	  value: {type:'get',action:'listhistorique',timestamp:">date('now','-15 day')",expr1_unit:"=' °C'",etat:" is not null"}},
+	   	 charge_historique_url:{type:String,notify:true},
+	   	 historiques:{type: Array,
+	   	 	  notify : true},
+	   	 loading:{type:Boolean,notify:true,value:false},
+	   	 hidegraphique:{type:Boolean,notify:true,value:false},
+	   	 grap_histo_data:{type:Array,
+	   		  notify : true,
+	   		  computed : '_getdata(historiques)'}
 	  },
+	  observers:[
+		  '_periphcharge(tagid,periphs_tag_Response)'
+		  ],
 	  ready: function() {
 	        this.app = document.querySelector('#app');
 	    	  this.charge_allconfiglite_url=this.app.url_api+':'+this.app.port_api+'/index'
-	    	  if (this.tagname) this.params_allconfiglite.tagname=this.tagname;
-	    	  if (this.taguuid) {
-	    		  this.params_allconfiglite.taguuid=this.taguuid;
+	    	/*  if (this.tagname) this.params_allconfiglite.tagname=this.tagname;
+	    	  if (this.tagid) {
+	    		  this.params_allconfiglite.tagid=this.tagid;
 	    		  this.params_allconfiglite.tagname=null;
+	    		  
+
 	    	  }
-	    	  this.$.charge_allconfiglite.generateRequest();
+	    	  this.$.charge_allconfiglite.generateRequest();*/
+	    	  
+
 	      },
-	 _chargenewtag(){
+ 	 _chargenewtagname(tagname){
+    	  this.periphs_tag_Response=[];
+    	  if (this && this.params_allconfiglite) {
+	    	  if (tagname)
+	    		  this.params_allconfiglite.tagname=tagname;
+	    	  if ( tagname)
+	    	  	   this.$.charge_allconfiglite.generateRequest();
+    	  }
+
+      },
+	 _chargenewtagid(tagid){
 	    	  this.periphs_tag_Response=[];
 	    	  if (this && this.params_allconfiglite) {
-		    	  if (this.tagname) 
-		    		  this.params_allconfiglite.tagname=this.tagname;
-		    	  if (this.taguuid) {
-		    		  this.params_allconfiglite.taguuid=this.taguuid;
+		    	  
+		    	  if (tagid) {
+		    		  this.params_allconfiglite.tagid=this.tagid;
 		    		  this.params_allconfiglite.tagname=null;
+			    		this.params_get_historique.uuid="='tag_"+this.tagid+"'";  
+			  	        this.charge_historique_url=this.app.url_api+':'+this.app.port_api+'/index'
+				    	
+				        this.set('loading',true);
 		    	  }
-		    	  if (this.taguuid || this.tagname)
+		    	  if (tagid )
 		    	  	   this.$.charge_allconfiglite.generateRequest();
 	    	  }
  
+	      },
+	      _periphcharge(tagid,periphs_tag_Response){
+
+	    	  		this.$.charge_historique.generateRequest();
+	    	  
 	      },
 	  _toArray(obj){
 	    	  return this.app._toArray(obj);
@@ -184,7 +243,82 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        },
        detached: function() {
          window.removeEventListener('resize', this._updateGridStyles);
-       }
+       },
+		_getdata:function (historiques){
+			console.log('histo recu');
+			
+			historiques.sort(this.sort_by('uuid','timestamp')) ;
+			
+			var res=[];
+			var res_tag=[];
+			if (historiques && historiques[0]) {
+				this.set('hidegraphique',false);
+				var tag=historiques[0].uuid;
+				for (var h in historiques){
+					if (tag!=historiques[h].uuid) {
+						res.push({name: 'Consigne ' +tag, data: res_tag});
+						res_tag=[];
+						tag=historiques[h].uuid
+					}
+					var point=[(new Date(historiques[h].timestamp)).getTime(),historiques[h].etat*1];
+					res_tag.push(point);
+					
+				}
+				
+				res.push({name: 'Consigne ' +tag, data: res_tag});
+				
+				var res_tag=[];
+				var tag=historiques[0].uuid;
+				for (var h in historiques){
+					if (tag!=historiques[h].uuid) {
+						res.push({name: 'Température ' +tag, data: res_tag});
+						res_tag=[];
+						tag=historiques[h].uuid
+					}
+					var point=[(new Date(historiques[h].timestamp)).getTime(),historiques[h].expr1*1];
+					res_tag.push(point);
+					
+				}
+				
+				res.push({name: 'Température ' +tag, data: res_tag});
+			} else {
+				this.set('hidegraphique',true);
+			}
+
+			this.set('loading',false);
+			return res;
+		}
+		  
+		,sort_by : function() {
+			   var fields = [].slice.call(arguments),
+			       n_fields = fields.length;
+
+			   return function(A,B) {
+			       var a, b, field, key, primer, reverse, result, i;
+
+			       for(i = 0; i < n_fields; i++) {
+			           result = 0;
+			           field = fields[i];
+
+			           key = typeof field === 'string' ? field : field.name;
+
+			           a = A[key];
+			           b = B[key];
+
+			           if (typeof field.primer  !== 'undefined'){
+			               a = field.primer(a);
+			               b = field.primer(b);
+			           }
+
+			           reverse = (field.reverse) ? -1 : 1;
+
+			           if (a<b) result = reverse * -1;
+			           if (a>b) result = reverse * 1;
+			           if(result !== 0) break;
+			       }
+			       return result;
+			   }
+			}	   	 
 	      
   })
   </script>

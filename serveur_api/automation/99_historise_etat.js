@@ -42,8 +42,8 @@ function add_etat_in_database(obj,previous_etat,new_etat_expressions,user) {
 	//console.log('capture event '+JSON.stringify(new_etat_expressions));
 	var timestamp=req.moment().format('YYYY-MM-DD HH:mm:ss');
 	var uuid=obj.uuid;
-	if (user) console.log('event historique',user.user,JSON.stringify(new_etat_expressions));
-	else  console.log('event historique','system auto',JSON.stringify(new_etat_expressions));
+	if (user) 		logger('INFO',{nom:'historisation ',user:user.user, detail:JSON.stringify(new_etat_expressions)},'historisation_etat');
+	else   		logger('INFO',{nom:'historisation ',user:'system auto', detail:JSON.stringify(new_etat_expressions)},'historisation_etat');
 	
 	var tablemodel=GLOBAL.obj.app.core.findobj('historique','tables');
 	var ordersql= 'insert into historique (';
@@ -69,6 +69,7 @@ function add_etat_in_database(obj,previous_etat,new_etat_expressions,user) {
 	ordersql+=colonnessql+") values ("+datasql+");";
 	if (okinsert) {
 		//console.log(ordersql);
+		logger('DEBUG',{nom:'historisation requete : ',sql:ordersql},'historisation_etat');
 		historise_etat.fileattenteetat.push(ordersql);
 	}
 }

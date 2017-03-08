@@ -8,11 +8,21 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
+<link rel="import" href="../majcore/my-combo_select2.html">
+<link rel="import" href="../majcore/my-combo_select.html">
+
 <dom-module id="my-liste_factures">
 
   <template>
 		<style >
   		</style>
+  		<my-combo_select id="charge_sexe" hidden charge_table liste="{{liste_soustable.sexe}}"   table="sexe" ></my-combo_select>
+		<my-combo_select id="charge_tag" hidden charge_table liste="{{liste_soustable.tag_voyage}}"   table="tag_voyage"  ></my-combo_select>
+		<my-combo_select id="charge_operat" hidden charge_table  liste="{{liste_soustable.type_operation}}"   table="type_operation"  ></my-combo_select>
+		<my-combo_select id="charge_typecaf" hidden charge_table liste="{{liste_soustable.typecaf}}"   table="typecaf"  ></my-combo_select>
+		<my-combo_select id="charge_paiement" hidden charge_table liste="{{liste_soustable.type_paiement}}"   table="type_paiement"  ></my-combo_select>
+		<my-combo_select id="charge_tarif" hidden charge_table liste="{{liste_soustable.tarif}}"   table="tarif"  ></my-combo_select>
+		
   		<my-sous_liste_behavior class="parametres_zone"
   			
   			detail_code="my-profilfacture" 
@@ -35,10 +45,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   			dropdowntype$="{{dropdowntype}}"
   			value_sel="{{value_sel}}"
   			dropdown_selobj="{{dropdown_selobj}}"
-  			
+  			searchmode="[[searchmode]]"
   			liste_objets="{{liste_objets}}"  		>
-	  		<div class="selection">
-  				<my-searchbox placeholder="Filtre" query="{{searchquery}}"></my-searchbox>	
+	  		<div class="selection" hidden="{{hidesearchbox}}" style="display:flex">
+  				<my-combo_select2 hiderefresh style="padding:0 16px;" limit=8 fullnamefields="nom;prenom1" queryfields="nom;prenom1;ville" charge_table dropdown_selobj="{{titulairesel}}" class="input3cols" table="personne" id="personne_id" label="Famille" value_sel="{{famille_id}}"></my-combo_select2>
+  				<my-searchbox placeholder="Numéro de Facture" query="{{searchquery}}"></my-searchbox>	
+  				
   			</div>
 		</my-sous_liste_behavior>
   </template>
@@ -57,8 +69,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  	 		computed:'_get_grants(titulaire)'
 	  	 	 },
 		 titulaire:{type:Object,notify:true},
+		 hidesearchbox:{type:Boolean,notify:true},
 		 liste_objets:{type:Array,
 	    	 notify:true},
+	     liste_soustable:{type:Object,
+	    	 notify:true,value:{}
+	     },
+	     titulairesel:{type:Object,notify:true},
 	     dropdown_selobj:{type:Object,notify:true},
 	     value_sel:{type:Number,notify:true,value:6},
 	     charge_table:{type:Boolean,notify:true},
@@ -68,7 +85,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     },
 	  },
 	 
-
+	  observers:[
+		  '_selection_titulaire(titulairesel,searchmode)',
+	  ],
+	  _selection_titulaire(titulairesel,searchmode){
+		  if (searchmode) {
+			  this.set('titulaire',titulairesel);  
+		  }
+	  },
 	  _getparams_get:function(titulaire){
 		  if (titulaire) {
 			  if (titulaire.id!=''){
@@ -77,8 +101,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				  return  {type:'get',action:'listfacture'} ; 
 			  }
 			  
+		  } else if (!this.hidesearchbox){
+			  return  {type:'get',action:'listfacture'};
 		  } else {
-			  return null;
+			  return  {type:'get',action:'listfacture',titulaire_id:'=-1'} ;
 		  }
 		  
 	  },

@@ -63,7 +63,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     charge_table:{type:Boolean,notify:true}
 	  },
 	 
-
+	  observers:[
+		  '_liste_factures_change(liste_soustable2,liste_soustable2.length)',
+	  ],
+	  _liste_factures_change(listeFactures,length){
+		  console.log('my-liste_famillesejours','_liste_factures_change',listeFactures.length);
+	  },
 	  _getparams_get:function(titulaire){
 		  if (titulaire) {
 			  return  {type:'get',action:'listsejour',titulaire_id:'='+titulaire.id} ;

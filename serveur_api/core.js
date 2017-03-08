@@ -474,7 +474,12 @@ var core=function(){
 			
 			if (changed) {
 				logger('INFO',{msg:'Changement etat periph',nom:obj.nom,id:obj.id,lastsetetatname:lastsetetatname,last_etat:obj.last_etat,new_etat:new_etat,},'changement_etat');
-				if (obj.categorie && obj.categorie.nom) logger('INFO',{msg:'Changement etat periph',nom:obj.nom,id:obj.id,last_etat:obj.last_etat,new_etat:new_etat,},'changement_etat_'+obj.categorie.nom);
+				
+				if (obj.categorie && obj.categorie.nom){
+					var cat_nom = obj.categorie.nom;
+					cat_nom = cat_nom.replace("/", "_");
+					logger('INFO',{msg:'Changement etat periph',nom:obj.nom,id:obj.id,last_etat:obj.last_etat,new_etat:new_etat,},'changement_etat_'+cat_nom);
+				}
 				GLOBAL.obj.app.serveur.emit(typeobj+'.last_etat.changed',obj,obj.last_etat,new_etat,user);
 				
 				obj.last_etat.expression=new_etat;
@@ -501,7 +506,12 @@ var core=function(){
 				//console.log("     "+jnew_etat);				
 			} else if (added){
 				logger('INFO',{msg:'Changement etat periph',nom:obj.nom,id:obj.id,lastsetetatname:lastsetetatname,last_etat:obj.last_etat,new_etat:new_etat,},'changement_etat');
-				if (obj.categorie && obj.categorie.nom) logger('INFO',{msg:'Changement etat periph',nom:obj.nom,id:obj.id,last_etat:obj.last_etat,new_etat:new_etat,},'changement_etat_'+obj.categorie.nom);
+				
+				if (obj.categorie && obj.categorie.nom) {
+					var cat_nom = obj.categorie.nom;
+					cat_nom = cat_nom.replace("/", "_");
+					logger('INFO',{msg:'Changement etat periph',nom:obj.nom,id:obj.id,last_etat:obj.last_etat,new_etat:new_etat,},'changement_etat_'+cat_nom);
+				}
 				GLOBAL.obj.app.serveur.emit(typeobj+'.last_etat.added',obj,obj.last_etat,new_etat,user);
 				obj.last_etat={};
 				obj.last_etat.expression=new_etat;

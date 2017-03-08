@@ -1,0 +1,254 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html">
+
+<dom-module id="my-graphique_highchart">
+
+  <template>
+		<style include="app-grid-style">
+  		</style>
+
+     
+     <iron-ajax
+		id="charge_historique"			    method="GET"
+	    url="{{charge_historique_url}}"	    headers="{{app.header_auth}}"
+	    params="{{params_get_historique}}"    handle-as="json"   	on-error="_disconnect"
+	    last-response="{{historiques}}"   		debounce-duration="300">
+	</iron-ajax>
+		<paper-fab hidden="{{hidegraphique}}" style="z-index:1000;position:absolute;margin-top:-15px;margin-left:30px" mini icon="arrow-back" title="Reculer" on-tap="_back"></paper-fab>
+		<paper-fab hidden="{{hidegraphique}}" disabled$="[[hideforward]]" style="z-index:1000;position:absolute;margin-top:-15px;margin-left:80px" mini icon="arrow-forward" title="Avancer" on-tap="_forward"></paper-fab>
+	 
+	    <highcharts-chart 
+	           hidden="{{hidegraphique}}"
+	           data="{{grap_histo_data}}" 
+	           title='{{titre_graphique}}' 
+	           type="{{type_graphique}}"
+	           x-zoom 
+	           legend
+	           loading$="[[loading]]"
+	           vs-time="true"
+	           x-label="{{titreX_graphique}}" 
+	           y-label="{{titreY_graphique}}">
+	    </highcharts-chart>
+   
+  </template>
+  <script>
+  
+  Polymer({
+
+	  is: 'my-graphique_highchart',
+	  
+	  properties: {  
+	     app: {
+	          type: Object
+	        },    	 
+	     resolution:{type:String,notify:true,value:'detail'},
+	     uuids:{type:String,notify:true},
+	     periphs:{type:String,notify:true},
+	     ecriture_type:{type:String,notify:true},
+	     categorie_type:{type:String,notify:true},
+	     type_graphique:{type:String,
+	    	             notify:true,
+	    	             value:'line'},
+   	     titre_graphique:{type:String,
+			             notify:true,
+			             value:'Températures'},
+   	     titreX_graphique:{type:String,
+			             notify:true,
+			             value:'Temps'},
+   	     titreY_graphique:{type:String,
+			             notify:true,
+			             value:'°C'},
+	     position:{type:Number,notify:true,value:0},
+         params_get_historique:{type: Object,
+	   	 	  notify : true,
+	   	 	  value: {type:'get',action:'listhistorique',timestamp:">date('now','-15 day')",expr1_unit:"=' °C'",etat:" is not null"}},
+	   	 charge_historique_url:{type:String,notify:true},
+	   	 historiques:{type: Array,
+	   	 	  notify : true},
+	   	 loading:{type:Boolean,notify:true,value:false},
+	   	 hidegraphique:{type:Boolean,notify:true,value:false},
+	   	 hideforward:{type:Boolean,
+	   		  notify : true,
+	   		  computed : '_gethidefoward(position)'},
+	   	 grap_histo_data:{type:Array,
+	   		  notify : true,
+	   		  computed : '_getdata(historiques,ecriture_type,categorie_type,periphs)'}
+	  },
+	  observers:['_chargedata(ecriture_type,uuids,resolution,position)' ,
+		         '_receivelisteperiphs(periphs)'],
+	  ready: function() {
+	        this.app = document.querySelector('#app');
+	  },
+	  
+	  _back:function(){
+		  this.set('position',this.position+1);
+	  },
+	  _forward:function(){
+		  if (this.position>0) {
+			  this.set('position',this.position-1);
+		  }
+	  },
+	  _gethidefoward:function(position){
+		  if(position>0) {
+			  return false;
+		  } else {
+			  return true;
+		  }
+	  },
+	  _receivelisteperiphs:function(periphs){
+		  var uuids_sel="";
+		  if (periphs && periphs.length){
+			  this.set('ecriture_type',periphs[0].ecriture_type);
+			  this.set('categorie_type',periphs[0].categorie.type);
+			  for (var p in periphs){
+				  if (uuids_sel!="") uuids_sel+=',';
+				  uuids_sel+="'"+periphs[p].uuid+"'";
+			  }
+		  }
+		  this.set('uuids',uuids_sel);
+	  },
+       _chargedata(type,uuids,resolution,position){
+		  this.app = document.querySelector('#app');
+		  this.params_get_historique.uuid=" in ("+uuids+")";  
+		  if (resolution=='detail'){
+			  if (position<0) position=0;
+			  var position_back=position*-15-15;
+			  var position_last=position*-15+1;
+			  
+			  this.params_get_historique.timestamp=" between date('now','"+position_back+" day') and date('now','"+position_last+" day')";   
+		  }
+	      this.charge_historique_url=this.app.url_api+':'+this.app.port_api+'/index'
+		  this.$.charge_historique.generateRequest();
+	  },
+		_getdata:function (historiques,ecriture_type,categorie_type,periphs){
+			console.log('histo recu',ecriture_type,categorie_type);
+			var res=[];
+			if (ecriture_type=="TEMPERATURECONSIGNE" || ecriture_type=="TEMPERATURE" || ecriture_type=="CONSIGNE"){
+				res=this._getdata_temperaturesconsignes(historiques,periphs);
+			} else {
+				this.set('hidegraphique',true);
+			}
+
+			return res;
+		},
+		  
+	  
+	    _getdata_temperaturesconsignes:function(historiques,periphs){
+			historiques.sort(this.sort_by('uuid','timestamp')) ;
+			
+			var res=[];
+			var res_tag=[];
+			if (historiques && historiques[0]) {
+				this.set('hidegraphique',false);
+				var tag=historiques[0].uuid;
+				var nom = this._getobjinliste(periphs,tag,'uuid').nom;
+				for (var h in historiques){
+					if (tag!=historiques[h].uuid) {
+						res.push({name: 'Consigne ' +nom, data: res_tag});
+						res_tag=[];
+						tag=historiques[h].uuid
+						nom = this._getobjinliste(periphs,tag,'uuid').nom;
+					}
+					var point=[(new Date(historiques[h].timestamp)).getTime(),historiques[h].etat*1];
+					res_tag.push(point);
+					
+				}
+				res.push({name: 'Consigne ' +nom, data: res_tag});
+				
+				
+				var res_tag=[];
+				var tag=historiques[0].uuid;
+				nom = this._getobjinliste(periphs,tag,'uuid').nom;
+				for (var h in historiques){
+					if (tag!=historiques[h].uuid) {
+						res.push({name: 'Température ' +nom, data: res_tag});
+						res_tag=[];
+						tag=historiques[h].uuid
+						nom = this._getobjinliste(periphs,tag,'uuid').nom;
+					}
+					var point=[(new Date(historiques[h].timestamp)).getTime(),historiques[h].expr1*1];
+					res_tag.push(point);
+					
+				}
+				res.push({name: 'Température ' +nom, data: res_tag});
+				
+				
+			} else if (this.position==0){
+				this.set('hidegraphique',true);
+			}
+
+			this.set('loading',false);
+			return res;
+	    },
+	  
+	  
+	  		_getobjinliste:function(liste,searchval,searchcolumn){
+				  if(!liste){
+					  return {};
+				  }
+				  if (!searchcolumn){
+					  searchcolumn='id';
+				  }
+				  for (var o in liste){
+					  if(liste[o][searchcolumn]==searchval){
+						  return liste[o];
+					  }
+				  }
+				  return {};
+				  
+			  },
+	  
+	  
+	  
+		sort_by : function() {
+			   var fields = [].slice.call(arguments),
+			       n_fields = fields.length;
+
+			   return function(A,B) {
+			       var a, b, field, key, primer, reverse, result, i;
+
+			       for(i = 0; i < n_fields; i++) {
+			           result = 0;
+			           field = fields[i];
+
+			           key = typeof field === 'string' ? field : field.name;
+
+			           a = A[key];
+			           b = B[key];
+
+			           if (typeof field.primer  !== 'undefined'){
+			               a = field.primer(a);
+			               b = field.primer(b);
+			           }
+
+			           reverse = (field.reverse) ? -1 : 1;
+
+			           if (a<b) result = reverse * -1;
+			           if (a>b) result = reverse * 1;
+			           if(result !== 0) break;
+			       }
+			       return result;
+			   }
+			}	 ,
+
+		  _toArray(obj){
+		    	  return this.app._toArray(obj);
+		      },
+		  _disconnect(obj){
+		    	  this.app = document.querySelector('#app');
+		    	  return this.app.disconnect();
+		      },
+	      
+  })
+  </script>
+
+</dom-module>

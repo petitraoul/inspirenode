@@ -34,17 +34,17 @@ var modbuscoils = function(adresseip) {
 				  client.close();
 				} catch (e) {
 				}
-				logger('ERROR',{nom:self.nom,id:self.id,msg:"set etat box modbus Timeout:"},'box_modbus');
+				logger('ERROR',{nom:self.nom,id:self.id,msg:"set etat box modbus Timeout:"},'box_modbuscoil');
 			   callbackfunc({rep:rep,'error':'timeout'});
 			}
 		},29000);
 		client.on('error', function (err) {
-			logger('ERROR',{nom:self.nom,id:self.id,msg:"set etat box modbus Error:",error:err},'box_modbus');
+			logger('ERROR',{nom:self.nom,id:self.id,msg:"set etat box modbus Error:",error:err},'box_modbuscoil');
 		})
 		
 		client.on('connect', function () {
 				    // make some calls
-					logger('INFO',{nom:self.nom,id:self.id,msg:"set etat box modbus connect:"},'box_modbus');
+					logger('INFO',{nom:self.nom,id:self.id,msg:"set etat box modbus connect:"},'box_modbuscoil');
 					
 						switch (cmd) {
 						case 'ON':
@@ -63,26 +63,9 @@ var modbuscoils = function(adresseip) {
 						default:
 							break;
 						}
-						logger('INFO',{nom:self.nom,id:self.id,msg:"write registre modbus:",val:val,cmd:cmd},'box_modbus');
-						var registre=[];
-						try {
-							var reste=Number(val);
-							for (var i=Number(periph.box_type);i>0;i--){
-	
-								var nb=Math.floor(reste/65536);
-								if (!nb) { nb=0;}
-								registre.unshift(nb);
-								reste=reste%nb;
-								//console.log(i,reste,nb,registre);
-							}							
-						} catch (e) {
-							logger('ERROR',{nom:self.nom,id:self.id,msg:"probleme creation tableau registre modbus:",registre:registre,val:val,cmd:cmd},'box_modbus');
-							
-						}
-
-						//console.log(registre);
-						logger('INFO',{nom:self.nom,id:self.id,msg:"write registre modbus:",registre:registre},'box_modbus');
+						logger('INFO',{nom:self.nom,id:self.id,msg:"write registre modbus:",val:val,cmd:cmd},'box_modbuscoil');
 						
+
 						write(client,periph.box_identifiant,val,periph.box_protocole,function(resultbox){
 							rep.result=resultbox;
 							callbackfunc(rep);
@@ -122,18 +105,18 @@ var modbuscoils = function(adresseip) {
 						  client.close();
 						} catch (e) {
 						}
-						logger('ERROR',{nom:self.nom,id:self.id,msg:"get etat box modbus Timeout:"},'box_modbus');
+						logger('ERROR',{nom:self.nom,id:self.id,msg:"get etat box modbus Timeout:"},'box_modbuscoil');
 					   callbackfunc({'error':'timeout'});
 					}
 				},29000);
 				client.on('error', function (err) {
-					logger('ERROR',{nom:self.nom,id:self.id,msg:"get etat box modbus Error:",error:err},'box_modbus');
+					logger('ERROR',{nom:self.nom,id:self.id,msg:"get etat box modbus Error:",error:err},'box_modbuscoil');
 				})
 				client.on('connect', function () {
 				    // make some calls
-					logger('INFO',{nom:self.nom,id:self.id,msg:"get etat box modbus connect:"},'box_modbus');
+					logger('INFO',{nom:self.nom,id:self.id,msg:"get etat box modbus connect:"},'box_modbuscoil');
 					GLOBAL.req.async.map(rows,function(row_periph,callbackb){
-						logger('INFO',{nom:self.nom,id:self.id,msg:"read registre modbus:",row_periph:row_periph},'box_modbus');
+						logger('INFO',{nom:self.nom,id:self.id,msg:"read registre modbus:",row_periph:row_periph},'box_modbuscoil');
 						read(client,row_periph.box_identifiant,row_periph.box_type,row_periph.box_protocole,function(resultbox){
 							
 							res['reg_'+resultbox.registre_deb]={etat:resultbox.result};
@@ -146,7 +129,7 @@ var modbuscoils = function(adresseip) {
 							} catch (e) {
 							}
 						  callbackfunc(res);
-						  logger('INFO',{nom:self.nom,id:self.id,msg:"get etat box modbus read:"/*,result:res*/},'box_modbus');
+						  logger('INFO',{nom:self.nom,id:self.id,msg:"get etat box modbus read:"/*,result:res*/},'box_modbuscoil');
 					  });
 				});
 				
@@ -187,71 +170,51 @@ var modbuscoils = function(adresseip) {
 
 var read= function (client,registre_deb,taille_registre,bit,callback) {
 	// adresse du registre en decimal , nombre de mot
-	client.readCoils(registre_deb, taille_registre,callback).then(function (resp) {
+	
+	var adresse = 	parseInt(registre_deb)*16;
+	adresse = parseInt(adresse)+parseInt(bit);
+	
+	client.readCoils(adresse, taille_registre,callback).then(function (resp) {
 
-	    // resp will look like { fc: 1, byteCount: 20, register: [ values 0 - 10 ] }
-	    console.log(resp); 
-		console.log(resp.coils);
+	    // resp will look like { fc: 1, byteCount: 20, register: [ values 0 - 10 ] 
 
 		result = resp.coils[0];
+		if(result)
+			result = 1;
+		else
+			result=0;
+		registre_deb = registre_deb+'_'+bit;
+		logger('INFO',{nom:client.host,id:client.port,msg:"Lecture OK",adresse:adresse,taille_registre:taille_registre, reponse:resp.coils[0] },'box_modbuscoil');
 
 		callback({registre_deb:registre_deb,taille_registre:taille_registre,result:result});
 		//client.close();
 		//console.log('client close');
-	}).fail(console.log);
+	}).fail(function(){callback({registre_deb:'fail',taille_registre:'0',result:'erreur'});});
 }
 
-/*var write= function (client,registre_deb,registre,binaire,callback) {
-	console.log("ecriture adresse: "+registre_deb);
-	console.log("ecriture valeur: "+registre);
-	// adresse du registre en decimal , nombre de mot
-	if((binaire+"")==""){
-		
-	}
-	client.writeMultipleRegisters(registre_deb, registre,callback).then(function (resp) {
-		var result={};
-	    // resp will look like { fc: 3, byteCount: 20, register: [ values 0 - 10 ] }
-	    console.log(resp); 
-		console.log(resp.register);
-		if (registre_deb==resp.startAddress){
-			result.status='resultat : ok';
-		}else{
-			result.status='resultat : erreur';
-		}
-		result.resp=resp;
-		client.close();
-		
-		callback({registre_deb:registre_deb,registre:registre,result:result});
-		//client.close();
-		//console.log('client close');
-	}).fail(console.log);
-}*/
 var write= function (client,registre_deb,valeur,binaire,callback) {
-	console.log("ecriture adresse: "+registre_deb);
-	console.log("ecriture valeur: "+valeur);
-	// adresse du registre en decimal , nombre de mot
-	if((binaire+"")==""){
-		valeur=valeur*10;
-		console.log("ecriture valeur: "+valeur);
-	}
+
+	var adresse = 	parseInt(registre_deb)*16;
+	adresse = parseInt(adresse)+parseInt(binaire);
+	valeur = parseInt(valeur);
 	var registre = [valeur];
-	console.log("ecriture valeur: "+registre);
-	client.writeMultipleRegisters(registre_deb, registre,callback).then(function (resp) {
+	logger('INFO',{nom:client.host,id:client.port,msg:"write registre modbus:",registre:registre, registre_deb:adresse},'box_modbuscoil');
+	client.writeMultipleCoils(adresse, registre,callback).then(function (resp) {
 		var result={};
 	    // resp will look like { fc: 3, byteCount: 20, register: [ values 0 - 10 ] }
-	    console.log(resp); 
-		console.log(resp.register);
-		if (registre_deb==resp.startAddress){
+		if (adresse==resp.startAddress){
 			result.status='resultat : ok';
+			logger('INFO',{nom:client.host,id:client.port,msg:"Ecriture OK"},'box_modbuscoil');
 		}else{
 			result.status='resultat : erreur';
+			logger('INFO',{nom:client.host,id:client.port,msg:"Ecriture erreur"},'box_modbuscoil');
 		}
 		result.resp=resp;
 		client.close();
 		
-		callback({registre_deb:registre_deb,registre:registre,result:result});
+		callback({registre_deb:adresse,registre:registre,result:result});
 		//client.close();
 		//console.log('client close');
-	}).fail(console.log);
+	}).fail(function(){callback({registre_deb:'fail',registre:'0',result:'erreur'});});
 }
 module.exports = modbuscoils;

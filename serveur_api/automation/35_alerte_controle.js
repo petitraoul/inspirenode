@@ -12,15 +12,21 @@ alerte_controle.start=function(){
 		//obj.app.serveur.on('peripherique.last_etat.added',controleifalerte);
 		obj.app.serveur.on('peripherique.last_etat.changed',controleifalerte);
 		
+		obj.app.serveur.on('applipiscine.acquitementrecu',function(){
+			setTimeout(function(){
+				controleglobal();
+			},5000);
+		});
+		
 		timer=setInterval(function(){
-			/*purge toutes les 5 minutes*/
+			/*controle toutes les 1,5 minutes*/
 			controleglobal();	
-		}, 10000);
+		}, 90000);
 		
 		timer2=setTimeout(function(){
 			/*purge au démarrage de l'automation*/
 			controleglobal();
-		},15000);
+		},30000);
 	}
 }
 alerte_controle.stop=function(){
@@ -48,7 +54,7 @@ function controleifalerte(periph,previous_etat,new_etat_expressions){
 }
 
 function controleglobal(){
-	
+	logger('INFO',{msg:'--Controle globale des alertes--'},'automation_'+alerte_controle.nom);
 	for (var p in GLOBAL.obj.peripheriques) {
 		var periph=GLOBAL.obj.peripheriques[p];
 		if (periph.categorie && periph.categorie.type=='alerte') {

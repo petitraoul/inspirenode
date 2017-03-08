@@ -2,7 +2,7 @@
  * New node file
  */
 
-var database = {"name" : "mydb_piscine.db",
+var database = {"name" : "mydb_BriandAT2.db",
 				"application" : "inspireathome",
 				"descriptif" : "Base de donnée inspireathome",
 				"menus": [{"id" : "box", "titre" : "Boxs", "action" : "box", "image" : "../images/zcarte-8-relais-ethernet-ip-ipx800-v3.jpg"},
