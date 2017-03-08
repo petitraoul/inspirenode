@@ -152,7 +152,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						          </template>
 								  <template is="dom-if" if="{{show_element(detail_code,'my-profilfacture')}}">
 						          	<my-profilfacture id="[[item.id]]" searchmode="{{searchmode}}" name="my-profilfacture" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" liste_soustable2="{{liste_soustable2}}" parent="{{parent}}"></my-profilfacture>
-						          </template>						          						          		
+						          </template>		
+						          <template is="dom-if" if="{{show_element(detail_code,'my-profiljoursconsigne')}}">
+						          	<my-profiljoursconsigne id="[[item.id]]" searchmode="{{searchmode}}" name="my-profiljoursconsigne" hideothereditbutton_onedit="{{hideothereditbutton_onedit}}" hideother_onedit="{{hideother_onedit}}" edited_item_id="{{edited_item_id}}" objet="{{item}}" grants_acces="{{grants_acces}}" liste_soustable="{{liste_soustable}}" liste_soustable2="{{liste_soustable2}}" parent="{{parent}}"></my-profiljoursconsigne>
+						          </template>					          						          		
 					        </template>
 					    </li>
 					</template>

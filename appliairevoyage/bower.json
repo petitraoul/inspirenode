@@ -21,7 +21,8 @@
     "paper-fab": "^1.2.1",
     "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^1.1.0",
     "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.1",
-    "vaadin-combo-box": "^1.1.5"
+    "vaadin-combo-box": "^1.1.5",
+    "highcharts-chart": "^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
