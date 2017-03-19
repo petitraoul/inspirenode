@@ -848,9 +848,6 @@ module.exports =function(variables,res,user){
 					});
 				}
 				
-				
-
-				
 			} else if (variables.action.substr(0,6)=='detail'){
 				var sql='Select * from '+variables.action.substr(6,100)+' where 1=1 '+complsql+';';
 				logger('DEBUG',{nom:'requete get :',sql:sql},'Requete_action_get');

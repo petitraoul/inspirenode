@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	 	 	parent="{{parent}}"
   	 	 	parentfield_id="titulaire_id"
   	 	 	doc_print_link="{{doc_print_link}}"
-  	 	 	grants_acces="{{grants_acces}}"
+  	 	 	grants_acces="{{grants_acces_spec}}"
   	 	 	hideother_onedit="{{hideother_onedit}}"
   	 	 	hideothereditbutton_onedit="{{hideothereditbutton_onedit}}"
   	 	 	return_onsave=true
@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 	  		
 	  		<div class="reduit">
-				{{type_operation_sel.nom}}, {{mode_paiement_sel.nom}}, Montant {{objet.signe}}{{objet.montant}}€ ({{objet.recu_num}})
+				{{type_operation_sel.nom}}, {{objet.libelle}}, Montant {{objet.signe}}{{objet.montant}}€ ({{objet.recu_num}})
 		
 	  		</div>
 	  		
@@ -115,6 +115,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	     objet:{type: Object,
 	    	 notify : true
 	     },
+   	 	 grants_acces:{type:Object,
+	 		 notify : true
+	 	 },
+   	 	 grants_acces_spec:{type:Object,
+	 		 notify : true,
+	 		 computed:'_getgrantacces(grants_acces,objet)'
+	 	 },
 	     modificationbuttonint_hide:{notify:true},
 	     facture:{notify:true},
 	     listes_factures:{type:Array,
@@ -145,6 +152,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     	}  else {
     		this.set('objet.facture_num',null);
     	}
+      },
+      _getgrantacces:function(grant_acces,obj){
+    	  if (obj && obj.facture_num=='Annulé'){
+    		  return {creation:false,
+					 modification:false,
+					 suppression:false,
+					 impression:false};
+    	  }  else {
+    		  return grant_acces;
+    	  }
       },
       _getlistefacturesel:function(liste_soustable2){
     	var listfact = [null];
@@ -244,12 +261,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  set_recu_delete:function(){
 		  var rep=this.objet;
 		  rep.facture_num='Annulé'
+		  rep.libelle=this.objet.libelle + ' (annulation '+this.objet.recu_num+')';
 		  rep.id=null;
 		  rep.deleted='O'
 		  rep.uuid=null;
 		  rep.montant=-rep.montant;
 		  rep.pu=-rep.pu;
 		  rep.recu_num=this.new_recu_delete.num;
+		  
 		this.$.profil_compteecriture.savethis();
 		this.fire('reply_delete');
 	  },
