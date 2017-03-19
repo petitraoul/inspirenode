@@ -5,8 +5,9 @@
 
 
 module.exports = function() {
-	this.database=new GLOBAL.req.sqlite3.Database(__dirname+'/'+GLOBAL.req.dbmodel.name);
-	console.log('Utilisation de la base de donnée '+__dirname+'/'+GLOBAL.req.dbmodel.name );
+	this.database=new GLOBAL.req.sqlite3.Database(__dirname+'/'+GLOBAL.req.dbmodel.name);	
+	logger('INFO',{msg:'Utilisation de la base de donnée '+__dirname+'/'+GLOBAL.req.dbmodel.name},'database_sql');
+	//console.log('Utilisation de la base de donnée '+__dirname+'/'+GLOBAL.req.dbmodel.name );
 	this.nbsqlencours=0;
 	this.nbsqltotal=0;
 	this.nbsqlerror=0;
@@ -18,8 +19,9 @@ module.exports = function() {
 	
 	
 	
-	this.controledatabase=function(){
-		console.log('Controle de la structure de la base de donn�es')
+	this.controledatabase=function(){		
+		logger('INFO',{msg:'Controle de la structure de la base de données.'},'database_sql');
+		//console.log('Controle de la structure de la base de donn�es')
 		this.controleTables(GLOBAL.req.dbmodel.tables);
 	};
 
@@ -63,7 +65,8 @@ module.exports = function() {
 
 	};
 
-	this.sqltrans=function (order,callback,dataarray){
+	this.sqltrans=function (order,callback,dataarray){		
+		logger('DEBUG',{msg:'Requete : '+order},'database_sql');
 		//console.log(order);
 		if (!order) {
 			logger('ERROR',{order:'ordre sql null !'},'database_sql');
@@ -76,6 +79,7 @@ module.exports = function() {
 		
 	};
 	this.sqlorder=function (order,callback,dataarray){
+		logger('DEBUG',{msg:'Requete : '+order},'database_sql');
 		//console.log(order);
 		if (!order) {
 			//console.trace('ordre null !!!',order);
@@ -98,13 +102,17 @@ module.exports = function() {
 				 nbsqltraite++;
 				 if(sqls.type=='trans'){
 					 //console.log('--- exec next')
+					logger('DEBUG','transac execute: '+sqls.order,'database_sql');
 					 self.sqltransexec(sqls.order,function(data){
+							logger('DEBUG','transac réponse: '+data,'database_sql');
 							callbacke();
 							if (sqls.callback) sqls.callback(data);
 						},sqls.dataarray);
 				 }
 				 if(sqls.type=='order'){
+					logger('DEBUG','order execute: '+sqls.order,'database_sql');
 					 self.sqlorderexec(sqls.order,function(data){
+							logger('DEBUG','order réponse: '+data,'database_sql');
 							callbacke();
 							if (sqls.callback){
 									sqls.callback(data);
@@ -143,22 +151,22 @@ module.exports = function() {
 				    	  logger('ERROR',{transtnum:transtnum,msg:"begin transaction probleme",err:e,order:order},'database_sql');
 				      }
 					//console.log('BEGIN',transtnum,e,order);
-					//logger('DEBUG',transtnum+" BEGIN",'database_sql_order');
+					logger('DEBUG',transtnum+" BEGIN",'database_sql');
 					
 				    //console.log('insertData -> begin');
 				    // do multiple inserts
-					GLOBAL.req.async.map(order, function (sql, callbacke) {
+					GLOBAL.req.async.eachSeries(order, function (sql, callbacke) {
 					// GLOBAL.req.async.map(order,function(sql, indexsql,callbacke){
 					    	nborder++;
 							selfdb.nbsqlencours++;
 							selfdb.nbsqltotal++;
-							//logger('DEBUG','execute: '+sql,'database_sql_order');
+							logger('DEBUG','execute: '+sql,'database_sql');
 							transac.exec(sql, function(e) {
-								//logger('DEBUG',transtnum+'  fin: '+sql,'database_sql_order');
+								logger('DEBUG','  fin: '+sql,'database_sql');
 								nb--;
 						    	selfdb.nbsqlencours--;
 								//console.log(selfdb.nbsqlencours + ' '+selfdb.nbsqltotal+ ' '+selfdb.nbsqlerror);
-								//logger('INFO',transtnum+" sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
+								logger('INFO',transtnum+" sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
 									
 						        if (e) {
 						        	//console.log(e);
@@ -178,7 +186,7 @@ module.exports = function() {
 				  	   ,function(err){
 				  		   //console.log('COMMIT',err);
 				  		   transac.exec("COMMIT;", function(e) {
-						    	//logger('DEBUG',transtnum+" COMMIT",'database_sql_order');
+						    	logger('DEBUG',transtnum+" COMMIT;",'database_sql');
 							      if (nb>0) {
 							    	  logger('ERROR',{transtnum:transtnum,msg:"Commit avant fin des sql",restesqls:nb,order:order},'database_sql');
 							      }
@@ -201,12 +209,14 @@ module.exports = function() {
 			    	  logger('ERROR',{transtnum:transtnum,msg:"begin transaction probleme",err:e,order:order},'database_sql');
 			      }
 				var lastID=null;
+				
+				logger('DEBUG',{msg:'nb sql en cours: '+selfdb.nbsqlencours+', requete: '+order+', tableau: '+dataarray},'database_sql');
 				//console.log(selfdb.nbsqlencours,order,dataarray);
 			
 				selfdb.database.run(order,dataarray,function(err) {
 					selfdb.nbsqlencours--;
 					//console.log(selfdb.nbsqlencours + ' '+selfdb.nbsqltotal+ ' '+selfdb.nbsqlerror);
-					//logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
+					logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
 					if (err){
 						//console.log(err);
 						selfdb.nbsqlerror++;
@@ -214,6 +224,7 @@ module.exports = function() {
 					}
 					lastID=this.lastID;
 				    selfdb.database.run("COMMIT;", function(e) {
+						logger('DEBUG',transtnum+" COMMIT;",'database_sql');
 				    	if (e) {
 					    	  logger('ERROR',{transtnum:transtnum,msg:"Commit probleme",err:e,order:order},'database_sql');
 					      }
@@ -242,7 +253,7 @@ module.exports = function() {
 						selfdb.database.all(sql,function(err,rows) {
 							selfdb.nbsqlencours--;
 							//console.log(selfdb.nbsqlencours + ' '+selfdb.nbsqltotal+ ' '+selfdb.nbsqlerror);
-							//logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
+							logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
 							if (err){
 								selfdb.nbsqlerror++;
 								logger('ERROR',{msg:"erreur sql",order:order,err:err},'database_sql');
@@ -263,7 +274,7 @@ module.exports = function() {
 					selfdb.database.get(order,dataarray,function(err,rows) {
 						selfdb.nbsqlencours--;
 						//console.log(selfdb.nbsqlencours + ' '+selfdb.nbsqltotal+ ' '+selfdb.nbsqlerror);
-						//logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
+						logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
 						if (err){
 							selfdb.nbsqlerror++;
 							logger('ERROR',{msg:"erreur sql",order:order,err:err},'database_sql');
@@ -279,7 +290,7 @@ module.exports = function() {
 					selfdb.database.all(order,function(err,rows) {
 						selfdb.nbsqlencours--;
 						//console.log(selfdb.nbsqlencours + ' '+selfdb.nbsqltotal+ ' '+selfdb.nbsqlerror);
-						//logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
+						logger('INFO',"sql en cours:"+selfdb.nbsqlencours+" total:"+selfdb.nbsqltotal+" error:"+selfdb.nbsqlerror,'database_sql');
 						if (err){
 							selfdb.nbsqlerror++;
 							logger('ERROR',{msg:"erreur sql",order:order,err:err},'database_sql');

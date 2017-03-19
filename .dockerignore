@@ -1,0 +1,11 @@
+.project
+node_modules
+temp
+test
+serveur_udp_video
+pubs
+.externalToolBuilders
+.settings
+maj_zip
+serveur_api/*.db
+appli*

@@ -65,7 +65,7 @@ function calcul_services(){
 			"				  left outer join compte_ecriture e on e.titulaire_id=s.titulaire_id" +
 			"				  left outer join type_operation t  on t.id=e.type_operation" +
 			" where (s.clos is null or s.clos !='1')and tag.nom like 'Empl%'" +
-			" group by tag.nom,s.emplacement_id,s.titulaire_id,date_debut,date_fin,ta.seuil_alerte,seuil_coupure";
+			" group by tag.nom,s.emplacement_id,s.titulaire_id,date_debut,date_fin,ta.seuil_alerte,seuil_coupure;";
 	 GLOBAL.obj.app.db.sqlorder(sql,
 	            function(rows){
 	                if (rows) {
